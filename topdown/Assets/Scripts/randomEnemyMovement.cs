@@ -31,7 +31,6 @@ public class randomEnemyMovement : enemyController
             StartCoroutine(waitOnSpot());
             rb.velocity = moveDirection * speed;
         }
-
     }
     public IEnumerator waitOnSpot()
     {

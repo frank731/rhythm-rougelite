@@ -6,6 +6,7 @@ public class playerController : MonoBehaviour
 {
     public int health = 3;
     public bool isDead = false;
+    public roomController currentRoom;
     // Update is called once per frame
     public void removeHealth(int damage)
     {

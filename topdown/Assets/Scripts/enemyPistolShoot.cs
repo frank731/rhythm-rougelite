@@ -6,6 +6,8 @@ public class enemyPistolShoot : enemyController
 {
     public GameObject bulletPrefab;
     public Transform firePoint;
+    public float minShootDelay;
+    public float maxShootDelay;
     private float shootDelay;
     void Start()
     {
@@ -23,7 +25,7 @@ public class enemyPistolShoot : enemyController
     }
     void randomizeShootDelay()
     {
-        shootDelay = Random.Range(0.5f, 3f);
+        shootDelay = Random.Range(minShootDelay, maxShootDelay);
         Invoke("randomizeShootDelay", shootDelay);
     }
 }

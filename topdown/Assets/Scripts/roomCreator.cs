@@ -24,7 +24,7 @@ public class roomCreator : MonoBehaviour
         //get the arrays of rooms, then call the creating room method. delete spawner to clear space later
         roomTypesHolder = GameObject.FindGameObjectWithTag("RoomTypeHolder").GetComponent<roomTypes>();
         Invoke("CreateRoom", roomCreateTime);     
-        Destroy(gameObject, 3f);
+        Destroy(gameObject, 1f);
     }
     void CreateRoom()
     {

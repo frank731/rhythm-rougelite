@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.InputSystem;
 using UnityEngine;
 
 public class aimAtCursor : MonoBehaviour
@@ -9,9 +10,10 @@ public class aimAtCursor : MonoBehaviour
     public Transform leftHand;
     public Transform rightHand;
     public SpriteRenderer playerSprite;
+    Vector3 mousePos;
     void Update()
     {
-        Vector3 mousePos = Input.mousePosition;
+        mousePos = Mouse.current.position.ReadValue();
         mousePos = Camera.main.ScreenToWorldPoint(mousePos);
         
         //flip gun and player left when mouse moves to the left of player

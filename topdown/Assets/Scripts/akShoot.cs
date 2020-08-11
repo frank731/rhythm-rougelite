@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.InputSystem;
 using UnityEngine;
 
 public class akShoot : MonoBehaviour
@@ -9,7 +10,7 @@ public class akShoot : MonoBehaviour
     public Transform akBulletSpawn;
     public bool canShoot = true;
     public Animator akAnimator;
-    void Update()
+    public void Update()
     {
         //create bullet if mouse held and time between bullets has passed 
         if(canShoot == true && Input.GetMouseButton(0))

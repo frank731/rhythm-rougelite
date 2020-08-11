@@ -9,15 +9,14 @@ public class aimAtPlayer : enemyController
     public SpriteRenderer enemySprite;
     public SpriteRenderer gunSprite;
     public Transform enemy;
-    private Transform player;
     private bool facingRight = true;
-    private void Start()
+    void Start()
     {
-        player = getPlayer();
+        //prevent enemyController start function from being called
     }
     void Update()
     {
-        if (isActive == true)
+        if (isActive)
         {
             //flips the gun and enemy left is player is left of enemy
             //transform.localScale = new Vector3(1f, -1f, 1f);

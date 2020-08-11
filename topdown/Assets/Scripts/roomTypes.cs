@@ -10,17 +10,24 @@ public class roomTypes : MonoBehaviour
     public GameObject[] leftRooms;
     public GameObject[] rightRooms;
     public GameObject[] endRooms;
-    public Object[] layouts;
+    public Object[] normalLayouts;
+    public Object[] bossLayouts;
     public int maxRoomCount = 10;
     public int roomCount = 0;
     public int roomArrSize;
+    public List<GameObject> rooms = new List<GameObject>();
     public IDictionary<int, GameObject[]> numToRoom = new Dictionary<int, GameObject[]>() {};
-    public IDictionary<GameObject, int> roomDistances = new Dictionary<GameObject, int>() {};
+    public IDictionary<int, Vector2> numToMap = new Dictionary<int, Vector2>() { {1, new Vector2(0, 30)}, {2, new Vector2(0, -30)}, {3, new Vector2(-30, 0)}, {4, new Vector2(30, 0)} };
+    public IDictionary<int, List<GameObject>> roomDistances = new Dictionary<int, List<GameObject>>() {};
+    public GameObject emptyLayout;
+    public GameObject itemLayout;
+    public GameObject minimapCanvas;
 
     private void Awake()
     {
         roomArrSize = topRooms.Length;
-        layouts = Resources.LoadAll("Prefabs/Layouts", typeof(GameObject));
+        normalLayouts = Resources.LoadAll("Prefabs/Layouts/Room Layouts", typeof(GameObject));
+        bossLayouts = Resources.LoadAll("Prefabs/Layouts/Boss Layouts", typeof(GameObject));
     }
     private void Start()
     {
@@ -29,14 +36,52 @@ public class roomTypes : MonoBehaviour
         numToRoom.Add(3, rightRooms);
         numToRoom.Add(4, leftRooms);
 
-        Invoke("print", 3f);
+        Invoke("ChooseSpecialRooms", 0.5f);
     }
 
-    private void print()
+    private void ChooseSpecialRooms()
     {
-        foreach (KeyValuePair<GameObject, int> distance in roomDistances)
+        //add room distances to array
+        rooms.RemoveAll(item => item == null);
+        foreach (GameObject room in rooms)
         {
-            Debug.Log(distance.Key + " " + distance.Value);
+            int roomDist = room.GetComponent<roomController>().distance;
+            if (roomDistances.ContainsKey(roomDist))
+            {
+                roomDistances[roomDist].Add(room);
+            }
+            else
+            {
+                roomDistances[roomDist] = new List<GameObject> { room };
+            }
+        }
+        int farthestDistance = roomDistances.Keys.Max();
+        if (roomDistances[farthestDistance].Count >= 2)
+        {
+            //set boss room
+            GameObject farthestRoom = roomDistances[farthestDistance][0];
+            roomController farthestRoomController = farthestRoom.GetComponent<roomController>();
+            int roomType = Random.Range(0, bossLayouts.Length);
+            farthestRoomController.changeLayout(bossLayouts[roomType]);
+            farthestRoomController.bossRoom = true;
+            //set item room
+            farthestRoom = roomDistances[farthestDistance][1];
+            farthestRoomController = farthestRoom.GetComponent<roomController>();
+            farthestRoomController.changeLayout(itemLayout);
+            farthestRoomController.roomCleared = true;
+        }
+        else
+        {
+            GameObject farthestRoom = roomDistances[farthestDistance][0];
+            roomController farthestRoomController = farthestRoom.GetComponent<roomController>();
+            int roomType = Random.Range(0, bossLayouts.Length);
+            farthestRoomController.changeLayout(bossLayouts[roomType]);
+            farthestRoomController.bossRoom = true;
+            //set item room
+            farthestRoom = roomDistances[farthestDistance - 1][0];
+            farthestRoomController = farthestRoom.GetComponent<roomController>();
+            farthestRoomController.changeLayout(itemLayout);
+            farthestRoomController.roomCleared = true;
         }
     }
 }

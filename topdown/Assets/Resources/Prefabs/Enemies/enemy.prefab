@@ -79,6 +79,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -128,6 +129,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 0
   isActive: 0
+  player: {fileID: 0}
   leftHand: {fileID: 1490787731048525476}
   rightHand: {fileID: 1490787730441245892}
   enemySprite: {fileID: 1490787730791937057}
@@ -147,9 +149,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 0
   isActive: 0
+  player: {fileID: 0}
   bulletPrefab: {fileID: 8827757211778301572, guid: 5689bd7bfa611874fb4961900049bd9c,
     type: 3}
   firePoint: {fileID: 1995415790028000710}
+  minShootDelay: 0.5
+  maxShootDelay: 3
 --- !u!1 &1490787730441245893
 GameObject:
   m_ObjectHideFlags: 0
@@ -234,6 +239,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -257,7 +263,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 3
   m_Sprite: {fileID: 21300000, guid: aba7b5c63d9ec304b89edc574d32d4bd, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -328,6 +334,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 3
   isActive: 0
+  player: {fileID: 0}
   enemyGun: {fileID: 1490787730393243028}
   speed: 2
   canMove: 1
@@ -370,6 +377,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 3
   isActive: 0
+  player: {fileID: 0}
 --- !u!1 &1490787731048525477
 GameObject:
   m_ObjectHideFlags: 0

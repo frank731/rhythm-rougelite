@@ -11,6 +11,10 @@ public class adjacencyCheck : MonoBehaviour
      3 is need right opening
      4 is need left opening
       */
+    void Start()
+    {
+        Destroy(gameObject, 1f);
+    }
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == "RoomSpawnPoint" && collision.name != "replaced")

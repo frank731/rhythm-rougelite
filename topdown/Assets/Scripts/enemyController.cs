@@ -6,12 +6,8 @@ public class enemyController : MonoBehaviour
 {
     public float health;
     public bool isActive;
-    private Transform player;
+    public Transform player;
     private roomController roomControllerHolder;
-    public Transform getPlayer()
-    {
-        return player;
-    }
     void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
@@ -25,6 +21,7 @@ public class enemyController : MonoBehaviour
     private void Start()
     {
         roomControllerHolder = transform.parent.parent.gameObject.GetComponent<roomController>();
+        //Debug.Log(roomControllerHolder.name);
         roomControllerHolder.AddEnemy(gameObject);
         //deactivate when player is not in its room
         if (!roomControllerHolder.isPlayerIn)
