@@ -17,11 +17,12 @@ public class roomTypes : MonoBehaviour
     public int roomArrSize;
     public List<GameObject> rooms = new List<GameObject>();
     public IDictionary<int, GameObject[]> numToRoom = new Dictionary<int, GameObject[]>() {};
-    public IDictionary<int, Vector2> numToMap = new Dictionary<int, Vector2>() { {1, new Vector2(0, 30)}, {2, new Vector2(0, -30)}, {3, new Vector2(-30, 0)}, {4, new Vector2(30, 0)} };
+    public IDictionary<int, Vector3> numToMap = new Dictionary<int, Vector3>() { {1, new Vector3(0, 30)}, {2, new Vector3(0, -30)}, {3, new Vector3(-30, 0)}, {4, new Vector3(30, 0)} };
     public IDictionary<int, List<GameObject>> roomDistances = new Dictionary<int, List<GameObject>>() {};
     public GameObject emptyLayout;
     public GameObject itemLayout;
     public GameObject minimapCanvas;
+    public GameObject minimapRoomPrefab;
 
     private void Awake()
     {
@@ -39,6 +40,20 @@ public class roomTypes : MonoBehaviour
         Invoke("ChooseSpecialRooms", 0.5f);
     }
 
+    private void CreateSpecialRooms(int dist1, int dist2, int index1, int index2)
+    {
+        //set boss room
+        GameObject farthestRoom = roomDistances[dist1][index1];
+        roomController farthestRoomController = farthestRoom.GetComponent<roomController>();
+        int roomType = Random.Range(0, bossLayouts.Length);
+        farthestRoomController.changeLayout(bossLayouts[roomType]);
+        farthestRoomController.bossRoom = true;
+        //set item room
+        farthestRoom = roomDistances[dist2][index2];
+        farthestRoomController = farthestRoom.GetComponent<roomController>();
+        farthestRoomController.changeLayout(itemLayout);
+        farthestRoomController.roomCleared = true;
+    }
     private void ChooseSpecialRooms()
     {
         //add room distances to array
@@ -58,30 +73,11 @@ public class roomTypes : MonoBehaviour
         int farthestDistance = roomDistances.Keys.Max();
         if (roomDistances[farthestDistance].Count >= 2)
         {
-            //set boss room
-            GameObject farthestRoom = roomDistances[farthestDistance][0];
-            roomController farthestRoomController = farthestRoom.GetComponent<roomController>();
-            int roomType = Random.Range(0, bossLayouts.Length);
-            farthestRoomController.changeLayout(bossLayouts[roomType]);
-            farthestRoomController.bossRoom = true;
-            //set item room
-            farthestRoom = roomDistances[farthestDistance][1];
-            farthestRoomController = farthestRoom.GetComponent<roomController>();
-            farthestRoomController.changeLayout(itemLayout);
-            farthestRoomController.roomCleared = true;
+            CreateSpecialRooms(farthestDistance, farthestDistance, 0, 1);
         }
         else
         {
-            GameObject farthestRoom = roomDistances[farthestDistance][0];
-            roomController farthestRoomController = farthestRoom.GetComponent<roomController>();
-            int roomType = Random.Range(0, bossLayouts.Length);
-            farthestRoomController.changeLayout(bossLayouts[roomType]);
-            farthestRoomController.bossRoom = true;
-            //set item room
-            farthestRoom = roomDistances[farthestDistance - 1][0];
-            farthestRoomController = farthestRoom.GetComponent<roomController>();
-            farthestRoomController.changeLayout(itemLayout);
-            farthestRoomController.roomCleared = true;
+            CreateSpecialRooms(farthestDistance, farthestDistance - 1, 0, 0);
         }
     }
 }

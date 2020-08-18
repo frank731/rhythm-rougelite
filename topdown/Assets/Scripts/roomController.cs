@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using Microsoft.Unity.VisualStudio.Editor;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor.UI;
+using UnityEngine.UI;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -10,18 +12,23 @@ public class roomController : MonoBehaviour
     public GameObject gate;
     public GameObject layout = null;
     public GameObject mapIcon;
+    public Color mapColor;
     public bool isPlayerIn = false;
     public bool isDestroyed;
     public bool roomCleared = false;
+    public bool inPlayerRange = false;
     public bool startingRoom = false;
     public bool bossRoom = false;
     public int distance;
     private bool needFix = false;
     public int enemyCount = 0;
+    public List<GameObject> adjacentRooms = new List<GameObject>();
     private List<int> adjacencies = new List<int>();
     private List<GameObject> enemies = new List<GameObject>();
     private roomTypes roomTypesHolder;
     private playerController PlayerController = null;
+    
+    /*
     void ActivateEnemies()
     {
         //activate enemies when player enters room
@@ -30,12 +37,36 @@ public class roomController : MonoBehaviour
             enemy.SetActive(true);
         }
     }
+    */
+    public void RevealMap()
+    {
+        adjacentRooms.RemoveAll(item => item == null);
+        foreach (GameObject room in adjacentRooms)
+        {
+            Debug.Log(room.name + " " + transform.name);
+            roomController controller = room.GetComponent<roomController>();
+            if (!controller.inPlayerRange)
+            {
+                controller.mapIcon.SetActive(true);
+                controller.ChangeMapIconTransparency(0.2f);
+                controller.inPlayerRange = true;
+            }
+        }
+    }
+    public void ChangeMapIconTransparency(float t)
+    {
+        UnityEngine.UI.Image i = mapIcon.GetComponent<UnityEngine.UI.Image>();
+        Color c = i.color;
+        c.a = t;
+        i.color = c;
+    }
     public void DisableRoom()
     {
         foreach(Transform child in transform)
         {
             child.gameObject.SetActive(false);
         }
+        ChangeMapIconTransparency(0.6f);
     }
     public void EnableRoom()
     {
@@ -141,6 +172,9 @@ public class roomController : MonoBehaviour
             GameObject replace = Instantiate(compatible[index], transform.position, compatible[index].transform.rotation);
             //mark room as replaced to prevent other rooms from interacting with it and creating more rooms
             roomController replaceController = replace.GetComponent<roomController>();
+            GameObject minimapRoom = Instantiate(roomTypesHolder.minimapRoomPrefab, mapIcon.transform.position, transform.rotation);
+            minimapRoom.transform.SetParent(roomTypesHolder.minimapCanvas.transform);
+            replaceController.mapIcon = minimapRoom;
             replaceController.needFix = true;
             replaceController.distance = distance;
             Destroy(gameObject);
@@ -167,12 +201,21 @@ public class roomController : MonoBehaviour
         {
             int layoutType = Random.Range(0, roomTypesHolder.normalLayouts.Length);
             changeLayout(roomTypesHolder.normalLayouts[layoutType]);
+            //disable room as optimization
             Invoke("DisableRoom", 0.2f);
         }
         else
         {
             changeLayout(roomTypesHolder.emptyLayout);
+            inPlayerRange = true;
+            Invoke("RevealMap", 0.3f);
         }
+    }
+
+    public void OnDestroy()
+    {
+        //destroy its corresponding map icon on destroy
+        Destroy(mapIcon);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -180,13 +223,17 @@ public class roomController : MonoBehaviour
         //turns on gate and enemes when player enters room and room hasn't been cleared already
         if(collision.gameObject.tag == "Player")
         {
+            //re enable room on enter
+            isPlayerIn = true;
+            inPlayerRange = true;
+            EnableRoom();
+            ChangeMapIconTransparency(1f);
+            RevealMap();
             if (!roomCleared)
             {
                 gate.SetActive(true);
-                Invoke("ActivateEnemies", 0.5f);
+                //Invoke("ActivateEnemies", 0.5f);
             }
-            isPlayerIn = true;
-            EnableRoom();
             if (!PlayerController)
             {
                 PlayerController = collision.gameObject.GetComponent<playerController>();

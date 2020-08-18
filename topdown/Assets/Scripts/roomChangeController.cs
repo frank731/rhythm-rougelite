@@ -15,7 +15,8 @@ public class roomChangeController : KinematicFunctions
         Vector3 cameraPos = mainCamera.transform.position;
         Vector3 neededPos = cameraPos + new Vector3(cx, cy, 0);
         StartCoroutine(moveObject(mainCamera.transform, cameraPos, neededPos, cameraPanSpeed));
-        PlayerController.currentRoom.Invoke("DisableRoom", 0.2f);
+        //disable the room that you left as a optimization
+        PlayerController.currentRoom.Invoke("DisableRoom", 0.15f);
     }
     
     private void Awake()

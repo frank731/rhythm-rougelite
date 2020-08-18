@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using Microsoft.Unity.VisualStudio.Editor;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Security.Cryptography;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class roomCreator : MonoBehaviour
@@ -25,6 +27,13 @@ public class roomCreator : MonoBehaviour
         roomTypesHolder = GameObject.FindGameObjectWithTag("RoomTypeHolder").GetComponent<roomTypes>();
         Invoke("CreateRoom", roomCreateTime);     
         Destroy(gameObject, 1f);
+    }
+    void CreateMinimapIcon(GameObject room)
+    {
+        GameObject minimapRoom = Instantiate(roomTypesHolder.minimapRoomPrefab, transform.parent.parent.GetComponent<roomController>().mapIcon.transform.position + roomTypesHolder.numToMap[openingDirection], room.transform.rotation);
+        minimapRoom.transform.SetParent(roomTypesHolder.minimapCanvas.transform);
+        roomController newroomController = room.GetComponent<roomController>();
+        newroomController.mapIcon = minimapRoom;
     }
     void CreateRoom()
     {
@@ -54,8 +63,8 @@ public class roomCreator : MonoBehaviour
                 roomTypesHolder.roomCount = roomCount;
                 roomTypesHolder.maxRoomCount = maxRoomCount;
                 GameObject room = Instantiate(newroom, transform.position, newroom.transform.rotation);
-                //room.GetComponent<roomController>().distance = transform.parent.parent.GetComponent<roomController>().distance + 1;
                 room.name = room.name.Replace("(Clone)", "");
+                CreateMinimapIcon(room);
             }
 
             //create only ending rooms after max cycles of room creation
@@ -63,8 +72,8 @@ public class roomCreator : MonoBehaviour
             {
                 GameObject room = Instantiate(roomTypesHolder.endRooms[openingDirection - 1], transform.position, roomTypesHolder.endRooms[openingDirection - 1].transform.rotation);
                 room.name = room.name.Replace("(Clone)", "");
+                CreateMinimapIcon(room);
             }
-            
             //stop infinite spawning of rooms
             alreadySpawned = true;
         }    
