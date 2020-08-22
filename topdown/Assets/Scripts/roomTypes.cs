@@ -17,12 +17,14 @@ public class roomTypes : MonoBehaviour
     public int roomArrSize;
     public List<GameObject> rooms = new List<GameObject>();
     public IDictionary<int, GameObject[]> numToRoom = new Dictionary<int, GameObject[]>() {};
-    public IDictionary<int, Vector3> numToMap = new Dictionary<int, Vector3>() { {1, new Vector3(0, 30)}, {2, new Vector3(0, -30)}, {3, new Vector3(-30, 0)}, {4, new Vector3(30, 0)} };
+    public IDictionary<int, Vector3> numToMap = new Dictionary<int, Vector3>() { {1, new Vector3(0, 30)}, {2, new Vector3(0, -30) }, {3, new Vector3(-30, 0)}, {4, new Vector3(30, 0)} };
     public IDictionary<int, List<GameObject>> roomDistances = new Dictionary<int, List<GameObject>>() {};
     public GameObject emptyLayout;
     public GameObject itemLayout;
     public GameObject minimapCanvas;
     public GameObject minimapRoomPrefab;
+    public GameObject bossIcon;
+    public GameObject itemIcon;
 
     private void Awake()
     {
@@ -48,11 +50,14 @@ public class roomTypes : MonoBehaviour
         int roomType = Random.Range(0, bossLayouts.Length);
         farthestRoomController.changeLayout(bossLayouts[roomType]);
         farthestRoomController.bossRoom = true;
+        farthestRoomController.AddMapDetail(bossIcon);
+        
         //set item room
         farthestRoom = roomDistances[dist2][index2];
         farthestRoomController = farthestRoom.GetComponent<roomController>();
         farthestRoomController.changeLayout(itemLayout);
         farthestRoomController.roomCleared = true;
+        farthestRoomController.AddMapDetail(itemIcon);
     }
     private void ChooseSpecialRooms()
     {

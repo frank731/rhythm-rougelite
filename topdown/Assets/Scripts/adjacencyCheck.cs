@@ -22,7 +22,7 @@ public class adjacencyCheck : MonoBehaviour
             roomController room = collision.transform.parent.gameObject.GetComponent<roomController>();
             room.AddAdjacencies(needOpening, transform.parent.GetComponent<roomController>().distance + 1);
             transform.parent.gameObject.GetComponent<roomController>().adjacentRooms.Add(collision.transform.parent.gameObject);
-            //Destroy(gameObject);
+            Destroy(gameObject, 1f);
         }
 
     }

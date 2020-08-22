@@ -15,6 +15,8 @@ public class chestController : MonoBehaviour
     }
     void CreateItem()
     {
-        Debug.Log("ok");
+        GameObject item = itemPool[Random.Range(0, itemPool.Length)];
+        Instantiate(item, transform.position - new Vector3(0, 2, 0), transform.rotation);
+        spriteRenderer.sprite = openChestSprite;
     }
 }

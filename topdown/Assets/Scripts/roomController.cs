@@ -43,7 +43,6 @@ public class roomController : MonoBehaviour
         adjacentRooms.RemoveAll(item => item == null);
         foreach (GameObject room in adjacentRooms)
         {
-            Debug.Log(room.name + " " + transform.name);
             roomController controller = room.GetComponent<roomController>();
             if (!controller.inPlayerRange)
             {
@@ -60,6 +59,13 @@ public class roomController : MonoBehaviour
         c.a = t;
         i.color = c;
     }
+
+    public void AddMapDetail(GameObject detail)
+    {
+        GameObject mapDetail = Instantiate(detail, mapIcon.transform.position, mapIcon.transform.rotation);
+        mapDetail.transform.SetParent(mapIcon.transform);
+    }
+
     public void DisableRoom()
     {
         foreach(Transform child in transform)
@@ -208,7 +214,7 @@ public class roomController : MonoBehaviour
         {
             changeLayout(roomTypesHolder.emptyLayout);
             inPlayerRange = true;
-            Invoke("RevealMap", 0.3f);
+            Invoke("RevealMap", 0.4f);
         }
     }
 

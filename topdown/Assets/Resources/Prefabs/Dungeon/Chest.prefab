@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4325371457806631013}
   - component: {fileID: 4325371457806631010}
   - component: {fileID: 4325371457806631008}
-  m_Layer: 0
+  m_Layer: 26
   m_Name: Chest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72,8 +72,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 961700441
+  m_SortingLayer: 5
   m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: d6fc8cff49aa7d346a192f59c650df8b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -154,7 +154,8 @@ MonoBehaviour:
   openChestSprite: {fileID: 21300002, guid: d6fc8cff49aa7d346a192f59c650df8b, type: 3}
   spriteRenderer: {fileID: 4325371457806631011}
   playerInteractDetection: {fileID: 4325371457806631008}
-  itemPool: []
+  itemPool:
+  - {fileID: 6318840654001200769, guid: 6758301a7413d7c49ab261eb77c80a79, type: 3}
 --- !u!114 &4325371457806631008
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -169,3 +170,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inRange: 0
   interacted: 0
+  interact:
+    m_PersistentCalls:
+      m_Calls: []
