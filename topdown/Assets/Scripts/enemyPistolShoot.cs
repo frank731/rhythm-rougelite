@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class enemyPistolShoot : enemyController
+public class EnemyPistolShoot : EnemyController
 {
     public GameObject bulletPrefab;
     public Transform firePoint;

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1909975201020423609}
   - component: {fileID: 2393857318999029244}
   m_Layer: 0
-  m_Name: emptylayout
+  m_Name: emptyLayout
   m_TagString: Layout
   m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -1559,7 +1559,7 @@ TilemapRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

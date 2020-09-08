@@ -87,13 +87,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gate: {fileID: 7726751804119544376}
   layout: {fileID: 0}
+  mapIcon: {fileID: 0}
+  mapColor: {r: 0, g: 0, b: 0, a: 0}
   isPlayerIn: 0
   isDestroyed: 0
   roomCleared: 0
+  inPlayerRange: 0
   startingRoom: 0
+  endRoom: 0
   bossRoom: 0
   distance: 0
   enemyCount: 0
+  adjacentRooms: []
 --- !u!61 &1426157470256073737
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -752,7 +757,7 @@ TilemapRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1132,7 +1137,7 @@ TilemapRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

@@ -5,9 +5,10 @@ Material:
   serializedVersion: 6
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_Name: KoalaGunBulletMaterial
-  m_Shader: {fileID: 4800000, guid: a0480ba495373eb4395df15c5c713ef8, type: 3}
+  m_Shader: {fileID: 4800000, guid: e260cfa7296ee7642b167f1eb5be5023, type: 3}
   m_ShaderKeywords: ETC1_EXTERNAL_ALPHA PIXELSNAP_ON _ALPHAPREMULTIPLY_ON _GLOSSYREFLECTIONS_OFF
     _ISOUTLINEENABLED_ON _SPECULARHIGHLIGHTS_OFF
   m_LightmapFlags: 4
@@ -47,7 +48,15 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _MaskTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -89,3 +98,4 @@ Material:
     - _OutlineColor: {r: 1.9766746, g: 0.66234124, b: 0, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _TintColor: {r: 1, g: 1, b: 1, a: 1}
+  m_BuildTextureStacks: []

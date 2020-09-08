@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 using UnityEngine.UI;
 using UnityEngine;
 
-public class roomCreator : MonoBehaviour
+public class RoomCreator : MonoBehaviour
 {
     public int openingDirection;
     /*
@@ -15,7 +15,7 @@ public class roomCreator : MonoBehaviour
      3 is need right opening
      4 is need left opening
       */
-    private roomTypes roomTypesHolder;
+    private RoomTypes roomTypesHolder;
     private int randRoom;
     private bool alreadySpawned = false;
     private float roomCreateTime;
@@ -24,15 +24,15 @@ public class roomCreator : MonoBehaviour
         //offset the room creation time to prevent stacking of rooms
         roomCreateTime = Random.Range(0.01f, 0.02f);
         //get the arrays of rooms, then call the creating room method. delete spawner to clear space later
-        roomTypesHolder = GameObject.FindGameObjectWithTag("RoomTypeHolder").GetComponent<roomTypes>();
+        roomTypesHolder = GameObject.FindGameObjectWithTag("RoomTypeHolder").GetComponent<RoomTypes>();
         Invoke("CreateRoom", roomCreateTime);     
         Destroy(gameObject, 1f);
     }
     void CreateMinimapIcon(GameObject room)
     {
-        GameObject minimapRoom = Instantiate(roomTypesHolder.minimapRoomPrefab, transform.parent.parent.GetComponent<roomController>().mapIcon.transform.position + roomTypesHolder.numToMap[openingDirection], room.transform.rotation);
+        GameObject minimapRoom = Instantiate(roomTypesHolder.minimapRoomPrefab, transform.parent.parent.GetComponent<RoomController>().mapIcon.transform.position + roomTypesHolder.numToMap[openingDirection], room.transform.rotation);
         minimapRoom.transform.SetParent(roomTypesHolder.minimapCanvas.transform);
-        roomController newroomController = room.GetComponent<roomController>();
+        RoomController newroomController = room.GetComponent<RoomController>();
         newroomController.mapIcon = minimapRoom;
     }
     void CreateRoom()
@@ -72,6 +72,7 @@ public class roomCreator : MonoBehaviour
             {
                 GameObject room = Instantiate(roomTypesHolder.endRooms[openingDirection - 1], transform.position, roomTypesHolder.endRooms[openingDirection - 1].transform.rotation);
                 room.name = room.name.Replace("(Clone)", "");
+                room.GetComponent<RoomController>().endRoom = true;
                 CreateMinimapIcon(room);
             }
             //stop infinite spawning of rooms

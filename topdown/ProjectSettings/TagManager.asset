@@ -17,6 +17,8 @@ TagManager:
   - Layout
   - FadeCanvas
   - Exit
+  - LeftHand
+  - RightHand
   layers:
   - Default
   - TransparentFX

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class adjacencyCheck : MonoBehaviour
+public class AdjacencyCheck : MonoBehaviour
 {
     public int needOpening;
     /*
@@ -19,9 +19,9 @@ public class adjacencyCheck : MonoBehaviour
     {
         if (collision.tag == "RoomSpawnPoint" && collision.name != "replaced")
         {
-            roomController room = collision.transform.parent.gameObject.GetComponent<roomController>();
-            room.AddAdjacencies(needOpening, transform.parent.GetComponent<roomController>().distance + 1);
-            transform.parent.gameObject.GetComponent<roomController>().adjacentRooms.Add(collision.transform.parent.gameObject);
+            RoomController room = collision.transform.parent.gameObject.GetComponent<RoomController>();
+            room.AddAdjacencies(needOpening, transform.parent.GetComponent<RoomController>().distance + 1);
+            transform.parent.gameObject.GetComponent<RoomController>().adjacentRooms.Add(collision.transform.parent.gameObject);
             Destroy(gameObject, 1f);
         }
 

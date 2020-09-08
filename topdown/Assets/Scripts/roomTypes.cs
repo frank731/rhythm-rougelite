@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class roomTypes : MonoBehaviour
+public class RoomTypes : MonoBehaviour
 {
     public GameObject[] topRooms;
     public GameObject[] downRooms;
@@ -17,7 +17,7 @@ public class roomTypes : MonoBehaviour
     public int roomArrSize;
     public List<GameObject> rooms = new List<GameObject>();
     public IDictionary<int, GameObject[]> numToRoom = new Dictionary<int, GameObject[]>() {};
-    public IDictionary<int, Vector3> numToMap = new Dictionary<int, Vector3>() { {1, new Vector3(0, 30)}, {2, new Vector3(0, -30) }, {3, new Vector3(-30, 0)}, {4, new Vector3(30, 0)} };
+    public IDictionary<int, Vector3> numToMap;
     public IDictionary<int, List<GameObject>> roomDistances = new Dictionary<int, List<GameObject>>() {};
     public GameObject emptyLayout;
     public GameObject itemLayout;
@@ -31,6 +31,10 @@ public class roomTypes : MonoBehaviour
         roomArrSize = topRooms.Length;
         normalLayouts = Resources.LoadAll("Prefabs/Layouts/Room Layouts", typeof(GameObject));
         bossLayouts = Resources.LoadAll("Prefabs/Layouts/Boss Layouts", typeof(GameObject));
+        float offset = minimapRoomPrefab.GetComponent<RectTransform>().rect.width;
+        offset += (offset / 5);
+        Debug.Log(offset);
+        numToMap = new Dictionary<int, Vector3>() { { 1, new Vector3(0, offset) }, { 2, new Vector3(0, -offset) }, { 3, new Vector3(-offset, 0) }, { 4, new Vector3(offset, 0) } };
     }
     private void Start()
     {
@@ -46,16 +50,28 @@ public class roomTypes : MonoBehaviour
     {
         //set boss room
         GameObject farthestRoom = roomDistances[dist1][index1];
-        roomController farthestRoomController = farthestRoom.GetComponent<roomController>();
+        RoomController farthestRoomController = farthestRoom.GetComponent<RoomController>();
+        while (!farthestRoomController.endRoom)
+        {
+            index1 += 1;
+            farthestRoom = roomDistances[dist1][index1];
+            farthestRoomController = farthestRoom.GetComponent<RoomController>();
+        }
         int roomType = Random.Range(0, bossLayouts.Length);
-        farthestRoomController.changeLayout(bossLayouts[roomType]);
+        farthestRoomController.ChangeLayout(bossLayouts[roomType]);
         farthestRoomController.bossRoom = true;
         farthestRoomController.AddMapDetail(bossIcon);
         
         //set item room
         farthestRoom = roomDistances[dist2][index2];
-        farthestRoomController = farthestRoom.GetComponent<roomController>();
-        farthestRoomController.changeLayout(itemLayout);
+        farthestRoomController = farthestRoom.GetComponent<RoomController>();
+        while (!farthestRoomController.endRoom)
+        {
+            index2 += 1;
+            farthestRoom = roomDistances[dist2][index2];
+            farthestRoomController = farthestRoom.GetComponent<RoomController>();
+        }
+        farthestRoomController.ChangeLayout(itemLayout);
         farthestRoomController.roomCleared = true;
         farthestRoomController.AddMapDetail(itemIcon);
     }
@@ -65,7 +81,7 @@ public class roomTypes : MonoBehaviour
         rooms.RemoveAll(item => item == null);
         foreach (GameObject room in rooms)
         {
-            int roomDist = room.GetComponent<roomController>().distance;
+            int roomDist = room.GetComponent<RoomController>().distance;
             if (roomDistances.ContainsKey(roomDist))
             {
                 roomDistances[roomDist].Add(room);

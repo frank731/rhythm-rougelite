@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Security.Policy;
 using UnityEngine;
 
-public class bullet : MonoBehaviour
+public class Bullet : MonoBehaviour
 {
     public Rigidbody2D rb;
-    public static float bulletSpeed = 10;
-    public static float bulletDamage = 1;
+    public float bulletSpeed = 10;
+    public float bulletDamage = 1;
     void FixedUpdate()
     {
         //moves the bullet
@@ -19,13 +19,12 @@ public class bullet : MonoBehaviour
         
         if (collision.collider.tag == "Enemy")
         {
-            collision.collider.gameObject.GetComponent<enemyController>().removeHealth(1);
+            collision.collider.gameObject.GetComponent<EnemyController>().RemoveHealth(bulletDamage);
         }
         if(collision.collider.tag == "Player")
         {
-            collision.collider.gameObject.GetComponent<playerController>().removeHealth(1);
+            collision.collider.gameObject.GetComponent<PlayerController>().RemoveHealth(bulletDamage);
         }
-
         Destroy(gameObject);
 
     }

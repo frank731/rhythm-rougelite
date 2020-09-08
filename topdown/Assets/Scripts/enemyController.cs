@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class enemyController : MonoBehaviour
+public class EnemyController : MonoBehaviour
 {
     public float health;
     public bool isActive;
+    public bool isDead = false;
     public Transform player;
-    private roomController roomControllerHolder;
+    private RoomController roomControllerHolder;
     void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
@@ -15,13 +16,12 @@ public class enemyController : MonoBehaviour
     private void OnEnable()
     {
         isActive = false;
-        StartCoroutine(setActive());
+        StartCoroutine(SetActive());
     }
     
     private void Start()
     {
-        roomControllerHolder = transform.parent.parent.gameObject.GetComponent<roomController>();
-        //Debug.Log(roomControllerHolder.name);
+        roomControllerHolder = transform.parent.parent.gameObject.GetComponent<RoomController>();
         roomControllerHolder.AddEnemy(gameObject);
         //deactivate when player is not in its room
         if (!roomControllerHolder.isPlayerIn)
@@ -29,17 +29,19 @@ public class enemyController : MonoBehaviour
             gameObject.SetActive(false);
         }
     }
-    public void removeHealth(float damage)
+    public void RemoveHealth(float damage)
     {
         health -= damage;
-        if (health <= 0)
+        if (health <= 0 && !isDead)
         {
             //destroys enemy once health is lower than zero and tells room that enemy has been destroyed
+            isDead = true;
             Destroy(gameObject);
             roomControllerHolder.EnemyDestroyed();
+            return;
         }
     }
-    IEnumerator setActive()
+    IEnumerator SetActive()
     {
         yield return new WaitForSeconds(0.5f);
         isActive = true;

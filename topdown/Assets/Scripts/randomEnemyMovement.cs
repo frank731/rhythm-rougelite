@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Security.Permissions;
 using UnityEngine;
 
-public class randomEnemyMovement : enemyController
+public class RandomEnemyMovement : EnemyController
 {
     public Transform enemyGun;
 

@@ -7,7 +7,7 @@ using UnityEngine.UI;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class roomController : MonoBehaviour
+public class RoomController : MonoBehaviour
 {
     public GameObject gate;
     public GameObject layout = null;
@@ -18,6 +18,7 @@ public class roomController : MonoBehaviour
     public bool roomCleared = false;
     public bool inPlayerRange = false;
     public bool startingRoom = false;
+    public bool endRoom = false;
     public bool bossRoom = false;
     public int distance;
     private bool needFix = false;
@@ -25,8 +26,8 @@ public class roomController : MonoBehaviour
     public List<GameObject> adjacentRooms = new List<GameObject>();
     private List<int> adjacencies = new List<int>();
     private List<GameObject> enemies = new List<GameObject>();
-    private roomTypes roomTypesHolder;
-    private playerController PlayerController = null;
+    private RoomTypes roomTypesHolder;
+    private PlayerController PlayerController = null;
     
     /*
     void ActivateEnemies()
@@ -43,7 +44,7 @@ public class roomController : MonoBehaviour
         adjacentRooms.RemoveAll(item => item == null);
         foreach (GameObject room in adjacentRooms)
         {
-            roomController controller = room.GetComponent<roomController>();
+            RoomController controller = room.GetComponent<RoomController>();
             if (!controller.inPlayerRange)
             {
                 controller.mapIcon.SetActive(true);
@@ -72,7 +73,16 @@ public class roomController : MonoBehaviour
         {
             child.gameObject.SetActive(false);
         }
-        ChangeMapIconTransparency(0.6f);
+        //make sure unseen rooms are 0.2 transparent
+        if (roomCleared)
+        {
+            ChangeMapIconTransparency(0.6f);
+        }
+        else
+        {
+            ChangeMapIconTransparency(0.2f);
+        }
+        
     }
     public void EnableRoom()
     {
@@ -109,7 +119,7 @@ public class roomController : MonoBehaviour
             }
         }
     }
-    public void changeLayout(Object newlayout)
+    public void ChangeLayout(Object newlayout)
     {
         if (layout != null)
         {
@@ -177,7 +187,7 @@ public class roomController : MonoBehaviour
             }
             GameObject replace = Instantiate(compatible[index], transform.position, compatible[index].transform.rotation);
             //mark room as replaced to prevent other rooms from interacting with it and creating more rooms
-            roomController replaceController = replace.GetComponent<roomController>();
+            RoomController replaceController = replace.GetComponent<RoomController>();
             GameObject minimapRoom = Instantiate(roomTypesHolder.minimapRoomPrefab, mapIcon.transform.position, transform.rotation);
             minimapRoom.transform.SetParent(roomTypesHolder.minimapCanvas.transform);
             replaceController.mapIcon = minimapRoom;
@@ -189,7 +199,7 @@ public class roomController : MonoBehaviour
     }
     private void Awake()
     {
-        roomTypesHolder = GameObject.FindGameObjectWithTag("RoomTypeHolder").GetComponent<roomTypes>();
+        roomTypesHolder = GameObject.FindGameObjectWithTag("RoomTypeHolder").GetComponent<RoomTypes>();
         roomTypesHolder.rooms.Add(gameObject);
         if (!startingRoom)
         {
@@ -206,15 +216,15 @@ public class roomController : MonoBehaviour
         if (!startingRoom)
         {
             int layoutType = Random.Range(0, roomTypesHolder.normalLayouts.Length);
-            changeLayout(roomTypesHolder.normalLayouts[layoutType]);
+            ChangeLayout(roomTypesHolder.normalLayouts[layoutType]);
             //disable room as optimization
             Invoke("DisableRoom", 0.2f);
         }
         else
         {
-            changeLayout(roomTypesHolder.emptyLayout);
+            ChangeLayout(roomTypesHolder.emptyLayout);
             inPlayerRange = true;
-            Invoke("RevealMap", 0.4f);
+            Invoke("RevealMap", 0.2f);
         }
     }
 
@@ -242,7 +252,7 @@ public class roomController : MonoBehaviour
             }
             if (!PlayerController)
             {
-                PlayerController = collision.gameObject.GetComponent<playerController>();
+                PlayerController = collision.gameObject.GetComponent<PlayerController>();
             }
             PlayerController.currentRoom = this;
         }

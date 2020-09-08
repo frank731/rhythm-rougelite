@@ -3,30 +3,10 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine;
 
-public class akShoot : MonoBehaviour
+public class AkShoot : PlayerShoot
 {
-    public static float shootDelay = 0.2f;
-    public GameObject bulletPrefab;
-    public Transform akBulletSpawn;
-    public bool canShoot = true;
-    public Animator akAnimator;
-    public void Update()
+    public void Awake()
     {
-        //create bullet if mouse held and time between bullets has passed 
-        if(canShoot == true && Input.GetMouseButton(0))
-        {
-            Instantiate(bulletPrefab, akBulletSpawn.position, akBulletSpawn.rotation);
-            StartCoroutine(bulletDelay());
-            akAnimator.SetBool("hasShot", true);
-            //akAnimator.SetBool("hasShot", false);
-        }
-        
-    }
-    //delay between bullets
-    public IEnumerator bulletDelay()
-    {
-        canShoot = false;
-        yield return new WaitForSeconds(shootDelay);
-        canShoot = true;
+        shootDelay = 0.2f;
     }
 }

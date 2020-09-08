@@ -83,7 +83,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -129,6 +129,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 0
   isActive: 0
+  isDead: 0
   player: {fileID: 0}
   leftHand: {fileID: 1490787731048525476}
   rightHand: {fileID: 1490787730441245892}
@@ -149,6 +150,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 0
   isActive: 0
+  isDead: 0
   player: {fileID: 0}
   bulletPrefab: {fileID: 8827757211778301572, guid: 5689bd7bfa611874fb4961900049bd9c,
     type: 3}
@@ -243,7 +245,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -334,6 +336,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 3
   isActive: 0
+  isDead: 0
   player: {fileID: 0}
   enemyGun: {fileID: 1490787730393243028}
   speed: 2
@@ -377,6 +380,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 3
   isActive: 0
+  isDead: 0
   player: {fileID: 0}
 --- !u!1 &1490787731048525477
 GameObject:

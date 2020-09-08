@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class chestController : MonoBehaviour
+public class ChestController : MonoBehaviour
 {
     public Sprite closedChestSprite;
     public Sprite openChestSprite;

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine;
 
-public class playerMovement : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
-    float speed = 3f;
+    public float speed = 3f;
     public Rigidbody2D rb;
     public Animator animator;
     Vector2 move;

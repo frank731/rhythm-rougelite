@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class aimAtPlayer : enemyController
+public class AimAtPlayer : EnemyController
 {
     public Transform leftHand;
     public Transform rightHand;
@@ -20,7 +20,7 @@ public class aimAtPlayer : enemyController
         {
             //flips the gun and enemy left is player is left of enemy
             //transform.localScale = new Vector3(1f, -1f, 1f);
-            if (player.position.x < enemy.position.x && facingRight == true)
+            if (player.position.x < enemy.position.x && facingRight)
             {
                 gunSprite.flipY = true;
                 transform.position = leftHand.position;
@@ -28,7 +28,7 @@ public class aimAtPlayer : enemyController
                 facingRight = false;
             }
             //flips the gun and enemy right is player is right of enemy
-            if (player.position.x > enemy.position.x && facingRight == false)
+            if (player.position.x > enemy.position.x && !facingRight)
             {
                 gunSprite.flipY = false;
                 transform.position = rightHand.position;

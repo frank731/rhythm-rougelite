@@ -3,14 +3,38 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine;
 
-public class aimAtCursor : MonoBehaviour
+public class AimAtCursor : MonoBehaviour
 {
     public Transform player;
     public bool mouseFacingRight = true;
-    public Transform leftHand;
-    public Transform rightHand;
+    public Transform leftHand = null;
+    public Transform rightHand = null;
     public SpriteRenderer playerSprite;
     Vector3 mousePos;
+    private void Start()
+    {
+        player = transform.parent.parent;
+        playerSprite = player.GetComponent<SpriteRenderer>();
+        foreach(Transform child in player)
+        {
+            if(child.tag == "LeftHand")
+            {
+                leftHand = child;
+                if (rightHand)
+                {
+                    break;
+                }
+            }
+            else if(child.tag == "RightHand")
+            {
+                rightHand = child;
+                if (leftHand)
+                {
+                    break;
+                }
+            }
+        }
+    }
     void Update()
     {
         mousePos = Mouse.current.position.ReadValue();
