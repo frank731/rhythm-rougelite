@@ -15,7 +15,7 @@ public class RoomCreator : MonoBehaviour
      3 is need right opening
      4 is need left opening
       */
-    private RoomTypes roomTypesHolder;
+    private FloorGlobal floorGlobal;
     private int randRoom;
     private bool alreadySpawned = false;
     private float roomCreateTime;
@@ -24,14 +24,14 @@ public class RoomCreator : MonoBehaviour
         //offset the room creation time to prevent stacking of rooms
         roomCreateTime = Random.Range(0.01f, 0.02f);
         //get the arrays of rooms, then call the creating room method. delete spawner to clear space later
-        roomTypesHolder = GameObject.FindGameObjectWithTag("RoomTypeHolder").GetComponent<RoomTypes>();
+        floorGlobal = GameObject.FindGameObjectWithTag("FloorGlobalHolder").GetComponent<FloorGlobal>();
         Invoke("CreateRoom", roomCreateTime);     
         Destroy(gameObject, 1f);
     }
     void CreateMinimapIcon(GameObject room)
     {
-        GameObject minimapRoom = Instantiate(roomTypesHolder.minimapRoomPrefab, transform.parent.parent.GetComponent<RoomController>().mapIcon.transform.position + roomTypesHolder.numToMap[openingDirection], room.transform.rotation);
-        minimapRoom.transform.SetParent(roomTypesHolder.minimapCanvas.transform);
+        GameObject minimapRoom = Instantiate(floorGlobal.minimapRoomPrefab, transform.parent.parent.GetComponent<RoomController>().mapIcon.transform.position + floorGlobal.numToMap[openingDirection], room.transform.rotation);
+        minimapRoom.transform.SetParent(floorGlobal.minimapCanvas.transform);
         RoomController newroomController = room.GetComponent<RoomController>();
         newroomController.mapIcon = minimapRoom;
     }
@@ -39,14 +39,14 @@ public class RoomCreator : MonoBehaviour
     {
         if(alreadySpawned == false)
         {
-            randRoom = Random.Range(0, roomTypesHolder.roomArrSize);
-            int roomCount = roomTypesHolder.roomCount;
-            int maxRoomCount = roomTypesHolder.maxRoomCount;
+            randRoom = Random.Range(0, floorGlobal.roomArrSize);
+            int roomCount = floorGlobal.roomCount;
+            int maxRoomCount = floorGlobal.maxRoomCount;
             //create rooms based on opening type 
             if(roomCount < maxRoomCount)
             {
                 roomCount += 1;
-                GameObject[] roomType = roomTypesHolder.numToRoom[openingDirection];
+                GameObject[] roomType = floorGlobal.numToRoom[openingDirection];
                 GameObject newroom = roomType[randRoom];
                 roomCount += newroom.name.Length - 1;
                 if(roomCount > maxRoomCount)
@@ -54,14 +54,14 @@ public class RoomCreator : MonoBehaviour
                     while (roomCount != maxRoomCount)
                     {
                         roomCount -= newroom.name.Length - 1;
-                        randRoom = Random.Range(0, roomTypesHolder.roomArrSize);
+                        randRoom = Random.Range(0, floorGlobal.roomArrSize);
                         newroom = roomType[randRoom];
                         roomCount += newroom.name.Length - 1;
                     }
                     
                 }
-                roomTypesHolder.roomCount = roomCount;
-                roomTypesHolder.maxRoomCount = maxRoomCount;
+                floorGlobal.roomCount = roomCount;
+                floorGlobal.maxRoomCount = maxRoomCount;
                 GameObject room = Instantiate(newroom, transform.position, newroom.transform.rotation);
                 room.name = room.name.Replace("(Clone)", "");
                 CreateMinimapIcon(room);
@@ -70,7 +70,7 @@ public class RoomCreator : MonoBehaviour
             //create only ending rooms after max cycles of room creation
             else
             {
-                GameObject room = Instantiate(roomTypesHolder.endRooms[openingDirection - 1], transform.position, roomTypesHolder.endRooms[openingDirection - 1].transform.rotation);
+                GameObject room = Instantiate(floorGlobal.endRooms[openingDirection - 1], transform.position, floorGlobal.endRooms[openingDirection - 1].transform.rotation);
                 room.name = room.name.Replace("(Clone)", "");
                 room.GetComponent<RoomController>().endRoom = true;
                 CreateMinimapIcon(room);

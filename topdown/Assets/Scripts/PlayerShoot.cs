@@ -10,9 +10,18 @@ public class PlayerShoot : MonoBehaviour
     public bool canShoot = true;
     public bool auto = false;
     public Animator animator;
+    private FloorGlobal floorGlobal;
+
+    public void Start()
+    {
+        floorGlobal = GameObject.FindGameObjectWithTag("FloorGlobalHolder").GetComponent<FloorGlobal>();
+        floorGlobal.pausableScripts.Add(this);
+    }
 
     private void OnEnable()
     {
+        //prevent multiple bulletDelays from running when reenabled.
+        StopAllCoroutines();
         StartCoroutine(bulletDelay());
     }
     public void Update()

@@ -10,9 +10,12 @@ public class AimAtCursor : MonoBehaviour
     public Transform leftHand = null;
     public Transform rightHand = null;
     public SpriteRenderer playerSprite;
+    private FloorGlobal floorGlobal;
     Vector3 mousePos;
     private void Start()
     {
+        floorGlobal = GameObject.FindGameObjectWithTag("FloorGlobalHolder").GetComponent<FloorGlobal>();
+        floorGlobal.pausableScripts.Add(this);
         player = transform.parent.parent;
         playerSprite = player.GetComponent<SpriteRenderer>();
         foreach(Transform child in player)
@@ -60,8 +63,6 @@ public class AimAtCursor : MonoBehaviour
         Vector2 direction = new Vector2(mousePos.x - transform.position.x, mousePos.y - transform.position.y);
 
         transform.right = direction;
-
-
     }
-    
+   
 }

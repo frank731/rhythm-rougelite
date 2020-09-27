@@ -6,7 +6,7 @@ using UnityEngine.Experimental.GlobalIllumination;
 public class RoomChangeController : KinematicFunctions
 {
     public PlayerController PlayerController;
-    public RoomTypes RoomTypes;
+    public FloorGlobal floorGlobal;
     private Camera mainCamera;
     private Transform minimapCanvas;
     //speed in seconds
@@ -18,7 +18,7 @@ public class RoomChangeController : KinematicFunctions
         Vector3 neededPos = cameraPos + new Vector3(cx, cy, 0);
         StartCoroutine(moveObject(mainCamera.transform, cameraPos, neededPos, cameraPanSpeed));
         Vector3 canvasPos = minimapCanvas.localPosition;
-        Vector3 neededCanvasPos = canvasPos + RoomTypes.numToMap[direction];
+        Vector3 neededCanvasPos = canvasPos + floorGlobal.numToMap[direction];
         StartCoroutine(moveObject(minimapCanvas, canvasPos, neededCanvasPos, cameraPanSpeed));
         //disable the room that you left as a optimization
         PlayerController.currentRoom.Invoke("DisableRoom", 0.15f);
@@ -27,7 +27,7 @@ public class RoomChangeController : KinematicFunctions
     private void Awake()
     {
         mainCamera = Camera.main;
-        minimapCanvas = RoomTypes.minimapCanvas.transform;
+        minimapCanvas = floorGlobal.minimapCanvas.transform;
     }
 
     void OnTriggerEnter2D(Collider2D collision)

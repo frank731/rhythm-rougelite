@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     public List<int> itemIndexes;
     public RoomController currentRoom;
     public ItemDatabase itemDatabase;
+    public FloorGlobal floorGlobal;
     // Update is called once per frame
     public void AddItem(int itemId, string itemType)
     {
@@ -43,6 +44,7 @@ public class PlayerController : MonoBehaviour
     }
     public void OnSwitchWeapon()
     {
+        //switches to next gun in rotation
         currentGun.SetActive(false);
         currentGunIndex += 1;
         if (currentGunIndex >= guns.Count)
@@ -52,15 +54,15 @@ public class PlayerController : MonoBehaviour
         currentGun = guns[currentGunIndex];
         currentGun.SetActive(true);
     }
+    public void OnPause()
+    {
+        floorGlobal.OnPause();
+    }
     public void SwitchToNewWeapon(GameObject newWeapon)
     {
         currentGun.SetActive(false);
         currentGun = newWeapon;
         currentGunIndex = guns.Count - 1;
-    }
-    public void DestroyBullets()
-    {
-
     }
     public void RemoveHealth(float damage)
     {
