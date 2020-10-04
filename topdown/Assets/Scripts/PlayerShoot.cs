@@ -22,7 +22,7 @@ public class PlayerShoot : MonoBehaviour
     {
         //prevent multiple bulletDelays from running when reenabled.
         StopAllCoroutines();
-        StartCoroutine(bulletDelay());
+        StartCoroutine(BulletDelay());
     }
     public void Update()
     {
@@ -33,7 +33,7 @@ public class PlayerShoot : MonoBehaviour
             {
                 Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
                 canShoot = false;
-                StartCoroutine(bulletDelay());
+                StartCoroutine(BulletDelay());
                 animator.SetBool("hasShot", true);
                 //akAnimator.SetBool("hasShot", false);
             }
@@ -45,7 +45,7 @@ public class PlayerShoot : MonoBehaviour
             {
                 Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
                 canShoot = false;
-                StartCoroutine(bulletDelay());
+                StartCoroutine(BulletDelay());
                 animator.SetBool("hasShot", true);
                 //akAnimator.SetBool("hasShot", false);
             }
@@ -54,7 +54,7 @@ public class PlayerShoot : MonoBehaviour
 
     }
     //delay between bullets
-    public IEnumerator bulletDelay()
+    public IEnumerator BulletDelay()
     {
         canShoot = false;
         yield return new WaitForSeconds(shootDelay);

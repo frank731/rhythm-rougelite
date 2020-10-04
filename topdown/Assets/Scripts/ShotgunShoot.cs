@@ -23,7 +23,7 @@ public class ShotgunShoot : PlayerShoot
                 GameObject bullet = Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
                 bullet.transform.Rotate(0, 0, Random.Range(minSpread, maxSpread));
             }
-            StartCoroutine(bulletDelay());
+            StartCoroutine(BulletDelay());
             animator.SetTrigger("hasShot");
             //akAnimator.SetBool("hasShot", false);
         }
