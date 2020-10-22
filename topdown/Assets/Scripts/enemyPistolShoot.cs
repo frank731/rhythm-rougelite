@@ -6,26 +6,20 @@ public class EnemyPistolShoot : EnemyController
 {
     public GameObject bulletPrefab;
     public Transform firePoint;
-    public float minShootDelay;
-    public float maxShootDelay;
-    private float shootDelay;
-    void Start()
-    {
-        randomizeShootDelay();
-        Invoke("shoot", shootDelay);
-    }
+    private FloorGlobal floorGlobal;
 
-    void shoot()
+    void OnBeat()
     {
         if (isActive)
         {
             Instantiate(bulletPrefab, firePoint.position, transform.rotation);
         }
-        Invoke("shoot", shootDelay);
     }
-    void randomizeShootDelay()
+
+    void Start()
     {
-        shootDelay = Random.Range(minShootDelay, maxShootDelay);
-        Invoke("randomizeShootDelay", shootDelay);
+        floorGlobal = GameObject.FindGameObjectWithTag("FloorGlobalHolder").GetComponent<FloorGlobal>();
+        floorGlobal.onBeat.AddListener(OnBeat);
     }
+
 }

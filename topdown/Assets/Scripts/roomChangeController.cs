@@ -16,10 +16,10 @@ public class RoomChangeController : KinematicFunctions
         transform.position += new Vector3(px, py, 0);
         Vector3 cameraPos = mainCamera.transform.position;
         Vector3 neededPos = cameraPos + new Vector3(cx, cy, 0);
-        StartCoroutine(moveObject(mainCamera.transform, cameraPos, neededPos, cameraPanSpeed));
+        StartCoroutine(MoveObject(mainCamera.transform, cameraPos, neededPos, cameraPanSpeed));
         Vector3 canvasPos = minimapCanvas.localPosition;
         Vector3 neededCanvasPos = canvasPos + floorGlobal.numToMap[direction];
-        StartCoroutine(moveObject(minimapCanvas, canvasPos, neededCanvasPos, cameraPanSpeed));
+        StartCoroutine(MoveObject(minimapCanvas, canvasPos, neededCanvasPos, cameraPanSpeed));
         //disable the room that you left as a optimization
         PlayerController.currentRoom.Invoke("DisableRoom", 0.15f);
     }

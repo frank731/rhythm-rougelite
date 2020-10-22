@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 9080506579191746415}
   m_Layer: 5
   m_Name: Beat Indicator
-  m_TagString: Untagged
+  m_TagString: BPMIndicator
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -90,8 +90,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b554cb0004277a140976285bd23760ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 200
-  rb: {fileID: 9080506579191746415}
+  image: {fileID: 3656519254720474396}
+  beatCreateTime: 0
+  beatMarker: {fileID: 0}
 --- !u!61 &1237860919106802625
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -102,7 +103,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.15383911, y: 0.28783417}

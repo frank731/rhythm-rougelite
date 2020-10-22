@@ -28,13 +28,15 @@ public class FloorGlobal : MonoBehaviour
     public GameObject itemIcon;
     public GameObject pauseCanvas;
     public bool isPaused = false;
+    public bool isOnBeat = false;
+    public UnityEvent onBeat = new UnityEvent();
     public List<MonoBehaviour> pausableScripts;
 
     private void Awake()
     {
         roomArrSize = topRooms.Length;
-        normalLayouts = Resources.LoadAll("Prefabs/Layouts/Room Layouts", typeof(GameObject));
-        bossLayouts = Resources.LoadAll("Prefabs/Layouts/Boss Layouts", typeof(GameObject));
+        normalLayouts = Resources.LoadAll<GameObject>("Prefabs/Layouts/Room Layouts");
+        bossLayouts = Resources.LoadAll<GameObject>("Prefabs/Layouts/Boss Layouts");
         float offset = minimapRoomPrefab.GetComponent<RectTransform>().rect.width;
         offset += (offset / 5);
         numToMap = new Dictionary<int, Vector3>() { { 1, new Vector3(0, offset) }, { 2, new Vector3(0, -offset) }, { 3, new Vector3(-offset, 0) }, { 4, new Vector3(offset, 0) } };
@@ -106,6 +108,8 @@ public class FloorGlobal : MonoBehaviour
     }
     public void OnPause()
     {
+        //removes any scripts that have been deleted
+        pausableScripts.RemoveAll(script => script == null);
         if (!isPaused)
         {
             isPaused = true;

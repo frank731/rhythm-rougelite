@@ -5,7 +5,7 @@ using UnityEngine;
 public class KinematicFunctions : MonoBehaviour
 {
     //lerps object from one place to another
-    public IEnumerator moveObject(Transform obj, Vector3 Origin, Vector3 Destination, float totalMovementTime)
+    public IEnumerator MoveObject(Transform obj, Vector3 Origin, Vector3 Destination, float totalMovementTime)
     {
         float currentMovementTime = 0f;//The amount of time that has passed
         while (Vector3.Distance(obj.localPosition, Destination) > 0)

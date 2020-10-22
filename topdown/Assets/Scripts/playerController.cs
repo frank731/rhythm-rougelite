@@ -2,10 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
-    public float health = 3;
+    public float startHealth = 6;
+    public float health = 0;
+    public float iFrames = 1f;
+    public bool isInvincible = false;
     public bool isDead = false;
     public GameObject currentGun;
     public Transform rightHand;
@@ -17,7 +21,39 @@ public class PlayerController : MonoBehaviour
     public RoomController currentRoom;
     public ItemDatabase itemDatabase;
     public FloorGlobal floorGlobal;
-    // Update is called once per frame
+    public bool canShoot = false;
+    public Transform itemInventoryHolder;
+    public Transform gunInventoryHolder;
+    public GameObject itemInventoryImageTemplate;
+    public OnBeatRange onBeatRange;
+    public Transform heartUIGrid;
+    public Sprite[] heartSprites;
+    public GameObject heartTemplate;
+    private List<GameObject> hearts = new List<GameObject>();
+    public float heartContainers = 3;
+    private int heartEmptyIndex = 0;
+
+    private void Awake()
+    {
+        floorGlobal.pausableScripts.Add(this);
+        heartSprites = Resources.LoadAll<Sprite>("Sprites/hearts");
+        AddHealth(startHealth, heartContainers);
+    }
+    private void Update()
+    {
+        if (Input.GetKeyDown("k"))
+        {
+            RemoveHealth(1);
+        }
+        else if (Input.GetKeyDown("l"))
+        {
+            AddHealth(1);
+        }
+    }
+    public void OnBeatAction()
+    {
+        onBeatRange.BeatAction();
+    }
     public void AddItem(int itemId, string itemType)
     {
         switch (itemType)
@@ -27,6 +63,10 @@ public class PlayerController : MonoBehaviour
                 Gun gun = itemDatabase.guns[itemId];
                 GameObject newGun = Instantiate(gun.gunObject, rightHand.position, rightHand.rotation);
                 newGun.transform.SetParent(gunsHolder);
+                //create icon for inventory
+                GameObject gunSprite = Instantiate(itemInventoryImageTemplate, itemInventoryImageTemplate.transform.position, itemInventoryImageTemplate.transform.rotation);
+                gunSprite.GetComponent<Image>().sprite = gun.gunSprite;
+                gunSprite.transform.SetParent(gunInventoryHolder);
                 guns.Add(newGun);
                 SwitchToNewWeapon(newGun);
                 break;
@@ -34,6 +74,10 @@ public class PlayerController : MonoBehaviour
                 itemIndexes.Add(itemId);
                 Item item = itemDatabase.items[itemId];
                 item.function();
+                //create icon for inventory
+                GameObject itemSprite = Instantiate(itemInventoryImageTemplate, itemInventoryImageTemplate.transform.position, itemInventoryImageTemplate.transform.rotation);
+                itemSprite.GetComponent<Image>().sprite = item.itemSprite;
+                itemSprite.transform.SetParent(itemInventoryHolder);
                 break;
         }
         
@@ -64,15 +108,97 @@ public class PlayerController : MonoBehaviour
         currentGun = newWeapon;
         currentGunIndex = guns.Count - 1;
     }
+    public void AddHealth(float healthAdded, float containerCount = 0)
+    {
+        //create new heart containers
+        for (int i = 0; i < containerCount; i++)
+        {
+            GameObject newHeartContainer = Instantiate(heartTemplate, heartTemplate.transform.position, heartTemplate.transform.rotation);
+            newHeartContainer.transform.SetParent(heartUIGrid);
+            hearts.Add(newHeartContainer);
+            heartContainers++;
+        }
+        //fill heart containers
+        if (hearts[heartEmptyIndex].GetComponent<Image>().sprite.name == "hearts_half") //if the current "empty" heart is a half heart add +1 to health so it will call the next two loops properly
+        {
+            healthAdded++;
+            health -= 1;
+        }
+
+        for (int i = 0; i < (healthAdded / 2) - (healthAdded % 2); i++) //fill full hearts
+        {
+            //changes last empty heart to full
+            hearts[heartEmptyIndex].GetComponent<Image>().sprite = heartSprites[1];
+            health += 2;
+            heartEmptyIndex++;
+            if (heartEmptyIndex == hearts.Count)
+            {
+                heartEmptyIndex--;
+                break;
+            }
+        }
+        for (int i = 0; i < (healthAdded % 2); i++)
+        {
+            //changes empty hearts to half hearts
+            if (heartEmptyIndex != hearts.Count && hearts[heartEmptyIndex].GetComponent<Image>().sprite.name == "hearts_empty")
+            {
+                hearts[heartEmptyIndex].GetComponent<Image>().sprite = heartSprites[2];
+                health++;
+            }
+        }
+
+    }
+
     public void RemoveHealth(float damage)
     {
-        health -= damage;
-        //destroys player once health is lower than or equal to zero
-        if (health <= 0)
+        if (!isInvincible)
         {
-            isDead = true;
-            Debug.Log("dead");
-            //Destroy(gameObject);
+            StartCoroutine(IFrameDelay());
+
+            health -= damage;
+
+            Debug.Log(health);
+
+            //remove health from ui
+            if (hearts[heartEmptyIndex].GetComponent<Image>().sprite.name == "hearts_half") //if the current "empty" heart is a half heart add +1 to health so it will call the next two loops properly
+            {
+                damage++;
+            }
+            for (int i = 0; i < (damage / 2) - (damage % 2); i++) //destroy full hearts
+            {
+                //changes last full heart to empty
+                hearts[heartEmptyIndex].GetComponent<Image>().sprite = heartSprites[0];
+                heartEmptyIndex--;
+                if (heartEmptyIndex == -1)
+                {
+                    heartEmptyIndex++;
+                    break;
+                }
+            }
+            for (int i = 0; i < (damage % 2); i++)
+            {
+                //changes full hearts to half hearts
+                if (heartEmptyIndex > -1 && hearts[heartEmptyIndex].GetComponent<Image>().sprite.name == "hearts_full")
+                {
+                    hearts[heartEmptyIndex].GetComponent<Image>().sprite = heartSprites[2];
+                }
+            }
+
+            //destroys player once health is lower than or equal to zero
+            if (health <= 0)
+            {
+                isDead = true;
+                Debug.Log("dead");
+                //Destroy(gameObject);
+            }
         }
+        
+    }
+
+    public IEnumerator IFrameDelay()
+    {
+        isInvincible = true;
+        yield return new WaitForSeconds(iFrames);
+        isInvincible = false; 
     }
 }

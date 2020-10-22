@@ -1,13 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class BeatIndicatorMovement : MonoBehaviour
+public class BeatIndicatorMovement : KinematicFunctions
 {
-    public float movementSpeed;
-    public Rigidbody2D rb;
-    void Update()
+    public Image image;
+    public float beatCreateTime;
+    public Transform beatMarker;
+    private void Start()
     {
-        rb.velocity = transform.right * movementSpeed * -1;
+        StartCoroutine(MoveObject(transform, transform.localPosition, beatMarker.localPosition, beatCreateTime));
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        Debug.Log(collision.name);
+        if (collision.tag == "BPMIndicator")
+        {
+            Destroy(image);
+            Destroy(gameObject, beatCreateTime / 10);
+        }
     }
 }

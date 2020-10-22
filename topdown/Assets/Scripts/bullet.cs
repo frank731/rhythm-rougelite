@@ -16,7 +16,8 @@ public class Bullet : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         //destroys bullet if it hits something, lowers health 
-        
+        Destroy(gameObject);
+
         if (collision.collider.tag == "Enemy")
         {
             collision.collider.gameObject.GetComponent<EnemyController>().RemoveHealth(bulletDamage);
@@ -25,7 +26,7 @@ public class Bullet : MonoBehaviour
         {
             collision.collider.gameObject.GetComponent<PlayerController>().RemoveHealth(bulletDamage);
         }
-        Destroy(gameObject);
+        
 
     }
     void OnBecameInvisible()

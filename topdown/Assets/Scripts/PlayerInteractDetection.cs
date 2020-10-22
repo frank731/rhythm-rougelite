@@ -25,7 +25,7 @@ public class PlayerInteractDetection : MonoBehaviour
     }
     void Update()
     {
-        if (inRange && Input.GetKeyDown(KeyCode.E))
+        if (inRange && Input.GetKeyDown(KeyCode.F))
         {
             interacted = true;
             interact.Invoke();

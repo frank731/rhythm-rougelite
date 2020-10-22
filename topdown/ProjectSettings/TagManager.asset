@@ -19,6 +19,7 @@ TagManager:
   - LeftHand
   - RightHand
   - FloorGlobalHolder
+  - BPMIndicator
   layers:
   - Default
   - TransparentFX
