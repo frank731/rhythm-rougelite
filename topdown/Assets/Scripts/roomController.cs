@@ -9,9 +9,12 @@ using UnityEngine.Tilemaps;
 
 public class RoomController : MonoBehaviour
 {
-    public GameObject gate;
+    public List<GameObject> doors;
     public GameObject layout = null;
     public GameObject mapIcon;
+    public Transform spawnHolder;
+    public Tilemap walls;
+    public int roomShape;
     public Color mapColor;
     public bool isPlayerIn = false;
     public bool isDestroyed;
@@ -20,8 +23,8 @@ public class RoomController : MonoBehaviour
     public bool startingRoom = false;
     public bool endRoom = false;
     public bool bossRoom = false;
+    public bool itemRoom = false;
     public int distance;
-    private bool needFix = false;
     public int enemyCount = 0;
     public List<GameObject> adjacentRooms = new List<GameObject>();
     private List<int> adjacencies = new List<int>();
@@ -29,16 +32,6 @@ public class RoomController : MonoBehaviour
     private FloorGlobal floorGlobal;
     private PlayerController PlayerController = null;
     
-    /*
-    void ActivateEnemies()
-    {
-        //activate enemies when player enters room
-        foreach(GameObject enemy in enemies)
-        {
-            enemy.SetActive(true);
-        }
-    }
-    */
     public void RevealMap()
     {
         adjacentRooms.RemoveAll(item => item == null);
@@ -73,6 +66,7 @@ public class RoomController : MonoBehaviour
         {
             child.gameObject.SetActive(false);
         }
+
         //make sure unseen rooms are 0.2 transparent
         if (roomCleared)
         {
@@ -103,7 +97,7 @@ public class RoomController : MonoBehaviour
         enemyCount -= 1;
         if (enemyCount <= 0)
         {
-            gate.SetActive(false);
+            StartCoroutine(ChangeDoors(true));
             roomCleared = true;
             if (bossRoom)
             {
@@ -119,6 +113,14 @@ public class RoomController : MonoBehaviour
             }
         }
     }
+    public void SpawnPointDestroyed()
+    {
+        if(spawnHolder.childCount == 0)
+        {
+            endRoom = true;
+        }
+    }
+
     public void ChangeLayout(Object newlayout)
     {
         if (layout != null)
@@ -138,65 +140,16 @@ public class RoomController : MonoBehaviour
         {
             distance = newdistance;
         }
-        
     }
-
-    public void CorrectRooms()
+    public void AddDoor(int roomType, Transform doorPos)
     {
-        //check if room needs to be have more doors
-        foreach (int roomTypeNeeded in adjacencies)
-        {
-            if (!floorGlobal.numToRoom[roomTypeNeeded].Any((MyObject) => MyObject.name == gameObject.name))
-            {
-                needFix = true;
-                break;
-            }
-        }
-
-        if(needFix == true)
-        {
-            //get lists of rooms that have the needed doors
-            List<GameObject[]> needed = new List<GameObject[]>();           
-            foreach (int roomTypeNeeded in adjacencies)
-            {
-                needed.Add(floorGlobal.numToRoom[roomTypeNeeded]);
-            }
-
-            //check which rooms fufill the req of having all needed doors
-            List<GameObject> compatible = needed[0].ToList();            
-            for (int i = 1; i < needed.Count; i++)
-            {                
-                IEnumerable<GameObject> works = compatible.Intersect(needed[i].ToList());
-                compatible = new List<GameObject>();
-                foreach (GameObject g in works)
-                {
-                    compatible.Add(g);
-                }
-            }
-
-            //get room that makes no new rooms by taking shortest name
-            int index = 0;
-            int shortestLen = 5;
-            for(int i = 0; i < compatible.Count; i++)
-            {
-                if (compatible[i].name.Length < shortestLen)
-                {
-                    shortestLen = compatible[i].name.Length;
-                    index = i;
-                }
-            }
-            GameObject replace = Instantiate(compatible[index], transform.position, compatible[index].transform.rotation);
-            //mark room as replaced to prevent other rooms from interacting with it and creating more rooms
-            RoomController replaceController = replace.GetComponent<RoomController>();
-            GameObject minimapRoom = Instantiate(floorGlobal.minimapRoomPrefab, mapIcon.transform.position, transform.rotation);
-            minimapRoom.transform.SetParent(floorGlobal.minimapCanvas.transform);
-            replaceController.mapIcon = minimapRoom;
-            replaceController.needFix = true;
-            replaceController.distance = distance;
-            Destroy(gameObject);
-        }
-            
+        GameObject door = Instantiate(floorGlobal.doors[roomType - 1], doorPos.position, floorGlobal.doors[roomType - 1].transform.rotation);
+        door.transform.SetParent(transform);
+        door.transform.position = doorPos.position;
+        door.SetActive(true);
+        doors.Add(door);
     }
+
     private void Awake()
     {
         floorGlobal = GameObject.FindGameObjectWithTag("FloorGlobalHolder").GetComponent<FloorGlobal>();
@@ -205,13 +158,18 @@ public class RoomController : MonoBehaviour
         {
             distance = floorGlobal.maxRoomCount + 1;
         }
+        else
+        {
+            //create first map icon
+            GameObject minimapRoom = Instantiate(floorGlobal.minimapRoomPrefabs[roomShape], floorGlobal.minimapCanvas.transform.position, transform.rotation);
+            minimapRoom.transform.SetParent(floorGlobal.minimapCanvas.transform);
+            mapIcon = minimapRoom.transform.GetChild(0).gameObject;
+            mapIcon.SetActive(true);
+        }
     }
+
     void Start()
     {
-        gate.SetActive(false);
-        if (!needFix){
-            Invoke("CorrectRooms", 0.1f);
-        }        
         //sets room layout
         if (!startingRoom)
         {
@@ -219,32 +177,35 @@ public class RoomController : MonoBehaviour
             ChangeLayout(floorGlobal.normalLayouts[layoutType]);
             //disable room as optimization
             Invoke("DisableRoom", 0.2f);
+            StartCoroutine(ChangeDoors(false));
         }
         else
         {
-            //create first map icon
-            GameObject minimapRoom = Instantiate(floorGlobal.minimapRoomPrefab, floorGlobal.minimapCanvas.transform.position, transform.rotation);
-            minimapRoom.transform.SetParent(floorGlobal.minimapCanvas.transform);
-            minimapRoom.SetActive(true);
-            mapIcon = minimapRoom;
             //other
             ChangeLayout(floorGlobal.emptyLayout);
+            layout.SetActive(true);
             inPlayerRange = true;
             Invoke("RevealMap", 0.2f);
+            StartCoroutine(ChangeDoors(true));
         }
     }
 
     public void OnDestroy()
     {
         //destroy its corresponding map icon on destroy
-        Destroy(mapIcon);
+        Destroy(mapIcon.transform.parent.gameObject);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         //turns on gate and enemes when player enters room and room hasn't been cleared already
         if(collision.gameObject.tag == "Player")
-        {
+        { 
+            if (!PlayerController)
+            {
+                PlayerController = collision.gameObject.GetComponent<PlayerController>();
+            }
+            PlayerController.currentRoom = this;
             //re enable room on enter
             isPlayerIn = true;
             inPlayerRange = true;
@@ -253,14 +214,18 @@ public class RoomController : MonoBehaviour
             RevealMap();
             if (!roomCleared)
             {
-                gate.SetActive(true);
+                StartCoroutine(ChangeDoors(false));
                 //Invoke("ActivateEnemies", 0.5f);
             }
-            if (!PlayerController)
-            {
-                PlayerController = collision.gameObject.GetComponent<PlayerController>();
-            }
-            PlayerController.currentRoom = this;
+        }
+    }
+
+    public IEnumerator ChangeDoors(bool open)
+    {
+        yield return new WaitForSeconds(0.1f); //waits until all the doors have been created
+        foreach (GameObject door in doors)
+        {
+            door.GetComponent<DoorController>().ChangeDoorStatus(open);
         }
     }
 }

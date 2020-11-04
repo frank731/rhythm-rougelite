@@ -14,6 +14,5 @@ public class ButtonController : LevelChange
     public void ResumeGame()
     {
         floorGlobal.OnPause();
-        Debug.Log("click");
     }
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 public class AdjacencyCheck : MonoBehaviour
 {
     public int needOpening;
+    public Transform doorSpawn;
     /*
      1 is need down opening
      2 is need top opening
@@ -17,12 +18,14 @@ public class AdjacencyCheck : MonoBehaviour
     }
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "RoomSpawnPoint" && collision.name != "replaced")
+        if (collision.tag == "RoomSpawnPoint")
         {
-            RoomController room = collision.transform.parent.gameObject.GetComponent<RoomController>();
-            room.AddAdjacencies(needOpening, transform.parent.GetComponent<RoomController>().distance + 1);
-            transform.parent.gameObject.GetComponent<RoomController>().adjacentRooms.Add(collision.transform.parent.gameObject);
-            Destroy(gameObject, 1f);
+            RoomController adjRoom = collision.transform.parent.gameObject.GetComponent<RoomController>();
+            adjRoom.AddAdjacencies(needOpening, transform.parent.GetComponent<RoomController>().distance + 1);
+            RoomController room = transform.parent.gameObject.GetComponent<RoomController>();
+            room.adjacentRooms.Add(collision.transform.parent.gameObject);
+            room.AddDoor(needOpening, doorSpawn);
+            Destroy(gameObject);
         }
 
     }

@@ -20,6 +20,7 @@ TagManager:
   - RightHand
   - FloorGlobalHolder
   - BPMIndicator
+  - RoomSpawner
   layers:
   - Default
   - TransparentFX

@@ -54,13 +54,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gate: {fileID: 7726751804119544376}
   layout: {fileID: 0}
+  mapIcon: {fileID: 0}
+  roomShape: 0
+  mapColor: {r: 0, g: 0, b: 0, a: 0}
   isPlayerIn: 0
   isDestroyed: 0
   roomCleared: 0
+  inPlayerRange: 0
   startingRoom: 0
+  endRoom: 0
   bossRoom: 0
+  itemRoom: 0
   distance: 0
   enemyCount: 0
+  adjacentRooms: []
 --- !u!61 &1426157470256073737
 BoxCollider2D:
   m_ObjectHideFlags: 0

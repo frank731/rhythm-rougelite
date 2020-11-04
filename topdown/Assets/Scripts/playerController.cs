@@ -22,12 +22,13 @@ public class PlayerController : MonoBehaviour
     public ItemDatabase itemDatabase;
     public FloorGlobal floorGlobal;
     public bool canShoot = false;
+    public GameObject inventory;
     public Transform itemInventoryHolder;
     public Transform gunInventoryHolder;
     public GameObject itemInventoryImageTemplate;
     public OnBeatRange onBeatRange;
     public Transform heartUIGrid;
-    public Sprite[] heartSprites;
+    public bool viewingMap = false;
     public GameObject heartTemplate;
     private List<GameObject> hearts = new List<GameObject>();
     public float heartContainers = 3;
@@ -36,24 +37,15 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         floorGlobal.pausableScripts.Add(this);
-        heartSprites = Resources.LoadAll<Sprite>("Sprites/hearts");
         AddHealth(startHealth, heartContainers);
+        inventory.SetActive(false); //inventory canvas must be enabled at start to place images on it correctly
     }
-    private void Update()
-    {
-        if (Input.GetKeyDown("k"))
-        {
-            RemoveHealth(1);
-        }
-        else if (Input.GetKeyDown("l"))
-        {
-            AddHealth(1);
-        }
-    }
+
     public void OnBeatAction()
     {
         onBeatRange.BeatAction();
     }
+
     public void AddItem(int itemId, string itemType)
     {
         switch (itemType)
@@ -66,6 +58,7 @@ public class PlayerController : MonoBehaviour
                 //create icon for inventory
                 GameObject gunSprite = Instantiate(itemInventoryImageTemplate, itemInventoryImageTemplate.transform.position, itemInventoryImageTemplate.transform.rotation);
                 gunSprite.GetComponent<Image>().sprite = gun.gunSprite;
+                gunSprite.GetComponent<ShowDescription>().description = gun.description;
                 gunSprite.transform.SetParent(gunInventoryHolder);
                 guns.Add(newGun);
                 SwitchToNewWeapon(newGun);
@@ -77,6 +70,7 @@ public class PlayerController : MonoBehaviour
                 //create icon for inventory
                 GameObject itemSprite = Instantiate(itemInventoryImageTemplate, itemInventoryImageTemplate.transform.position, itemInventoryImageTemplate.transform.rotation);
                 itemSprite.GetComponent<Image>().sprite = item.itemSprite;
+                itemSprite.GetComponent<ShowDescription>().description = item.description;
                 itemSprite.transform.SetParent(itemInventoryHolder);
                 break;
         }
@@ -85,7 +79,9 @@ public class PlayerController : MonoBehaviour
     public void RemoveItem(int itemId)
     {
         itemIndexes.Remove(itemId);
+        //TODO make item effects reversible by keeping list of all current effects and calling when item is added or removed
     }
+
     public void OnSwitchWeapon()
     {
         //switches to next gun in rotation
@@ -102,6 +98,13 @@ public class PlayerController : MonoBehaviour
     {
         floorGlobal.OnPause();
     }
+    public void OnViewMap()
+    {
+        //calls when tab is pressed and when tab is released
+        viewingMap = !viewingMap;
+        floorGlobal.OnViewMap(viewingMap);
+    }
+
     public void SwitchToNewWeapon(GameObject newWeapon)
     {
         currentGun.SetActive(false);
@@ -128,7 +131,7 @@ public class PlayerController : MonoBehaviour
         for (int i = 0; i < (healthAdded / 2) - (healthAdded % 2); i++) //fill full hearts
         {
             //changes last empty heart to full
-            hearts[heartEmptyIndex].GetComponent<Image>().sprite = heartSprites[1];
+            hearts[heartEmptyIndex].GetComponent<Image>().sprite = floorGlobal.heartSprites[1];
             health += 2;
             heartEmptyIndex++;
             if (heartEmptyIndex == hearts.Count)
@@ -142,7 +145,7 @@ public class PlayerController : MonoBehaviour
             //changes empty hearts to half hearts
             if (heartEmptyIndex != hearts.Count && hearts[heartEmptyIndex].GetComponent<Image>().sprite.name == "hearts_empty")
             {
-                hearts[heartEmptyIndex].GetComponent<Image>().sprite = heartSprites[2];
+                hearts[heartEmptyIndex].GetComponent<Image>().sprite = floorGlobal.heartSprites[2];
                 health++;
             }
         }
@@ -157,8 +160,6 @@ public class PlayerController : MonoBehaviour
 
             health -= damage;
 
-            Debug.Log(health);
-
             //remove health from ui
             if (hearts[heartEmptyIndex].GetComponent<Image>().sprite.name == "hearts_half") //if the current "empty" heart is a half heart add +1 to health so it will call the next two loops properly
             {
@@ -167,7 +168,7 @@ public class PlayerController : MonoBehaviour
             for (int i = 0; i < (damage / 2) - (damage % 2); i++) //destroy full hearts
             {
                 //changes last full heart to empty
-                hearts[heartEmptyIndex].GetComponent<Image>().sprite = heartSprites[0];
+                hearts[heartEmptyIndex].GetComponent<Image>().sprite = floorGlobal.heartSprites[0];
                 heartEmptyIndex--;
                 if (heartEmptyIndex == -1)
                 {
@@ -180,7 +181,7 @@ public class PlayerController : MonoBehaviour
                 //changes full hearts to half hearts
                 if (heartEmptyIndex > -1 && hearts[heartEmptyIndex].GetComponent<Image>().sprite.name == "hearts_full")
                 {
-                    hearts[heartEmptyIndex].GetComponent<Image>().sprite = heartSprites[2];
+                    hearts[heartEmptyIndex].GetComponent<Image>().sprite = floorGlobal.heartSprites[2];
                 }
             }
 

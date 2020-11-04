@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class FloorGlobal : MonoBehaviour
 {
@@ -11,8 +12,11 @@ public class FloorGlobal : MonoBehaviour
     public GameObject[] leftRooms;
     public GameObject[] rightRooms;
     public GameObject[] endRooms;
-    public Object[] normalLayouts;
-    public Object[] bossLayouts;
+    public GameObject[] roomShapes;
+    public GameObject[] normalLayouts;
+    public GameObject[] bossLayouts;
+    public GameObject[] itemLayouts;
+    public GameObject[] doors;
     public int maxRoomCount = 10;
     public int roomCount = 0;
     public int roomArrSize;
@@ -21,25 +25,25 @@ public class FloorGlobal : MonoBehaviour
     public IDictionary<int, Vector3> numToMap;
     public IDictionary<int, List<GameObject>> roomDistances = new Dictionary<int, List<GameObject>>() {};
     public GameObject emptyLayout;
-    public GameObject itemLayout;
     public GameObject minimapCanvas;
-    public GameObject minimapRoomPrefab;
+    public GameObject[] minimapRoomPrefabs;
     public GameObject bossIcon;
     public GameObject itemIcon;
     public GameObject pauseCanvas;
+    public Sprite[] heartSprites;
     public bool isPaused = false;
     public bool isOnBeat = false;
     public UnityEvent onBeat = new UnityEvent();
     public List<MonoBehaviour> pausableScripts;
+    public RectMask2D minimapMask;
 
     private void Awake()
     {
-        roomArrSize = topRooms.Length;
+        roomArrSize = roomShapes.Length;
         normalLayouts = Resources.LoadAll<GameObject>("Prefabs/Layouts/Room Layouts");
         bossLayouts = Resources.LoadAll<GameObject>("Prefabs/Layouts/Boss Layouts");
-        float offset = minimapRoomPrefab.GetComponent<RectTransform>().rect.width;
-        offset += (offset / 5);
-        numToMap = new Dictionary<int, Vector3>() { { 1, new Vector3(0, offset) }, { 2, new Vector3(0, -offset) }, { 3, new Vector3(-offset, 0) }, { 4, new Vector3(offset, 0) } };
+        itemLayouts = Resources.LoadAll<GameObject>("Prefabs/Layouts/Item Layouts");
+        heartSprites = Resources.LoadAll<Sprite>("Sprites/hearts");
     }
     private void Start()
     {
@@ -48,39 +52,70 @@ public class FloorGlobal : MonoBehaviour
         numToRoom.Add(3, rightRooms);
         numToRoom.Add(4, leftRooms);
 
-        Invoke("ChooseSpecialRooms", 0.5f);
+        Invoke("GetMaxDistance", 0.5f);
     }
 
-    private void CreateSpecialRooms(int dist1, int dist2, int index1, int index2)
+    void CreateSpecialRoom(GameObject room, GameObject[] layouts, ref bool roomType, GameObject icon)
     {
-        //set boss room
-        GameObject farthestRoom = roomDistances[dist1][index1];
-        RoomController farthestRoomController = farthestRoom.GetComponent<RoomController>();
-        while (!farthestRoomController.endRoom)
-        {
-            index1 += 1;
-            farthestRoom = roomDistances[dist1][index1];
-            farthestRoomController = farthestRoom.GetComponent<RoomController>();
-        }
-        int roomType = Random.Range(0, bossLayouts.Length);
-        farthestRoomController.ChangeLayout(bossLayouts[roomType]);
-        farthestRoomController.bossRoom = true;
-        farthestRoomController.AddMapDetail(bossIcon);
-        
-        //set item room
-        farthestRoom = roomDistances[dist2][index2];
-        farthestRoomController = farthestRoom.GetComponent<RoomController>();
-        while (!farthestRoomController.endRoom)
-        {
-            index2 += 1;
-            farthestRoom = roomDistances[dist2][index2];
-            farthestRoomController = farthestRoom.GetComponent<RoomController>();
-        }
-        farthestRoomController.ChangeLayout(itemLayout);
+        RoomController farthestRoomController = room.GetComponent<RoomController>();
+        int roomLayout = Random.Range(0, layouts.Length);
+        farthestRoomController.ChangeLayout(layouts[roomLayout]);
+        roomType = true;
+        farthestRoomController.AddMapDetail(icon);
         farthestRoomController.roomCleared = true;
-        farthestRoomController.AddMapDetail(itemIcon);
+        StartCoroutine(farthestRoomController.ChangeDoors(true));
     }
-    private void ChooseSpecialRooms()
+    private void CreateSpecialRooms(int maxDist)
+    {
+        int index = 0;
+
+        GameObject bossRoom = roomDistances[maxDist][index];
+        RoomController bossRoomController = bossRoom.GetComponent<RoomController>();
+        //ensures room is an ending room
+        while (!bossRoomController.endRoom)
+        {
+            if (index < roomDistances[maxDist].Count)
+            {
+                index++;
+            }
+            else
+            {
+                maxDist -= 1;
+            }
+            bossRoom = roomDistances[maxDist][index];
+            bossRoomController = bossRoom.GetComponent<RoomController>();
+        }
+        //set boss room
+        CreateSpecialRoom(bossRoom, bossLayouts, ref bossRoom.GetComponent<RoomController>().bossRoom, bossIcon);
+
+        index++;
+        if(index == roomDistances[maxDist].Count)
+        {
+            index = 0;
+            maxDist -= 1;
+        }
+
+        GameObject itemRoom = roomDistances[maxDist][index];
+        RoomController itemRoomController = bossRoom.GetComponent<RoomController>();
+        //ensures room is an ending room
+        while (!itemRoomController.endRoom)
+        {
+            if (index < roomDistances[maxDist].Count)
+            {
+                index++;
+            }
+            else
+            {
+                maxDist -= 1;
+            }
+            itemRoom = roomDistances[maxDist][index];
+            itemRoomController = bossRoom.GetComponent<RoomController>();
+        }
+        //set item room
+        CreateSpecialRoom(itemRoom, itemLayouts, ref itemRoom.GetComponent<RoomController>().itemRoom, itemIcon);
+
+    }
+    private void GetMaxDistance()
     {
         //add room distances to array
         rooms.RemoveAll(item => item == null);
@@ -97,14 +132,8 @@ public class FloorGlobal : MonoBehaviour
             }
         }
         int farthestDistance = roomDistances.Keys.Max();
-        if (roomDistances[farthestDistance].Count >= 2)
-        {
-            CreateSpecialRooms(farthestDistance, farthestDistance, 0, 1);
-        }
-        else
-        {
-            CreateSpecialRooms(farthestDistance, farthestDistance - 1, 0, 0);
-        }
+        CreateSpecialRooms(farthestDistance);
+        
     }
     public void OnPause()
     {
@@ -130,5 +159,22 @@ public class FloorGlobal : MonoBehaviour
             }
             pauseCanvas.SetActive(false);
         }
+    }
+
+    public void OnViewMap(bool viewingMap)
+    {
+        minimapMask.enabled = !minimapMask.enabled;
+        if (viewingMap)
+        {
+            minimapCanvas.transform.localScale = new Vector3(1.5f, 1.5f, 1);
+            minimapCanvas.transform.position -= new Vector3(100f, 100f, 1);
+        }
+        else
+        {
+            minimapCanvas.transform.localScale = new Vector3(1, 1, 1);
+            minimapCanvas.transform.position += new Vector3(100f, 100f, 1);
+        }
+       
+        Debug.Log("br");
     }
 }

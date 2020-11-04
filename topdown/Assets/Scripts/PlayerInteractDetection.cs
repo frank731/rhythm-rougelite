@@ -17,11 +17,17 @@ public class PlayerInteractDetection : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        inRange = true;
+        if (collision.tag == "Player")
+        {
+            inRange = true;
+        }
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        inRange = false;
+        if (collision.tag == "Player")
+        {
+            inRange = false;
+        }
     }
     void Update()
     {

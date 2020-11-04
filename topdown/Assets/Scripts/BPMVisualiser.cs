@@ -10,7 +10,6 @@ public class BPMVisualiser : MonoBehaviour
     private float minBPM;
     private float maxBPM;
     private bool isPlaying = false;
-    public AudioClip bgm;
     public AudioSource audioSource;
     public AudioSource audioTest;
     public GameObject beatIndicator;
@@ -42,7 +41,7 @@ public class BPMVisualiser : MonoBehaviour
 
     void Awake()
     {
-        baseBPM = BPMDetector.AnalyzeBpm(bgm);
+        baseBPM = BPMDetector.AnalyzeBpm(audioSource.clip);
         
         //prevents superfast creation
         while (baseBPM >= 240)

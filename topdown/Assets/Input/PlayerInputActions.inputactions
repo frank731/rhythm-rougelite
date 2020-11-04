@@ -60,6 +60,14 @@
                     "expectedControlType": "Axis",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "ViewMap",
+                    "type": "Value",
+                    "id": "42d2d369-e5ea-4101-9d3c-fb35e50da521",
+                    "expectedControlType": "Double",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -326,6 +334,17 @@
                     "action": "TempoChange",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "ec35f4aa-4bed-48fb-9c04-62a8387e1a81",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "ViewMap",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },

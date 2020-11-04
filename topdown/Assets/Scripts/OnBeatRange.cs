@@ -8,10 +8,6 @@ public class OnBeatRange : MonoBehaviour
     public FloorGlobal floorGlobal;
     private List<GameObject> beatMarkers = new List<GameObject>();
 
-    private void Start()
-    {
-        Debug.Log("d");
-    }
     public void BeatAction()
     {
         if (floorGlobal.isOnBeat)
@@ -25,7 +21,6 @@ public class OnBeatRange : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("s");
         floorGlobal.isOnBeat = true;
         floorGlobal.onBeat.Invoke();
         beatMarkers.Add(collision.gameObject);

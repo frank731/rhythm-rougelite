@@ -12,7 +12,7 @@ public class PlayerMovement : MonoBehaviour
     Vector2 direction;
     public void FixedUpdate()
     {
-        Vector2 direction = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        direction = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         //move the character
         move = new Vector2(direction.x, direction.y);
         rb.velocity = (move * speed * Time.deltaTime * 50);
