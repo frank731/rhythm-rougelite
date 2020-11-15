@@ -14,9 +14,11 @@ public class FloorGlobal : MonoBehaviour
     public GameObject[] endRooms;
     public GameObject[] roomShapes;
     public GameObject[] normalLayouts;
+    public GameObject[] largeLayouts;
     public GameObject[] bossLayouts;
     public GameObject[] itemLayouts;
     public GameObject[] doors;
+    public GameObject[][] layouts;
     public int maxRoomCount = 10;
     public int roomCount = 0;
     public int roomArrSize;
@@ -36,14 +38,18 @@ public class FloorGlobal : MonoBehaviour
     public UnityEvent onBeat = new UnityEvent();
     public List<MonoBehaviour> pausableScripts;
     public RectMask2D minimapMask;
+    public CameraFollowPlayer cameraFollowPlayer;
 
     private void Awake()
     {
         roomArrSize = roomShapes.Length;
         normalLayouts = Resources.LoadAll<GameObject>("Prefabs/Layouts/Room Layouts");
+        largeLayouts = Resources.LoadAll<GameObject>("Prefabs/Layouts/Large Room Layouts");
         bossLayouts = Resources.LoadAll<GameObject>("Prefabs/Layouts/Boss Layouts");
         itemLayouts = Resources.LoadAll<GameObject>("Prefabs/Layouts/Item Layouts");
-        heartSprites = Resources.LoadAll<Sprite>("Sprites/hearts");
+        heartSprites = Resources.LoadAll<Sprite>("Sprites/HeartsUI");
+
+        layouts = new GameObject[][]{normalLayouts, largeLayouts};
     }
     private void Start()
     {
@@ -89,10 +95,10 @@ public class FloorGlobal : MonoBehaviour
         CreateSpecialRoom(bossRoom, bossLayouts, ref bossRoom.GetComponent<RoomController>().bossRoom, bossIcon);
 
         index++;
-        if(index == roomDistances[maxDist].Count)
+        while (index >= roomDistances[maxDist].Count)
         {
-            index = 0;
             maxDist -= 1;
+            index = 0;
         }
 
         GameObject itemRoom = roomDistances[maxDist][index];
@@ -133,6 +139,7 @@ public class FloorGlobal : MonoBehaviour
         }
         int farthestDistance = roomDistances.Keys.Max();
         CreateSpecialRooms(farthestDistance);
+        
         
     }
     public void OnPause()

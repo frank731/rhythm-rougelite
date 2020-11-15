@@ -4,12 +4,21 @@ using UnityEngine;
 
 public class PlayerShoot : MonoBehaviour
 {
-    public float shootDelay = 0.2f;
+    public float reloadDelay = 1f;
+    public int maxAmmo;
+    public int currentAmmo;
+    public bool outOfAmmo = false;
+    public bool reloading = false;
     public GameObject bulletPrefab;
     public Transform bulletSpawn;
     public Animator animator;
     protected PlayerController playerController;
     protected FloorGlobal floorGlobal;
+
+    public void Awake()
+    {
+        currentAmmo = maxAmmo;
+    }
 
     public void Start()
     {
@@ -19,39 +28,51 @@ public class PlayerShoot : MonoBehaviour
         playerController = transform.parent.parent.GetComponent<PlayerController>();
     }
 
-    private void OnEnable()
-    {
-        //prevent multiple bulletDelays from running when reenabled.
-        //StopAllCoroutines();
-        //StartCoroutine(BulletDelay());
-    }
     private void OnBeat()
     {
         playerController.canShoot = true;
     }
 
-    public void Update()
+    protected virtual void Shoot()
+    {
+        Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
+        playerController.canShoot = false;
+        currentAmmo--;
+        if (currentAmmo <= 0)
+        {
+            outOfAmmo = true;
+        }
+        animator.SetBool("hasShot", true);
+        SendMessageUpwards("OnBeatAction");
+
+        playerController.gunAmmoText.text = currentAmmo.ToString() + "/" + maxAmmo.ToString();
+        //akAnimator.SetBool("hasShot", false);
+    }
+
+    public void OnFire()
     {
         //create bullet if mouse clicked and on beat 
-        if (Input.GetMouseButtonDown(0) && playerController.canShoot && floorGlobal.isOnBeat)
+        if (playerController.canShoot && floorGlobal.isOnBeat && !outOfAmmo && !reloading)
         {
-            Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
-            playerController.canShoot = false;
-            //StartCoroutine(BulletDelay());
-            animator.SetBool("hasShot", true);
-            SendMessageUpwards("OnBeatAction");
-            //akAnimator.SetBool("hasShot", false);
+            Shoot();
         }
-        
+    }
 
-    }
-    //delay between bullets
-    /*
-    public IEnumerator BulletDelay()
+    public void OnReload()
     {
-        playerController.canShoot = false;
-        yield return new WaitForSeconds(shootDelay);
-        playerController.canShoot = true;
+        if (currentAmmo < maxAmmo && !reloading && floorGlobal.isOnBeat)
+        {
+            StartCoroutine(ReloadDelay());
+            reloading = true;
+        }
     }
-    */
+
+    private IEnumerator ReloadDelay()
+    {
+        yield return new WaitForSeconds(reloadDelay);
+        outOfAmmo = false;
+        reloading = false;
+        currentAmmo = maxAmmo;
+        playerController.gunAmmoText.text = currentAmmo.ToString() + "/" + maxAmmo.ToString();
+    }
 }

@@ -5,12 +5,26 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float speed = 3f;
+    public float baseSpeed = 3f;
+    public float speed;
     public Rigidbody2D rb;
     public Animator animator;
-    Vector2 move;
-    Vector2 direction;
-    public void FixedUpdate()
+    private Vector2 move;
+    private Vector2 direction;
+    private PlayerController playerController;
+    private void Awake()
+    {
+        speed = baseSpeed;
+        playerController = GetComponent<PlayerController>();
+        playerController.resetStats.AddListener(ResetStats);    
+    }
+
+    private void ResetStats()
+    {
+        speed = baseSpeed;
+    }
+
+    private void FixedUpdate()
     {
         direction = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         //move the character

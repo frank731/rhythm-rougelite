@@ -5,14 +5,21 @@ using UnityEngine;
 public class EnemyPistolShoot : EnemyController
 {
     public GameObject bulletPrefab;
-    public Transform firePoint;
+    [SerializeField]
+    private Transform firePoint;
     private FloorGlobal floorGlobal;
+    private int beatCount = 0;
 
     void OnBeat()
     {
-        if (isActive)
+        if (isActive && beatCount == 1) //shoot every second beat
         {
             Instantiate(bulletPrefab, firePoint.position, transform.rotation);
+        }
+        beatCount++;
+        if(beatCount > 1)
+        {
+            beatCount = 0;
         }
     }
 

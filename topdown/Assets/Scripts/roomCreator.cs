@@ -21,6 +21,7 @@ public class RoomCreator : MonoBehaviour
     private int randRoom;
     private bool alreadySpawned = false;
     private float roomCreateTime;
+    public bool test = false;
 
     private void Awake()
     {
@@ -38,7 +39,7 @@ public class RoomCreator : MonoBehaviour
         mapLocation = roomController.mapIcon.transform.parent.GetChild(openingDirection); 
 
         //offset the room creation time to prevent stacking of rooms
-        roomCreateTime = Random.Range(0.01f, 0.01f);
+        roomCreateTime = Random.Range(0.02f, 0.03f);
 
         //get the arrays of rooms, then call the creating room method. delete spawner to clear space later
         floorGlobal = GameObject.FindGameObjectWithTag("FloorGlobalHolder").GetComponent<FloorGlobal>();
@@ -54,15 +55,25 @@ public class RoomCreator : MonoBehaviour
     }
     void CreateRoom()
     {
-        if(alreadySpawned == false)
+        
+        if (alreadySpawned == false)
         {
+            
             randRoom = Random.Range(0, floorGlobal.roomArrSize);
             int roomCount = floorGlobal.roomCount;
             int maxRoomCount = floorGlobal.maxRoomCount;
             //create rooms based on opening type 
             if(roomCount < maxRoomCount)
             {
-                GameObject newRoom = Instantiate(floorGlobal.roomShapes[0], transform.position, transform.rotation);
+                GameObject newRoom;
+                if ((randRoom == 1 && openingDirection == 2) || (randRoom == 1 && openingDirection == 3))
+                {
+                    newRoom = Instantiate(floorGlobal.roomShapes[randRoom], transform.position - new Vector3(23, 15, 0), transform.rotation);
+                }
+                else
+                {
+                    newRoom = Instantiate(floorGlobal.roomShapes[randRoom], transform.position, transform.rotation);
+                }
                 RoomController newRoomController = newRoom.GetComponent<RoomController>();
                 roomCount += newRoomController.spawnHolder.childCount; //adds the number of new rooms that will be spawned by this new room
                 if(roomCount > maxRoomCount)
@@ -77,7 +88,12 @@ public class RoomCreator : MonoBehaviour
                 floorGlobal.roomCount = roomCount;
                 floorGlobal.maxRoomCount = maxRoomCount;
                 newRoom.name = newRoom.name.Replace("(Clone)", "");
-                CreateMinimapIcon(newRoom, mapLocation, newRoom.GetComponent<RoomController>().roomShape, newRoomController); 
+                CreateMinimapIcon(newRoom, mapLocation, newRoom.GetComponent<RoomController>().roomShape, newRoomController);
+                if (test)
+                {
+
+                    Debug.Log(newRoom.transform.position);
+                }
             }
 
             //create only ending rooms after max cycles of room creation

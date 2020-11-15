@@ -15,7 +15,7 @@
                 },
                 {
                     "name": "Fire",
-                    "type": "Value",
+                    "type": "Button",
                     "id": "54459865-49b9-462d-9da0-2d90adceb133",
                     "expectedControlType": "Button",
                     "processors": "",
@@ -66,6 +66,14 @@
                     "type": "Value",
                     "id": "42d2d369-e5ea-4101-9d3c-fb35e50da521",
                     "expectedControlType": "Double",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Reload",
+                    "type": "Button",
+                    "id": "8641d266-9c17-4de4-b67d-81869894503d",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 }
@@ -343,6 +351,17 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "ViewMap",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f3400faf-f405-4b54-96e4-106203c2d14c",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Reload",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

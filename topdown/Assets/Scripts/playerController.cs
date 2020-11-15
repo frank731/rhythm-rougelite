@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class PlayerController : MonoBehaviour
 {
@@ -15,7 +16,8 @@ public class PlayerController : MonoBehaviour
     public Transform rightHand;
     public Transform gunsHolder;
     public int currentGunIndex = 0;
-    public List<GameObject> guns;
+    public List<GameObject> guns = new List<GameObject>();
+    public List<Item> items = new List<Item>();
     public List<int> gunIndexes;
     public List<int> itemIndexes;
     public RoomController currentRoom;
@@ -32,13 +34,19 @@ public class PlayerController : MonoBehaviour
     public GameObject heartTemplate;
     private List<GameObject> hearts = new List<GameObject>();
     public float heartContainers = 3;
+    public TMPro.TextMeshProUGUI gunAmmoText;
+    public Image gunUIImage;
+    public UnityEvent resetStats = new UnityEvent();
     private int heartEmptyIndex = 0;
-
+    private Animator playerAnimator;
+    
     private void Awake()
     {
+        playerAnimator = GetComponent<Animator>();
         floorGlobal.pausableScripts.Add(this);
         AddHealth(startHealth, heartContainers);
         inventory.SetActive(false); //inventory canvas must be enabled at start to place images on it correctly
+        SwitchToNewWeapon(currentGun);
     }
 
     public void OnBeatAction()
@@ -63,22 +71,45 @@ public class PlayerController : MonoBehaviour
                 guns.Add(newGun);
                 SwitchToNewWeapon(newGun);
                 break;
+
             case "item":
                 itemIndexes.Add(itemId);
-                Item item = itemDatabase.items[itemId];
-                item.function();
+                Item databaseItem = itemDatabase.items[itemId];
+                Item newItem = new Item(databaseItem.itemId, databaseItem.displayName, databaseItem.description, databaseItem.itemSprite, databaseItem.function); //create copy of item instead of pointer to databases item
                 //create icon for inventory
                 GameObject itemSprite = Instantiate(itemInventoryImageTemplate, itemInventoryImageTemplate.transform.position, itemInventoryImageTemplate.transform.rotation);
-                itemSprite.GetComponent<Image>().sprite = item.itemSprite;
-                itemSprite.GetComponent<ShowDescription>().description = item.description;
+                itemSprite.GetComponent<Image>().sprite = newItem.itemSprite;
+                itemSprite.GetComponent<ShowDescription>().description = newItem.description;
                 itemSprite.transform.SetParent(itemInventoryHolder);
+                Debug.Log(itemSprite.GetInstanceID() + "new");
+                newItem.inventoryIcon = itemSprite;
+                items.Add(newItem);
+                foreach (Item item in items)
+                {
+                    item.function();
+                    Debug.Log(item.inventoryIcon.GetInstanceID());
+                }
                 break;
         }
         
     }
-    public void RemoveItem(int itemId)
+
+    public void RemoveItem(int removeItemId)
     {
-        itemIndexes.Remove(itemId);
+        foreach(Item i in items)
+        {
+            Debug.Log(i.inventoryIcon.GetInstanceID());
+        }
+        Item toDelete = items.Find(i => i.itemId == removeItemId); //finds first item with needed id
+        itemIndexes.Remove(removeItemId);
+        //Debug.Log(toDelete.inventoryIcon.transform.position);
+        Destroy(toDelete.inventoryIcon);
+        items.Remove(toDelete);
+        resetStats.Invoke();
+        foreach (Item item in items)
+        {
+            item.function();
+        }
         //TODO make item effects reversible by keeping list of all current effects and calling when item is added or removed
     }
 
@@ -93,7 +124,22 @@ public class PlayerController : MonoBehaviour
         }
         currentGun = guns[currentGunIndex];
         currentGun.SetActive(true);
+        UpdateGunUI();
     }
+    public void SwitchToNewWeapon(GameObject newWeapon)
+    {
+        currentGun.SetActive(false);
+        currentGun = newWeapon;
+        newWeapon.SetActive(true);
+        currentGunIndex = guns.Count - 1;
+        UpdateGunUI();
+    }
+    public void UpdateGunUI()
+    {
+        gunUIImage.sprite = currentGun.GetComponent<SpriteRenderer>().sprite;
+        gunAmmoText.text = currentGun.GetComponent<PlayerShoot>().currentAmmo.ToString() + "/" + currentGun.GetComponent<PlayerShoot>().maxAmmo.ToString();
+    }
+
     public void OnPause()
     {
         floorGlobal.OnPause();
@@ -105,12 +151,6 @@ public class PlayerController : MonoBehaviour
         floorGlobal.OnViewMap(viewingMap);
     }
 
-    public void SwitchToNewWeapon(GameObject newWeapon)
-    {
-        currentGun.SetActive(false);
-        currentGun = newWeapon;
-        currentGunIndex = guns.Count - 1;
-    }
     public void AddHealth(float healthAdded, float containerCount = 0)
     {
         //create new heart containers
@@ -160,6 +200,8 @@ public class PlayerController : MonoBehaviour
 
             health -= damage;
 
+            playerAnimator.SetTrigger("Player Damaged");
+
             //remove health from ui
             if (hearts[heartEmptyIndex].GetComponent<Image>().sprite.name == "hearts_half") //if the current "empty" heart is a half heart add +1 to health so it will call the next two loops properly
             {
@@ -189,6 +231,7 @@ public class PlayerController : MonoBehaviour
             if (health <= 0)
             {
                 isDead = true;
+                playerAnimator.SetTrigger("Player Killed");
                 Debug.Log("dead");
                 //Destroy(gameObject);
             }
@@ -196,6 +239,13 @@ public class PlayerController : MonoBehaviour
         
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            RemoveItem(1);
+        }
+    }
     public IEnumerator IFrameDelay()
     {
         isInvincible = true;

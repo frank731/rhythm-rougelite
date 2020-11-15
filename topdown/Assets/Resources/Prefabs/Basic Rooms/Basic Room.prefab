@@ -1259,6 +1259,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   openingDirection: 1
   roomController: {fileID: 8859272024883302049}
+  test: 0
 --- !u!1 &3429088558312428621
 GameObject:
   m_ObjectHideFlags: 0
@@ -1481,6 +1482,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   openingDirection: 2
   roomController: {fileID: 8859272024883302049}
+  test: 0
 --- !u!1 &3917793716800332910
 GameObject:
   m_ObjectHideFlags: 0
@@ -1635,6 +1637,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   openingDirection: 4
   roomController: {fileID: 8859272024883302049}
+  test: 0
 --- !u!1 &6189545012906358495
 GameObject:
   m_ObjectHideFlags: 0
@@ -1980,3 +1983,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   openingDirection: 3
   roomController: {fileID: 8859272024883302049}
+  test: 0

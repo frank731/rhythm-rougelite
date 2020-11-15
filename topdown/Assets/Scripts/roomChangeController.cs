@@ -11,16 +11,17 @@ public class RoomChangeController : KinematicFunctions
     private Transform minimapCanvas;
     //speed in seconds
     private float cameraPanSpeed = 0.15f;
-    void MoveRoom(int px, int py, int cx, int cy)
+    void MoveRoom(int px, int py)
     {
+        //disable camera follow player script just in case
+        floorGlobal.cameraFollowPlayer.enabled = false;
+
         //disable the room that you left as a optimization
         playerController.currentRoom.Invoke("DisableRoom", 0.15f);
 
         transform.position += new Vector3(px, py, 0);
-        Vector3 cameraPos = mainCamera.transform.position;
-        Vector3 neededPos = cameraPos + new Vector3(cx, cy, 0);
-        StartCoroutine(MoveObject(mainCamera.transform, cameraPos, neededPos, cameraPanSpeed));
-        StartCoroutine(MoveMinimap()); //put on delay so player current room can update
+       
+        StartCoroutine(MoveMinimapCamera()); //put on delay so player current room can update
     }
     
     private void Awake()
@@ -34,25 +35,37 @@ public class RoomChangeController : KinematicFunctions
         switch (collision.tag)
         {
             case "DownRoomCheck":
-                MoveRoom(0, -7, 0, -15);
+                MoveRoom(0, -7);
                 break;
             case "TopRoomCheck":
-                MoveRoom(0, 7, 0, 15);
+                MoveRoom(0, 7);
                 break;
             case "RightRoomCheck":
-                MoveRoom(7, 0, 23, 0);
+                MoveRoom(7, 0);
                 break;
             case "LeftRoomCheck":
-                MoveRoom(-7, 0, -23, 0);
+                MoveRoom(-7, 0);
                 break;
         }
     }
 
-    private IEnumerator MoveMinimap()
+    private IEnumerator MoveMinimapCamera()
     {
         yield return new WaitForSeconds(0.02f);
         Vector3 canvasPos = minimapCanvas.localPosition;
         Vector3 neededCanvasPos = playerController.currentRoom.mapIcon.transform.parent.localPosition * -1;
         StartCoroutine(MoveObject(minimapCanvas, canvasPos, neededCanvasPos, cameraPanSpeed));
+        Vector3 cameraPos = mainCamera.transform.position;
+        Vector3 neededPos = playerController.currentRoom.transform.position;
+        neededPos.z = -100; //make sure camera isnt on the scene 
+        IEnumerator cameraMove = MoveObject(mainCamera.transform, cameraPos, neededPos, cameraPanSpeed);
+        StartCoroutine(cameraMove);
+
+        if (playerController.currentRoom.roomShape == 1)
+        {
+            //enable camera following
+            floorGlobal.cameraFollowPlayer.enabled = true;
+            StopCoroutine(cameraMove); //stops camera from trying to move back to room spawnpoint instead of player
+        }
     }
 }

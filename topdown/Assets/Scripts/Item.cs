@@ -10,6 +10,7 @@ public class Item
     public string description;
     public Sprite itemSprite;
     public UnityAction function;
+    public GameObject inventoryIcon;
     public Item(int itemId, string displayName, string description, Sprite sprite, UnityAction function)
     {
         this.itemId = itemId;

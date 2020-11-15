@@ -173,15 +173,14 @@ public class RoomController : MonoBehaviour
         //sets room layout
         if (!startingRoom)
         {
-            int layoutType = Random.Range(0, floorGlobal.normalLayouts.Length);
-            ChangeLayout(floorGlobal.normalLayouts[layoutType]);
+            int layoutType = Random.Range(0, floorGlobal.layouts[roomShape].Length);
+            ChangeLayout(floorGlobal.layouts[roomShape][layoutType]);
             //disable room as optimization
             Invoke("DisableRoom", 0.2f);
             StartCoroutine(ChangeDoors(false));
         }
         else
         {
-            //other
             ChangeLayout(floorGlobal.emptyLayout);
             layout.SetActive(true);
             inPlayerRange = true;
