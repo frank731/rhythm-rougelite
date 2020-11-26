@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace MoreMountains.Feedbacks
@@ -16,7 +15,7 @@ namespace MoreMountains.Feedbacks
         public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.LightColor; } }
 
         /// the possible modes for this feedback
-        public enum Modes { OverTime, Instant}
+        public enum Modes { OverTime, Instant }
 
         [Header("Light")]
         /// the light to affect when playing the feedback

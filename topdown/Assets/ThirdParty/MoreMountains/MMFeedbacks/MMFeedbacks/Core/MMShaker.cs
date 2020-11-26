@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using MoreMountains.Feedbacks;
+﻿using UnityEngine;
 
 namespace MoreMountains.Feedbacks
 {
@@ -26,7 +23,7 @@ namespace MoreMountains.Feedbacks
         protected float _remappedTimeSinceStart;
         protected bool _resetShakerValuesAfterShake;
         protected bool _resetTargetValuesAfterShake;
-        
+
         /// <summary>
         /// On Awake we grab our volume and profile
         /// </summary>
@@ -146,11 +143,11 @@ namespace MoreMountains.Feedbacks
             if (_resetTargetValuesAfterShake)
             {
                 ResetTargetValues();
-            }   
+            }
             if (_resetShakerValuesAfterShake)
             {
                 ResetShakerValues();
-            }            
+            }
             this.enabled = false;
         }
 
@@ -161,7 +158,7 @@ namespace MoreMountains.Feedbacks
         {
             StartShaking();
         }
-             
+
         /// <summary>
         /// On destroy we stop listening for events
         /// </summary>

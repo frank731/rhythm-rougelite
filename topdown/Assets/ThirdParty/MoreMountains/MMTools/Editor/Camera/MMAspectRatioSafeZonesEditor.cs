@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using UnityEditor;
 using UnityEngine;
-using UnityEditor;
 
 namespace MoreMountains.Tools
 {
@@ -14,25 +12,25 @@ namespace MoreMountains.Tools
     {
         static MMAspectRatioSafeZones safeZones;
 
-         /// <summary>
-         /// On enable, registers to the OnSceneGUI hook
-         /// </summary>
-         void OnEnable()
-         {
+        /// <summary>
+        /// On enable, registers to the OnSceneGUI hook
+        /// </summary>
+        void OnEnable()
+        {
             SceneView.duringSceneGui -= OnSceneGUI;
             safeZones = (MMAspectRatioSafeZones)target;
-            SceneView.duringSceneGui += OnSceneGUI;            
-         }
+            SceneView.duringSceneGui += OnSceneGUI;
+        }
 
         /// <summary>
         /// OnSceneGUI, draws center and ratios
         /// </summary>
         /// <param name="sceneView"></param>
-         private static void OnSceneGUI(SceneView sceneView)
-         {
-             DrawFrameCenter(sceneView);
-             DrawRatios(sceneView);
-         }
+        private static void OnSceneGUI(SceneView sceneView)
+        {
+            DrawFrameCenter(sceneView);
+            DrawRatios(sceneView);
+        }
 
         /// <summary>
         /// Draws a rectangle for each ratio
@@ -52,14 +50,14 @@ namespace MoreMountains.Tools
 
             Vector3 bottomLeft = new Vector3(center.x - width / 2f, center.y - height / 2f, 0f);
             Vector3 topRight = new Vector3(center.x + width / 2f, center.y + height / 2f, 0f);
-            
+
             Vector3 topLeft = bottomLeft;
             topLeft.y = topRight.y;
             Vector3 bottomRight = topRight;
             bottomRight.y = bottomLeft.y;
 
             float size = safeZones.CameraSize;
-            
+
             // dotted lines
             float spacing = 2f;
             Color dottedLineColor = Color.white;
@@ -79,10 +77,10 @@ namespace MoreMountains.Tools
                     Handles.color = ratio.RatioColor;
 
                     // aspect ratio positions
-                    Vector3 ratioTopLeft =       new Vector3(center.x - size * aspectRatio, center.y + size, 0f);
-                    Vector3 ratioTopRight =      new Vector3(center.x + size * aspectRatio, center.y + size, 0f);
-                    Vector3 ratioBottomLeft =    new Vector3(center.x - size * aspectRatio, center.y - size, 0f);
-                    Vector3 ratioBottomRight =   new Vector3(center.x + size * aspectRatio, center.y - size, 0f);
+                    Vector3 ratioTopLeft = new Vector3(center.x - size * aspectRatio, center.y + size, 0f);
+                    Vector3 ratioTopRight = new Vector3(center.x + size * aspectRatio, center.y + size, 0f);
+                    Vector3 ratioBottomLeft = new Vector3(center.x - size * aspectRatio, center.y - size, 0f);
+                    Vector3 ratioBottomRight = new Vector3(center.x + size * aspectRatio, center.y - size, 0f);
                     Vector3 ratioLabelPosition = ratioBottomLeft + 0.1f * Vector3.down + 0.1f * Vector3.right;
 
                     // draws a label under the rectangle
@@ -112,7 +110,7 @@ namespace MoreMountains.Tools
                     Handles.DrawSolidRectangleWithOutline(verts, zoneColor, new Color(0, 0, 0, 0));
 
                     // right rectangle
-                    verts = new Vector3[] { new Vector3(topRight.x, ratioTopRight.y, 0f), new Vector3(bottomRight.x, ratioBottomRight.y, 0f), ratioBottomRight, ratioTopRight};
+                    verts = new Vector3[] { new Vector3(topRight.x, ratioTopRight.y, 0f), new Vector3(bottomRight.x, ratioBottomRight.y, 0f), ratioBottomRight, ratioTopRight };
                     Handles.DrawSolidRectangleWithOutline(verts, zoneColor, new Color(0, 0, 0, 0));
 
                     // dotted line left 

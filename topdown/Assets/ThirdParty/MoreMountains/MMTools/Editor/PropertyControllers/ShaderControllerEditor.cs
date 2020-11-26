@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEditor;
+﻿using UnityEditor;
 
 namespace MoreMountains.Tools
 {
@@ -94,7 +91,7 @@ namespace MoreMountains.Tools
             Undo.RecordObject(target, "Modified ShaderController");
 
             ShaderController myTarget = (ShaderController)target;
-                        
+
             Editor.DrawPropertiesExcluding(serializedObject, new string[] { "m_Script", "Curve", "MinValue", "MaxValue", "Duration", "PingPongPauseDuration",
                 "Amplitude", "Frequency", "Shift", "OneTimeDuration", "OneTimeAmplitude", "OneTimeRemapMin",
             "OneTimeRemapMax", "OneTimeCurve", "DisableAfterOneTime", "OneTimeButton", "AudioAnalyzer", "BeatID", "AudioAnalyzerMultiplier", "AudioAnalyzerOffset",
@@ -109,7 +106,7 @@ namespace MoreMountains.Tools
                 EditorGUILayout.PropertyField(_MaxValue);
                 EditorGUILayout.PropertyField(_Duration);
                 EditorGUILayout.PropertyField(_PingPongPauseDuration);
-    }
+            }
             else if (myTarget.ControlMode == ShaderController.ControlModes.Random)
             {
                 EditorGUILayout.PropertyField(_Amplitude);

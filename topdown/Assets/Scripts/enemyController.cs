@@ -5,26 +5,37 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
     public float health;
+    public float iFrames;
     public bool isActive;
     public bool isDead = false;
+    public bool invincible = false;
+    public List<MonoBehaviour> enemyScripts = new List<MonoBehaviour>();
+    public List<GameObject> weapons = new List<GameObject>();
     public Transform player;
-    private RoomController roomControllerHolder;
+    public AudioClip enemyHurtSFX;
+    private RoomController roomController;
+    private AudioSource enemyAudioSource;
+    protected Animator enemyAnimator;
+
     void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
+        player.GetComponent<PlayerController>().playerKilled.AddListener(PlayerKilled);
+        enemyAudioSource = GetComponent<AudioSource>();
+        enemyAnimator = GetComponent<Animator>();
     }
     private void OnEnable()
     {
         isActive = false;
         StartCoroutine(SetActive());
     }
-    
+
     private void Start()
     {
-        roomControllerHolder = transform.parent.parent.gameObject.GetComponent<RoomController>();
-        roomControllerHolder.AddEnemy(gameObject);
+        roomController = transform.parent.parent.gameObject.GetComponent<RoomController>();
+        roomController.AddEnemy(gameObject);
         //deactivate when player is not in its room
-        if (!roomControllerHolder.isPlayerIn)
+        if (!roomController.isPlayerIn)
         {
             gameObject.SetActive(false);
         }
@@ -32,18 +43,55 @@ public class EnemyController : MonoBehaviour
     public void RemoveHealth(float damage)
     {
         health -= damage;
+        enemyAnimator.SetTrigger("Enemy Damaged");
+        enemyAudioSource.PlayOneShot(enemyHurtSFX, 0.3f);
         if (health <= 0 && !isDead)
         {
-            //destroys enemy once health is lower than zero and tells room that enemy has been destroyed
-            isDead = true;
-            Destroy(gameObject);
-            roomControllerHolder.EnemyDestroyed();
+            EnemyKilled();
             return;
         }
+        StartCoroutine(IFrameDelay());
     }
-    IEnumerator SetActive()
+
+    private void PlayerKilled()
+    {
+        foreach (MonoBehaviour script in enemyScripts)
+        {
+            script.enabled = false;
+        }
+    }
+
+    private void EnemyKilled()
+    {
+        //destroys enemy once health is lower than zero and tells room that enemy has been destroyed
+        isDead = true;
+        isActive = false;
+        roomController.EnemyDestroyed();
+        enemyAnimator.SetTrigger("Enemy Killed");
+        //disables movement and attack scripts
+        foreach (MonoBehaviour script in enemyScripts)
+        {
+            script.enabled = false;
+        }
+        foreach (GameObject weapon in weapons)
+        {
+            weapon.SetActive(false);
+        }
+        GetComponent<Collider2D>().enabled = false;
+
+    }
+
+    private IEnumerator SetActive()
     {
         yield return new WaitForSeconds(0.5f);
         isActive = true;
     }
+
+    private IEnumerator IFrameDelay()
+    {
+        invincible = true;
+        yield return new WaitForSeconds(iFrames);
+        invincible = false;
+    }
+
 }

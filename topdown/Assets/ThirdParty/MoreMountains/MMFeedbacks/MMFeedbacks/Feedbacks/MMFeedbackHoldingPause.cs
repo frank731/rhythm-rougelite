@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 namespace MoreMountains.Feedbacks
 {
     /// <summary>
@@ -15,10 +13,10 @@ namespace MoreMountains.Feedbacks
         public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.HoldingPauseColor; } }
         public override bool HoldingPause { get { return true; } }
         public override YieldInstruction Pause { get { return _waitForSeconds; } }
-                
+
         /// the duration of this feedback is the duration of the pause
         public override float FeedbackDuration { get { return PauseDuration; } }
-        
+
         /// <summary>
         /// On custom play we just play our pause
         /// </summary>

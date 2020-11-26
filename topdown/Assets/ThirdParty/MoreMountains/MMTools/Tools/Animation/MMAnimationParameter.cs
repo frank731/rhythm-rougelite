@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MoreMountains.Tools
 {
@@ -48,7 +46,7 @@ namespace MoreMountains.Tools
         {
             TargetAnimator.SetInteger(_parameter, value);
         }
-        
+
         /// <summary>
         /// Sets the float of the specified name to the specified value
         /// </summary>
@@ -56,7 +54,7 @@ namespace MoreMountains.Tools
         {
             TargetAnimator.SetFloat(_parameter, value);
         }
-        
+
         /// <summary>
         /// Sets the bool of the specified name to the specified value
         /// </summary>

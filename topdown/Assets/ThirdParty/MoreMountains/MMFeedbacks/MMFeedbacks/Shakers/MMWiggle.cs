@@ -1,6 +1,5 @@
-﻿using UnityEngine;
-using System.Collections;
-using System;
+﻿using System;
+using UnityEngine;
 
 namespace MoreMountains.Feedbacks
 {
@@ -63,7 +62,7 @@ namespace MoreMountains.Feedbacks
         public bool LimitedTimeResetValue = true;
         /// the actual time left
         [MMFReadOnly]
-        public float LimitedTimeLeft;        
+        public float LimitedTimeLeft;
 
         [Header("Noise Frequency")]
         /// the minimum time between two changes of noise frequency
@@ -106,7 +105,7 @@ namespace MoreMountains.Feedbacks
         public Vector3 newValue;
         public Vector3 initialValue;
         public Vector3 startValue;
-        public float timeSinceLastChange ;
+        public float timeSinceLastChange;
         public float randomFrequency;
         public Vector3 randomNoiseFrequency;
         public Vector3 randomAmplitude;
@@ -121,7 +120,7 @@ namespace MoreMountains.Feedbacks
     /// Add this class to a GameObject to be able to control its position/rotation/scale individually and periodically, allowing it to "wiggle" (or just move however you want on a periodic basis)
     /// </summary>
     [AddComponentMenu("More Mountains/Feedbacks/Shakers/Various/MMWiggle")]
-    public class MMWiggle : MonoBehaviour 
+    public class MMWiggle : MonoBehaviour
     {
         /// whether or not position wiggle is active
         public bool PositionActive = false;
@@ -216,10 +215,10 @@ namespace MoreMountains.Feedbacks
             RandomizeVector3(ref internalProperties.randomNoiseFrequency, properties.NoiseFrequencyMin, properties.NoiseFrequencyMax);
             RandomizeVector3(ref internalProperties.randomNoiseShift, properties.NoiseShiftMin, properties.NoiseShiftMax);
 
-            internalProperties.newValue = DetermineNewValue(properties, internalProperties.newValue, internalProperties.initialValue, ref internalProperties.startValue, 
+            internalProperties.newValue = DetermineNewValue(properties, internalProperties.newValue, internalProperties.initialValue, ref internalProperties.startValue,
                 ref internalProperties.randomAmplitude, ref internalProperties.randomFrequency, ref internalProperties.pauseDuration);
         }
-        
+
         /// <summary>
         /// Every frame we update our object's position, rotation and scale
         /// </summary>
@@ -254,7 +253,7 @@ namespace MoreMountains.Feedbacks
         protected virtual bool UpdateValue(bool valueActive, WiggleProperties properties, ref InternalWiggleProperties internalProperties)
         {
             if (!valueActive) { return false; }
-            if (!properties.WigglePermitted) { return false;  }
+            if (!properties.WigglePermitted) { return false; }
 
             // handle limited time
             if ((properties.LimitedTime) && (properties.LimitedTimeTotal > 0f))
@@ -272,7 +271,7 @@ namespace MoreMountains.Feedbacks
                             properties.WigglePermitted = false;
                             return true;
                         }
-                    }                    
+                    }
                     return false;
                 }
             }
@@ -280,22 +279,22 @@ namespace MoreMountains.Feedbacks
             switch (properties.WiggleType)
             {
                 case WiggleTypes.PingPong:
-                    return MoveVector3TowardsTarget(ref internalProperties.returnVector, properties, ref internalProperties.startValue, internalProperties.initialValue, 
-                        ref internalProperties.newValue, ref internalProperties.timeSinceLastPause, 
-                        ref internalProperties.timeSinceLastChange, ref internalProperties.randomAmplitude, 
-                        ref internalProperties.randomFrequency, 
+                    return MoveVector3TowardsTarget(ref internalProperties.returnVector, properties, ref internalProperties.startValue, internalProperties.initialValue,
+                        ref internalProperties.newValue, ref internalProperties.timeSinceLastPause,
+                        ref internalProperties.timeSinceLastChange, ref internalProperties.randomAmplitude,
+                        ref internalProperties.randomFrequency,
                         ref internalProperties.pauseDuration, internalProperties.randomFrequency);
-                    
+
 
                 case WiggleTypes.Random:
-                    return MoveVector3TowardsTarget(ref internalProperties.returnVector, properties, ref internalProperties.startValue, internalProperties.initialValue, 
-                        ref internalProperties.newValue, ref internalProperties.timeSinceLastPause, 
-                        ref internalProperties.timeSinceLastChange, ref internalProperties.randomAmplitude, 
-                        ref internalProperties.randomFrequency, 
+                    return MoveVector3TowardsTarget(ref internalProperties.returnVector, properties, ref internalProperties.startValue, internalProperties.initialValue,
+                        ref internalProperties.newValue, ref internalProperties.timeSinceLastPause,
+                        ref internalProperties.timeSinceLastChange, ref internalProperties.randomAmplitude,
+                        ref internalProperties.randomFrequency,
                         ref internalProperties.pauseDuration, internalProperties.randomFrequency);
 
                 case WiggleTypes.Noise:
-                    internalProperties.returnVector = AnimateNoiseValue(ref internalProperties, properties);                    
+                    internalProperties.returnVector = AnimateNoiseValue(ref internalProperties, properties);
                     return true;
             }
             return false;
@@ -331,12 +330,12 @@ namespace MoreMountains.Feedbacks
             internalProperties.newValue.x = (Mathf.PerlinNoise(internalProperties.randomNoiseFrequency.x * internalProperties.noiseElapsedTime, internalProperties.randomNoiseShift.x) * 2.0f - 1.0f) * internalProperties.randomAmplitude.x;
             internalProperties.newValue.y = (Mathf.PerlinNoise(internalProperties.randomNoiseFrequency.y * internalProperties.noiseElapsedTime, internalProperties.randomNoiseShift.y) * 2.0f - 1.0f) * internalProperties.randomAmplitude.y;
             internalProperties.newValue.z = (Mathf.PerlinNoise(internalProperties.randomNoiseFrequency.z * internalProperties.noiseElapsedTime, internalProperties.randomNoiseShift.z) * 2.0f - 1.0f) * internalProperties.randomAmplitude.z;
-            
+
             if (properties.RelativeAmplitude)
             {
                 internalProperties.newValue += internalProperties.initialValue;
             }
-            
+
             return internalProperties.newValue;
         }
 
@@ -355,8 +354,8 @@ namespace MoreMountains.Feedbacks
         /// <param name="pauseDuration"></param>
         /// <param name="frequency"></param>
         /// <returns></returns>
-        protected virtual bool MoveVector3TowardsTarget(ref Vector3 movedValue, WiggleProperties properties, ref Vector3 startValue, Vector3 initialValue, 
-            ref Vector3 destinationValue, ref float timeSinceLastPause, ref float timeSinceLastValueChange, 
+        protected virtual bool MoveVector3TowardsTarget(ref Vector3 movedValue, WiggleProperties properties, ref Vector3 startValue, Vector3 initialValue,
+            ref Vector3 destinationValue, ref float timeSinceLastPause, ref float timeSinceLastValueChange,
             ref Vector3 randomAmplitude, ref float randomFrequency,
             ref float pauseDuration, float frequency)
         {
@@ -368,7 +367,7 @@ namespace MoreMountains.Feedbacks
             {
                 return false;
             }
-            
+
             // if we're just out of a pause
             if (timeSinceLastPause == timeSinceLastValueChange)
             {
@@ -396,7 +395,7 @@ namespace MoreMountains.Feedbacks
                     timeSinceLastValueChange = 0f;
                     timeSinceLastPause = 0f;
                     movedValue = destinationValue;
-                    destinationValue = DetermineNewValue(properties, movedValue, initialValue, ref startValue, 
+                    destinationValue = DetermineNewValue(properties, movedValue, initialValue, ref startValue,
                         ref randomAmplitude, ref randomFrequency, ref pauseDuration);
                 }
             }
@@ -414,7 +413,7 @@ namespace MoreMountains.Feedbacks
         /// <param name="randomFrequency"></param>
         /// <param name="pauseDuration"></param>
         /// <returns></returns>
-        protected virtual Vector3 DetermineNewValue(WiggleProperties properties, Vector3 newValue, Vector3 initialValue, ref Vector3 startValue, 
+        protected virtual Vector3 DetermineNewValue(WiggleProperties properties, Vector3 newValue, Vector3 initialValue, ref Vector3 startValue,
             ref Vector3 randomAmplitude, ref float randomFrequency, ref float pauseDuration)
         {
             switch (properties.WiggleType)
@@ -440,7 +439,7 @@ namespace MoreMountains.Feedbacks
                     {
                         newValue = (newValue == properties.AmplitudeMin) ? properties.AmplitudeMax : properties.AmplitudeMin;
                         startValue = (newValue == properties.AmplitudeMin) ? properties.AmplitudeMax : properties.AmplitudeMin;
-                    }                    
+                    }
                     RandomizeFloat(ref randomFrequency, properties.FrequencyMin, properties.FrequencyMax);
                     RandomizeFloat(ref pauseDuration, properties.PauseMin, properties.PauseMax);
                     return newValue;
@@ -457,9 +456,9 @@ namespace MoreMountains.Feedbacks
                     }
                     return newValue;
             }
-            return Vector3.zero;            
+            return Vector3.zero;
         }
-        
+
         /// <summary>
         /// Randomizes a float between bounds
         /// </summary>

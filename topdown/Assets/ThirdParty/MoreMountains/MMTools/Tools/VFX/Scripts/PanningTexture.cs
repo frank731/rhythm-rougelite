@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEngine.UI;
-using MoreMountains.Tools;
 
 namespace MoreMountains.Tools
 {
@@ -13,7 +11,7 @@ namespace MoreMountains.Tools
     public class PanningTexture : MonoBehaviour
     {
         /// the speed at which the texture pans
-        public Vector2 Speed = new Vector2(10,10);
+        public Vector2 Speed = new Vector2(10, 10);
         /// the name of the sorting layer to render the texture at
         public string SortingLayerName = "Above";
 
@@ -30,7 +28,7 @@ namespace MoreMountains.Tools
             if ((_renderer != null) && (!string.IsNullOrEmpty(SortingLayerName)))
             {
                 _renderer.sortingLayerName = SortingLayerName;
-            }            
+            }
 
             _rawImage = GetComponent<RawImage>();
         }
@@ -56,7 +54,7 @@ namespace MoreMountains.Tools
             {
                 _position.y -= 1.0f;
             }
-            
+
             if (_renderer != null)
             {
                 _renderer.material.mainTextureOffset = _position;

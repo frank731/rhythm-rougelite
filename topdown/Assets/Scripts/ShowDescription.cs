@@ -1,23 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 public class ShowDescription : MonoBehaviour
 {
     public GameObject descriptionHolder;
-    public TMPro.TextMeshPro descriptionText;
+    public TMPro.TextMeshProUGUI descriptionText;
     public string description;
 
-    private void Awake()
+    private void Start()
     {
-        EventSystem.current.SetSelectedGameObject(descriptionHolder);
         descriptionText.text = description;
     }
-    void ShowItemDescription()
+    public void ShowItemDescription()
     {
-        descriptionHolder.SetActive(true);
+        descriptionHolder.SetActive(!descriptionHolder.activeSelf);
+        EventSystem.current.SetSelectedGameObject(descriptionHolder);
     }
     public void OnDeselect(BaseEventData eventData)
     {

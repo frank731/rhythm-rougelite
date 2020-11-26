@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using MoreMountains.Tools;
 using UnityEngine;
-using MoreMountains.Tools;
 
 namespace MoreMountains.Feedbacks
 {
@@ -28,7 +26,7 @@ namespace MoreMountains.Feedbacks
         public float TransitionDuration = 1f;
         /// the curve to move along to
         public MMTweenType Curve = new MMTweenType(MMTween.MMTweenCurve.EaseInCubic);
-        
+
         /// the duration of this feedback is the duration of the transition
         public override float FeedbackDuration { get { return TransitionDuration; } }
 

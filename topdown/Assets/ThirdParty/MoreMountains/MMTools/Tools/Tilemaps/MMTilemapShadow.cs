@@ -1,9 +1,5 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
-using MoreMountains.Tools;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Tilemaps;
 
 namespace MoreMountains.Tools
@@ -17,10 +13,10 @@ namespace MoreMountains.Tools
     [AddComponentMenu("More Mountains/Tools/Tilemaps/MMTilemapShadow")]
     [RequireComponent(typeof(Tilemap))]
     public class MMTilemapShadow : MonoBehaviour
-    {        
+    {
         /// the tilemap to copy
         public Tilemap ReferenceTilemap;
-        
+
         [MMInspectorButton("UpdateShadows")]
         public bool UpdateShadowButton;
 
@@ -38,7 +34,7 @@ namespace MoreMountains.Tools
 
             _tilemap = this.gameObject.GetComponent<Tilemap>();
             List<Vector3Int> referenceTilemapPositions = new List<Vector3Int>();
-            
+
             // we grab all filled positions from the ref tilemap
             foreach (var pos in ReferenceTilemap.cellBounds.allPositionsWithin)
             {
@@ -48,12 +44,12 @@ namespace MoreMountains.Tools
                     referenceTilemapPositions.Add(localPlace);
                 }
             }
-            
+
             // we turn our list into an array
             Vector3Int[] positions = new Vector3Int[referenceTilemapPositions.Count];
             TileBase[] allTiles = new TileBase[referenceTilemapPositions.Count];
             int i = 0;
-            foreach(Vector3Int tilePosition in referenceTilemapPositions)
+            foreach (Vector3Int tilePosition in referenceTilemapPositions)
             {
                 positions[i] = tilePosition;
                 allTiles[i] = ReferenceTilemap.GetTile(tilePosition);
@@ -66,10 +62,10 @@ namespace MoreMountains.Tools
             _tilemap.size = ReferenceTilemap.size;
             _tilemap.origin = ReferenceTilemap.origin;
             _tilemap.ResizeBounds();
-            
+
             // we feed it our positions
             _tilemap.SetTiles(positions, allTiles);
         }
-		
-	}
+
+    }
 }

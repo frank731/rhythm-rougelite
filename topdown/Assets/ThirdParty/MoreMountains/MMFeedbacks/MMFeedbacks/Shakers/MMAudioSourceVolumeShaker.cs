@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MoreMountains.Feedbacks
 {
@@ -40,7 +38,7 @@ namespace MoreMountains.Feedbacks
             base.Initialization();
             _targetAudioSource = this.gameObject.GetComponent<AudioSource>();
         }
-               
+
         /// <summary>
         /// When that shaker gets added, we initialize its shake duration
         /// </summary>
@@ -82,7 +80,7 @@ namespace MoreMountains.Feedbacks
             {
                 return;
             }
-            
+
             _resetShakerValuesAfterShake = resetShakerValuesAfterShake;
             _resetTargetValuesAfterShake = resetTargetValuesAfterShake;
 

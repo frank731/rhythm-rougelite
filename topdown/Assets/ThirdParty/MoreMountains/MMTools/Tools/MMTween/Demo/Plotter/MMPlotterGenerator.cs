@@ -1,17 +1,12 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
-using System;
-using System.Reflection;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Reflection;
+using UnityEngine;
 
 namespace MoreMountains.Tools
 {
     public class MMPlotterGenerator : MonoBehaviour
     {
         public MMPlotter PlotterPrefab;
-        
+
         public Vector2 Spacing;
         public float VerticalOddSpacing;
         public int RowLength;
@@ -53,13 +48,13 @@ namespace MoreMountains.Tools
             int column = 0;
             float yCoordinate = 0;
 
-            for (int i=0; i < methods.Length; i++)
+            for (int i = 0; i < methods.Length; i++)
             {
                 _position.x = column * Spacing.x;
-                
+
 
                 _position.y = yCoordinate;
-                
+
                 MMPlotter plotter = Instantiate(PlotterPrefab);
                 plotter.transform.SetParent(this.transform);
                 plotter.transform.localPosition = _position;
@@ -86,7 +81,7 @@ namespace MoreMountains.Tools
 
                 if (column >= RowLength - 1)
                 {
-                    column = 0;                    
+                    column = 0;
                     row++;
                     if (row % 2 == 0)
                     {

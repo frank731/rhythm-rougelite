@@ -1,23 +1,21 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class EnemyPistolShoot : EnemyController
+public class EnemyPistolShoot : MonoBehaviour
 {
     public GameObject bulletPrefab;
     [SerializeField]
     private Transform firePoint;
-    private FloorGlobal floorGlobal;
     private int beatCount = 0;
+    private EnemyController enemyController;
 
     void OnBeat()
     {
-        if (isActive && beatCount == 1) //shoot every second beat
+        if (enemyController.isActive && beatCount == 1) //shoot every second beat
         {
             Instantiate(bulletPrefab, firePoint.position, transform.rotation);
         }
         beatCount++;
-        if(beatCount > 1)
+        if (beatCount > 1)
         {
             beatCount = 0;
         }
@@ -25,8 +23,10 @@ public class EnemyPistolShoot : EnemyController
 
     void Start()
     {
-        floorGlobal = GameObject.FindGameObjectWithTag("FloorGlobalHolder").GetComponent<FloorGlobal>();
-        floorGlobal.onBeat.AddListener(OnBeat);
+        FloorGlobal.Instance.onBeat.AddListener(OnBeat);
+        enemyController = transform.parent.GetComponent<EnemyController>();
+        enemyController.enemyScripts.Add(this);
+        enemyController.weapons.Add(gameObject);
     }
 
 }

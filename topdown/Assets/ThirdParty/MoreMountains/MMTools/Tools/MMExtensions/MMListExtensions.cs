@@ -1,7 +1,5 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.UI;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace MoreMountains.Tools
 {
@@ -34,7 +32,7 @@ namespace MoreMountains.Tools
             for (int i = 0; i < list.Count; i++)
             {
                 list.MMSwap(i, Random.Range(i, list.Count));
-            }                
+            }
         }
     }
 }

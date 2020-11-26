@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-using System.Reflection;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace MoreMountains.Tools
@@ -24,7 +22,7 @@ namespace MoreMountains.Tools
         /// the type of renderer to pilot
         public TargetTypes TargetType = TargetTypes.Renderer;
         /// the renderer with the shader you want to control
-        [MMEnumCondition("TargetType",(int)TargetTypes.Renderer)]
+        [MMEnumCondition("TargetType", (int)TargetTypes.Renderer)]
         public Renderer TargetRenderer;
         /// the ID of the material in the Materials array on the target renderer (usually 0)
         [MMEnumCondition("TargetType", (int)TargetTypes.Renderer)]
@@ -90,7 +88,7 @@ namespace MoreMountains.Tools
         [Header("Random")]
         [MMVector("Min", "Max")]
         /// the noise amplitude
-        public Vector2 Amplitude = new Vector2(0f,5f);
+        public Vector2 Amplitude = new Vector2(0f, 5f);
         [MMVector("Min", "Max")]
         /// the noise frequency
         public Vector2 Frequency = new Vector2(1f, 1f);
@@ -164,7 +162,7 @@ namespace MoreMountains.Tools
         /// internal use only
         [HideInInspector]
         public float PingPong;
-        
+
         protected float _randomAmplitude;
         protected float _randomFrequency;
         protected float _randomShift;
@@ -229,7 +227,7 @@ namespace MoreMountains.Tools
                 return true;
             }
             if (TargetMaterial.HasProperty(propertyName))
-            {                
+            {
                 PropertyID = Shader.PropertyToID(propertyName);
                 PropertyFound = true;
                 return true;
@@ -291,13 +289,13 @@ namespace MoreMountains.Tools
             {
                 return;
             }
-            
+
             PropertyFound = FindShaderProperty(TargetPropertyName);
             if (!PropertyFound)
             {
                 return;
             }
-            
+
             _elapsedTime = 0f;
             _randomAmplitude = Random.Range(Amplitude.x, Amplitude.y);
             _randomFrequency = Random.Range(Frequency.x, Frequency.y);
@@ -308,10 +306,10 @@ namespace MoreMountains.Tools
             {
                 InitialColor = TargetMaterial.GetColor(PropertyID);
             }
-                
+
             _shaking = false;
         }
-                
+
         /// <summary>
         /// Triggers a one time shake of the shader controller
         /// </summary>
@@ -355,7 +353,7 @@ namespace MoreMountains.Tools
                 {
                     _fromColorStorage = FromColor;
                     FromColor = TargetMaterial.GetColor(PropertyID);
-                }                
+                }
                 ControlMode = ControlModes.ToDestination;
                 _startedTimestamp = Time.time;
                 _shaking = true;
@@ -491,7 +489,7 @@ namespace MoreMountains.Tools
                 if (DisableAfterOneTime)
                 {
                     this.enabled = false;
-                }                
+                }
                 return;
             }
 
@@ -530,7 +528,7 @@ namespace MoreMountains.Tools
             switch (PropertyType)
             {
                 case PropertyTypes.Bool:
-                    return TargetMaterial.GetInt(PropertyID);                    
+                    return TargetMaterial.GetInt(PropertyID);
 
                 case PropertyTypes.Int:
                     return TargetMaterial.GetInt(PropertyID);
@@ -539,7 +537,7 @@ namespace MoreMountains.Tools
                     return TargetMaterial.GetFloat(PropertyID);
 
                 case PropertyTypes.Vector:
-                    return TargetMaterial.GetVector(PropertyID).x;                    
+                    return TargetMaterial.GetVector(PropertyID).x;
 
                 case PropertyTypes.Keyword:
                     return TargetMaterial.IsKeywordEnabled(TargetPropertyName) ? 1f : 0f;
@@ -548,7 +546,7 @@ namespace MoreMountains.Tools
                     if (ControlMode != ControlModes.ToDestination)
                     {
                         InitialColor = TargetMaterial.GetColor(PropertyID);
-                    }                    
+                    }
                     return 0f;
 
                 default:
@@ -610,7 +608,7 @@ namespace MoreMountains.Tools
                     }
                     TargetMaterial.SetVector(PropertyID, _vectorValue);
                     break;
-                    
+
                 case PropertyTypes.Color:
                     TargetMaterial.SetColor(PropertyID, _currentColor);
                     break;

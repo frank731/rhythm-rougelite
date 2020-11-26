@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace MoreMountains.Feedbacks
@@ -53,7 +52,7 @@ namespace MoreMountains.Feedbacks
 
         protected virtual int DetermineNextIndex()
         {
-            switch(Method)
+            switch (Method)
             {
                 case Methods.Random:
                     int random = Random.Range(0, Materials.Count);
@@ -65,7 +64,7 @@ namespace MoreMountains.Feedbacks
                         }
                     }
                     _currentIndex = random;
-                    return _currentIndex;                    
+                    return _currentIndex;
 
                 case Methods.Sequential:
                     _currentIndex++;

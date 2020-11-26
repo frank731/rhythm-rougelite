@@ -1,8 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
-using System.Collections.Generic;
-using MoreMountains.Tools;
 
 namespace MoreMountains.Tools
 {
@@ -10,8 +6,8 @@ namespace MoreMountains.Tools
     /// A class to handle cooldown related properties and their resource consumption over time
     /// Remember to initialize it (once) and update it every frame from another class
     /// </summary>
-    [System.Serializable]    
-    public class MMCooldown 
+    [System.Serializable]
+    public class MMCooldown
     {
         /// all possible states for the object
         public enum CooldownStates { Idle, Consuming, PauseOnEmpty, Refilling }
@@ -127,5 +123,5 @@ namespace MoreMountains.Tools
                     break;
             }
         }
-	}
+    }
 }

@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "com.unity.2d.animation": {
-      "version": "4.2.4",
+      "version": "4.2.6",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -73,7 +73,7 @@
       "dependencies": {}
     },
     "com.unity.cinemachine": {
-      "version": "2.6.0",
+      "version": "2.6.3",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -185,7 +185,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.textmeshpro": {
-      "version": "3.0.1",
+      "version": "3.0.3",
       "depth": 0,
       "source": "registry",
       "dependencies": {

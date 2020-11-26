@@ -1,7 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
-using System;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -23,7 +20,7 @@ namespace MoreMountains.Tools
         public override void OnGUI(Rect rect, SerializedProperty property, GUIContent guiContent)
         {
             MMVectorAttribute vector = (MMVectorAttribute)attribute;
-            
+
             if (property.propertyType == SerializedPropertyType.Vector2)
             {
                 float[] fieldArray = new float[] { property.vector2Value.x, property.vector2Value.y };
@@ -67,7 +64,7 @@ namespace MoreMountains.Tools
             if (shortSpace)
             {
                 mainLabelRect.height *= 0.5f;
-            }                
+            }
 
             Rect fieldRect = rect;
             if (shortSpace)

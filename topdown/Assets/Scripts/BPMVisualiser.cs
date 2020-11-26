@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BPMVisualiser : MonoBehaviour
@@ -10,8 +9,8 @@ public class BPMVisualiser : MonoBehaviour
     private float minBPM;
     private float maxBPM;
     private bool isPlaying = false;
+    public float beatHangTime = 0.3f;
     public AudioSource audioSource;
-    public AudioSource audioTest;
     public GameObject beatIndicator;
     //private GameObject beatIndicatorLeft;
     private BeatIndicatorMovement beatIndicatorMovement;
@@ -19,7 +18,6 @@ public class BPMVisualiser : MonoBehaviour
     public Transform beatIndicatorHolder;
     public Transform beatSpawnPointLeft;
     public Transform beatSpawnPointRight;
-    public FloorGlobal floorGlobal;
 
     void OnTempoChange(bool isUp)
     {
@@ -42,7 +40,7 @@ public class BPMVisualiser : MonoBehaviour
     void Awake()
     {
         baseBPM = BPMDetector.AnalyzeBpm(audioSource.clip);
-        
+
         //prevents superfast creation
         while (baseBPM >= 240)
         {
@@ -65,22 +63,22 @@ public class BPMVisualiser : MonoBehaviour
         beatIndicatorMovement.beatMarker = transform;
 
         StartCoroutine(BeatDelay());
-        floorGlobal.pausableScripts.Add(this);
+        FloorGlobal.Instance.pausableScripts.Add(this);
     }
 
-    
+
     private void Update()
     {
         //changes tempo of song and shifts pitch using output mixer group
         if (Input.GetKeyDown("q"))
         {
             currBPM = Mathf.Clamp((currBPM - (audioSource.pitch * 7)), minBPM, maxBPM);
-            if(currBPM > minBPM)
+            if (currBPM > minBPM)
             {
                 OnTempoChange(false);
             }
         }
-        else if(Input.GetKeyDown("e"))
+        else if (Input.GetKeyDown("e"))
         {
             currBPM = Mathf.Clamp((currBPM + (audioSource.pitch * 7)), minBPM, maxBPM);
             if (maxBPM > currBPM)
@@ -91,7 +89,6 @@ public class BPMVisualiser : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        audioTest.Play();
         if (!isPlaying)
         {
             audioSource.Play();
@@ -117,6 +114,14 @@ public class BPMVisualiser : MonoBehaviour
         indicatorLeft.transform.SetParent(beatIndicatorHolder);
         GameObject indicatorRight = Instantiate(beatIndicator, beatSpawnPointRight.position, beatSpawnPointRight.rotation);
         indicatorRight.transform.SetParent(beatIndicatorHolder);
+        FloorGlobal.Instance.isOnBeat = true;
+        FloorGlobal.Instance.onBeat.Invoke();
+        StartCoroutine(BeatHangTime());
         StartCoroutine(BeatDelay());
+    }
+    private IEnumerator BeatHangTime()
+    {
+        yield return new WaitForSeconds(beatHangTime);
+        FloorGlobal.Instance.isOnBeat = false;
     }
 }

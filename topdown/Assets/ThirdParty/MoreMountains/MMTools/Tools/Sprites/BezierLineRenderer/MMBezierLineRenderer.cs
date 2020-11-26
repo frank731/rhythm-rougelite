@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
 
 namespace MoreMountains.Tools
 {
@@ -13,17 +12,17 @@ namespace MoreMountains.Tools
         [MMReadOnly]
         public int NumberOfCurves = 0;
 
-        protected LineRenderer _lineRenderer;    
+        protected LineRenderer _lineRenderer;
 
         protected virtual void Awake()
         {
-            NumberOfCurves = (int)AdjustmentHandles.Length / 3;
+            NumberOfCurves = AdjustmentHandles.Length / 3;
 
-            _lineRenderer = GetComponent<LineRenderer>();   
+            _lineRenderer = GetComponent<LineRenderer>();
             if (_lineRenderer != null)
             {
                 _lineRenderer.sortingLayerID = SortingLayerID;
-            }                        
+            }
         }
 
         protected virtual void Update()
@@ -40,7 +39,7 @@ namespace MoreMountains.Tools
                     float t = j / (float)NumberOfSegments;
                     int pointIndex = i * 3;
                     Vector3 point = BezierPoint(t, AdjustmentHandles[pointIndex].position, AdjustmentHandles[pointIndex + 1].position, AdjustmentHandles[pointIndex + 2].position, AdjustmentHandles[pointIndex + 3].position);
-                    _lineRenderer.positionCount = (i * NumberOfSegments) + j;                    
+                    _lineRenderer.positionCount = (i * NumberOfSegments) + j;
                     _lineRenderer.SetPosition((i * NumberOfSegments) + (j - 1), point);
                 }
             }

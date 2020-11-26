@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Audio;
 
 namespace MoreMountains.Feedbacks
@@ -25,7 +23,7 @@ namespace MoreMountains.Feedbacks
         [Header("Random Sound")]
         /// an array to pick a random sfx from
         public AudioClip[] RandomSfx;
-        
+
         [Header("Volume")]
         /// the minimum volume to play the sound at
         public float MinVolume = 1f;
@@ -41,7 +39,7 @@ namespace MoreMountains.Feedbacks
         [Header("Mixer")]
         /// the audiomixer to play the sound with (optional)
         public AudioMixerGroup SfxAudioMixerGroup;
-        
+
         /// the duration of this feedback is the duration of the clip being played
         public override float FeedbackDuration { get { return _duration; } }
 
@@ -56,7 +54,7 @@ namespace MoreMountains.Feedbacks
         {
             base.CustomInitialization(owner);
         }
-        
+
         /// <summary>
         /// Plays either a random sound or the specified sfx
         /// </summary>
@@ -66,7 +64,7 @@ namespace MoreMountains.Feedbacks
         {
             if (Active)
             {
-                switch(Mode)
+                switch (Mode)
                 {
                     case Modes.Play:
                         if (RandomSfx.Length > 0)
@@ -97,7 +95,7 @@ namespace MoreMountains.Feedbacks
                 }
             }
         }
-        
+
         /// <summary>
         /// Plays the audiosource at the selected volume and pitch
         /// </summary>
@@ -124,7 +122,7 @@ namespace MoreMountains.Feedbacks
             if (TargetAudioSource != null)
             {
                 TargetAudioSource?.Stop();
-            }            
+            }
         }
     }
 }

@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Cinemachine;
 using UnityEngine;
-using Cinemachine;
-using MoreMountains.Feedbacks;
 
 namespace MoreMountains.FeedbacksForThirdParty
 {
@@ -18,7 +15,7 @@ namespace MoreMountains.FeedbacksForThirdParty
         public int Channel = 0;
 
         protected CinemachineVirtualCamera _camera;
-        
+
         /// <summary>
         /// On Awake we store our virtual camera
         /// </summary>

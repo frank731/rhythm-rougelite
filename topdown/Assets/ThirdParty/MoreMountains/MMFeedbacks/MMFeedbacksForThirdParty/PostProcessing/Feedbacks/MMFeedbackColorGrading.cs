@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using MoreMountains.Feedbacks;
 using UnityEngine;
-using MoreMountains.Feedbacks;
 
 namespace MoreMountains.FeedbacksForThirdParty
 {
@@ -19,7 +17,7 @@ namespace MoreMountains.FeedbacksForThirdParty
     {
         /// sets the inspector color for this feedback
         public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.PostProcessColor; } }
-        
+
         [Header("Color Grading")]
         /// the channel to emit on
         public int Channel = 0;
@@ -82,11 +80,11 @@ namespace MoreMountains.FeedbacksForThirdParty
         {
             if (Active)
             {
-                MMColorGradingShakeEvent.Trigger(ShakePostExposure, RemapPostExposureZero, RemapPostExposureOne, 
-                    ShakeHueShift, RemapHueShiftZero, RemapHueShiftOne, 
-                    ShakeSaturation, RemapSaturationZero, RemapSaturationOne, 
-                    ShakeContrast, RemapContrastZero, RemapContrastOne, 
-                    ShakeDuration,                     
+                MMColorGradingShakeEvent.Trigger(ShakePostExposure, RemapPostExposureZero, RemapPostExposureOne,
+                    ShakeHueShift, RemapHueShiftZero, RemapHueShiftOne,
+                    ShakeSaturation, RemapSaturationZero, RemapSaturationOne,
+                    ShakeContrast, RemapContrastZero, RemapContrastOne,
+                    ShakeDuration,
                     RelativeIntensity, attenuation, Channel, ResetShakerValuesAfterShake, ResetTargetValuesAfterShake);
             }
         }

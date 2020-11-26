@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using MoreMountains.Feedbacks;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -89,7 +88,7 @@ namespace MoreMountains.Feedbacks
                 if (Feedbacks[i] != null)
                 {
                     Feedbacks[i].Initialization(owner);
-                }                
+                }
             }
         }
 
@@ -154,7 +153,7 @@ namespace MoreMountains.Feedbacks
             {
                 // if at least one pause was found
                 StartCoroutine(PausedFeedbacksCo(position, attenuation));
-            }            
+            }
         }
 
         protected virtual IEnumerator PausedFeedbacksCo(Vector3 position, float attenuation)
@@ -163,7 +162,7 @@ namespace MoreMountains.Feedbacks
             for (int i = 0; i < Feedbacks.Count; i++)
             {
                 // handles holding pauses
-                if ( (Feedbacks[i].Active) 
+                if ((Feedbacks[i].Active)
                     && ((Feedbacks[i].HoldingPause == true) || (Feedbacks[i].LooperPause == true)))
                 {
                     // we stay here until all previous feedbacks have finished
@@ -180,7 +179,7 @@ namespace MoreMountains.Feedbacks
                 Feedbacks[i].Play(position, attenuation);
 
                 // Handles pause
-                if ((Feedbacks[i].Pause != null) 
+                if ((Feedbacks[i].Pause != null)
                     && (Feedbacks[i].Active))
                 {
                     bool shouldPause = true;
@@ -198,48 +197,48 @@ namespace MoreMountains.Feedbacks
                         yield return Feedbacks[i].Pause;
                         _lastStartAt = Time.time;
                         _holdingMax = 0f;
-                    }                    
+                    }
                 }
 
                 // updates holding max
                 if (Feedbacks[i].Active)
-                {                    
+                {
                     if (Feedbacks[i].Pause == null)
                     {
                         float feedbackDuration = Feedbacks[i].FeedbackDuration + Feedbacks[i].Timing.InitialDelay + Feedbacks[i].Timing.NumberOfRepeats * (Feedbacks[i].FeedbackDuration + Feedbacks[i].Timing.DelayBetweenRepeats);
                         _holdingMax = Mathf.Max(feedbackDuration, _holdingMax);
-                    }                        
+                    }
                 }
 
                 // handles looper
-                if ( (Feedbacks[i].LooperPause == true) 
-                    && (Feedbacks[i].Active) 
-                    && ((Feedbacks[i] as MMFeedbackLooper).NumberOfLoopsLeft > 0) )
+                if ((Feedbacks[i].LooperPause == true)
+                    && (Feedbacks[i].Active)
+                    && ((Feedbacks[i] as MMFeedbackLooper).NumberOfLoopsLeft > 0))
                 {
                     // we determine the index we should start again at
                     bool loopAtLastPause = (Feedbacks[i] as MMFeedbackLooper).LoopAtLastPause;
                     bool loopAtLastLoopStart = (Feedbacks[i] as MMFeedbackLooper).LoopAtLastLoopStart;
-                    int newi = 0;                    
+                    int newi = 0;
                     for (int j = i - 1; j >= 0; j--)
                     {
                         // if we're at the start
                         if (j == 0)
                         {
-                            newi = j-1;
+                            newi = j - 1;
                             break;
                         }
                         // if we've found a pause
-                        if ( (Feedbacks[j].Pause != null) 
-                            && (Feedbacks[j].FeedbackDuration > 0f) 
-                            && loopAtLastPause && (Feedbacks[j].Active) )
+                        if ((Feedbacks[j].Pause != null)
+                            && (Feedbacks[j].FeedbackDuration > 0f)
+                            && loopAtLastPause && (Feedbacks[j].Active))
                         {
                             newi = j;
                             break;
                         }
                         // if we've found a looper start
-                        if ( (Feedbacks[j].LooperStart == true) 
-                            && loopAtLastLoopStart 
-                            && (Feedbacks[j].Active) )
+                        if ((Feedbacks[j].LooperStart == true)
+                            && loopAtLastLoopStart
+                            && (Feedbacks[j].Active))
                         {
                             newi = j;
                             break;
@@ -306,21 +305,21 @@ namespace MoreMountains.Feedbacks
         protected virtual void OnDestroy()
         {
             IsPlaying = false;
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             if (!Application.isPlaying)
-            {            
+            {
                 // we remove all binders
                 foreach (MMFeedback feedback in Feedbacks)
                 {
                     EditorApplication.delayCall += () =>
                     {
                         DestroyImmediate(feedback);
-                    };                    
+                    };
                 }
             }
-            #endif
+#endif
         }
-            
+
     }
 
 }

@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 namespace MoreMountains.Feedbacks
 {
@@ -11,13 +10,13 @@ namespace MoreMountains.Feedbacks
     [FeedbackPath("Pause/Pause")]
     public class MMFeedbackPause : MMFeedback
     {
-        public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.PauseColor; } }        
+        public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.PauseColor; } }
         public override YieldInstruction Pause { get { return _waitForSeconds; } }
-        
+
         [Header("Pause")]
         /// the duration of the pause, in seconds
         public float PauseDuration = 1f;
-        
+
         /// the duration of this feedback is the duration of the pause
         public override float FeedbackDuration { get { return PauseDuration; } }
 

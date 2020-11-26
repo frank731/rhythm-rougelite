@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
+using System.Collections;
 using UnityEngine;
-using MoreMountains.Tools;
-using System;
 using UnityEngine.Events;
 
 namespace MoreMountains.Tools
@@ -246,7 +244,7 @@ namespace MoreMountains.Tools
 #if !UNITY_WEBGL
                 GameObject audioSourceGo = new GameObject("Microphone");
                 audioSourceGo.transform.SetParent(this.gameObject.transform);
-                TargetAudioSource = audioSourceGo.AddComponent<AudioSource>();                
+                TargetAudioSource = audioSourceGo.AddComponent<AudioSource>();
                 string _microphone = Microphone.devices[MicrophoneID].ToString();
                 TargetAudioSource.clip = Microphone.Start(_microphone, true, _microphoneDuration, (int)_microphoneFrequency);
                 TargetAudioSource.Play();

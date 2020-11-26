@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
 
 namespace MoreMountains.Feedbacks
@@ -48,7 +46,7 @@ namespace MoreMountains.Feedbacks
         {
             if (Active && (PlayEvents != null))
             {
-                PlayEvents.Invoke();                
+                PlayEvents.Invoke();
             }
         }
 

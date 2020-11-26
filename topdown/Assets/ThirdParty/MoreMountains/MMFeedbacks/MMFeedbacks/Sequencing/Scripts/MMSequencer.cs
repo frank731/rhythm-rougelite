@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -27,7 +25,7 @@ namespace MoreMountains.Feedbacks
         public bool RandomSequence = false;
         /// whether that sequencer should start playing on application start
         public bool PlayOnStart = false;
-        
+
         [Header("Metronome")]
         /// a sound to play every beat
         public AudioClip MetronomeSound;
@@ -91,7 +89,7 @@ namespace MoreMountains.Feedbacks
                 _beatSoundAudiosource = go.AddComponent<AudioSource>();
                 _beatSoundAudiosource.clip = MetronomeSound;
                 _beatSoundAudiosource.loop = false;
-                _beatSoundAudiosource.playOnAwake = false;                
+                _beatSoundAudiosource.playOnAwake = false;
             }
             if (PlayOnStart)
             {
@@ -106,7 +104,7 @@ namespace MoreMountains.Feedbacks
         {
             CurrentSequenceIndex = 0;
             Playing = true;
-            LastBeatTimestamp = 0f;            
+            LastBeatTimestamp = 0f;
         }
 
         /// <summary>
@@ -326,7 +324,7 @@ namespace MoreMountains.Feedbacks
             }
             LastBPM = BPM;
         }
-        
+
         /// <summary>
         /// Rebuilds the sequence properties to match length and track count - will destroy contents
         /// </summary>
@@ -343,7 +341,7 @@ namespace MoreMountains.Feedbacks
             Sequence.Length = SequencerLength * beatDuration;
             Sequence.EndSilenceDuration = beatDuration;
             Sequence.Quantized = true;
-            
+
             if ((LastSequencerLength != SequencerLength) || (LastTracksCount != Sequence.SequenceTracks.Count))
             {
                 Sequence.QuantizedSequence = new List<MMSequenceList>();
@@ -359,9 +357,9 @@ namespace MoreMountains.Feedbacks
                         note.Timestamp = i * beatDuration;
                         Sequence.QuantizedSequence[trackIndex].Line.Add(note);
                     }
-                }                
+                }
             }
-            
+
             LastTracksCount = Sequence.SequenceTracks.Count;
             LastSequencerLength = SequencerLength;
         }

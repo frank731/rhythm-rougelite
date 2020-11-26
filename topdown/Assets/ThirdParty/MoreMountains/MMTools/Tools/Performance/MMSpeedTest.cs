@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace MoreMountains.Tools
@@ -30,7 +28,7 @@ namespace MoreMountains.Tools
     /// It'll output the time spent between the StartTest and the EndTest calls
     /// Make sure to use a unique ID for both calls
     /// </summary>
-    public static class MMSpeedTest 
+    public static class MMSpeedTest
     {
         private static readonly Dictionary<string, MMSpeedTestItem> _speedTests = new Dictionary<string, MMSpeedTestItem>();
 
@@ -63,7 +61,7 @@ namespace MoreMountains.Tools
             float elapsedTime = _speedTests[testID].Timer.ElapsedMilliseconds / 1000f;
             _speedTests.Remove(testID);
 
-            UnityEngine.Debug.Log("<color=red>MMSpeedTest</color> [Test "+testID+"] test duration : "+elapsedTime+"s");
-        }        
+            UnityEngine.Debug.Log("<color=red>MMSpeedTest</color> [Test " + testID + "] test duration : " + elapsedTime + "s");
+        }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MoreMountains.Tools
 {
@@ -36,7 +34,7 @@ namespace MoreMountains.Tools
 
         protected virtual void Awake()
         {
-            _animator = this.gameObject.GetComponent<Animator>();            
+            _animator = this.gameObject.GetComponent<Animator>();
         }
 
         protected virtual void Update()
@@ -59,7 +57,7 @@ namespace MoreMountains.Tools
             float timeBetweenFrames = 0f;
             float animatorSpeed = 0f;
 
-            switch(FramerateMode)
+            switch (FramerateMode)
             {
                 case FramerateModes.Manual:
                     timeBetweenFrames = ManualTimeBetweenFrames;

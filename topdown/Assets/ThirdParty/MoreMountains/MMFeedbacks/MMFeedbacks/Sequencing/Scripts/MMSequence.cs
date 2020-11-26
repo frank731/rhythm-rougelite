@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace MoreMountains.Feedbacks
@@ -40,7 +38,7 @@ namespace MoreMountains.Feedbacks
         public MMSequenceTrackStates State = MMSequenceTrackStates.Idle;
         [HideInInspector]
         public bool Initialized = false;
-        
+
         public virtual void SetDefaults(int index)
         {
             if (!Initialized)
@@ -51,7 +49,7 @@ namespace MoreMountains.Feedbacks
                 Active = true;
                 State = MMSequenceTrackStates.Idle;
                 Initialized = true;
-            }            
+            }
         }
     }
 
@@ -91,13 +89,13 @@ namespace MoreMountains.Feedbacks
         public int TargetBPM = 120;
         /// the contents of the quantized sequence
         public List<MMSequenceList> QuantizedSequence;
-        
+
         [Space]
         [Header("Controls")]
         [MMFInspectorButton("RandomizeTrackColors")]
         public bool RandomizeTrackColorsButton;
-        
-        protected float[] _quantizedBeats; 
+
+        protected float[] _quantizedBeats;
         protected List<MMSequenceNote> _deleteList;
 
         /// <summary>
@@ -154,7 +152,7 @@ namespace MoreMountains.Feedbacks
             {
                 _quantizedBeats[i] = i * beatDuration;
             }
-            
+
             for (int i = 0; i < SequenceTracks.Count; i++)
             {
                 QuantizedSequence.Add(new MMSequenceList());
@@ -175,7 +173,7 @@ namespace MoreMountains.Feedbacks
                         }
                     }
                 }
-            }        
+            }
         }
 
         /// <summary>
@@ -194,7 +192,7 @@ namespace MoreMountains.Feedbacks
         /// </summary>
         protected virtual void RandomizeTrackColors()
         {
-            foreach(MMSequenceTrack track in SequenceTracks)
+            foreach (MMSequenceTrack track in SequenceTracks)
             {
                 track.TrackColor = RandomSequenceColor();
             }
@@ -209,7 +207,7 @@ namespace MoreMountains.Feedbacks
             int random = UnityEngine.Random.Range(0, 32);
             switch (random)
             {
-                case 0: return new Color32(240, 248, 255, 255); 
+                case 0: return new Color32(240, 248, 255, 255);
                 case 1: return new Color32(127, 255, 212, 255);
                 case 2: return new Color32(245, 245, 220, 255);
                 case 3: return new Color32(95, 158, 160, 255);
@@ -243,9 +241,9 @@ namespace MoreMountains.Feedbacks
                 case 31: return new Color32(255, 255, 0, 255);
                 case 32: return new Color32(154, 205, 50, 255);
             }
-            return new Color32(240, 248, 255, 255); 
+            return new Color32(240, 248, 255, 255);
         }
-        
+
         /// <summary>
         /// Rounds a float to the closest float in an array (array has to be sorted)
         /// </summary>

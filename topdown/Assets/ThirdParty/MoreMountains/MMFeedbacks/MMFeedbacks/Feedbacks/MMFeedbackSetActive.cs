@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MoreMountains.Feedbacks
 {
@@ -17,7 +15,7 @@ namespace MoreMountains.Feedbacks
 
         /// the possible effects the feedback can have on the target object's status 
         public enum PossibleStates { Active, Inactive, Toggle }
-        
+
         [Header("Set Active")]
         /// the gameobject we want to change the active state of
         public GameObject TargetGameObject;
@@ -41,7 +39,7 @@ namespace MoreMountains.Feedbacks
         [MMFCondition("SetStateOnReset", true)]
         /// how to change the state on reset
         public PossibleStates StateOnReset = PossibleStates.Inactive;
-        
+
         /// <summary>
         /// On init we change the state of our object if needed
         /// </summary>

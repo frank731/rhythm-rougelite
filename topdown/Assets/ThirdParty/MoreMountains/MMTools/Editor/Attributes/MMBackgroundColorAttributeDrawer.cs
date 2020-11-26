@@ -1,7 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
-using System;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -16,7 +13,7 @@ namespace MoreMountains.Tools
             var backgroundColorAttribute = attribute as MMBackgroundColorAttribute;
 
             bool doHighlight = true;
-            
+
             if (doHighlight)
             {
                 var color = GetColor(backgroundColorAttribute.Color);

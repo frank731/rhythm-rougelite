@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -108,7 +105,7 @@ namespace MoreMountains.Feedbacks
                 _pool = new AudioSource[PoolSize];
                 for (int i = 0; i < PoolSize; i++)
                 {
-                    _pool[i] = CreateAudioSource(owner, "PooledAudioSource"+i);
+                    _pool[i] = CreateAudioSource(owner, "PooledAudioSource" + i);
                 }
             }
         }
@@ -121,9 +118,9 @@ namespace MoreMountains.Feedbacks
             temporaryAudioHost.transform.position = owner.transform.position;
             temporaryAudioHost.transform.SetParent(owner.transform);
             // we add an audio source to that host
-            _tempAudioSource = temporaryAudioHost.AddComponent<AudioSource>() as AudioSource;
+            _tempAudioSource = temporaryAudioHost.AddComponent<AudioSource>();
             _tempAudioSource.playOnAwake = false;
-            return _tempAudioSource; 
+            return _tempAudioSource;
         }
 
         /// <summary>
@@ -151,7 +148,7 @@ namespace MoreMountains.Feedbacks
                         _duration = _randomClip.length;
                         PlaySound(_randomClip, position);
                     }
-                    
+
                 }
             }
         }
@@ -179,7 +176,7 @@ namespace MoreMountains.Feedbacks
                 // we set the temp audio's position
                 temporaryAudioHost.transform.position = position;
                 // we add an audio source to that host
-                AudioSource audioSource = temporaryAudioHost.AddComponent<AudioSource>() as AudioSource;
+                AudioSource audioSource = temporaryAudioHost.AddComponent<AudioSource>();
                 PlayAudioSource(audioSource, sfx, volume, pitch);
                 // we destroy the host after the clip has played
                 Destroy(temporaryAudioHost, sfx.length);
@@ -236,7 +233,7 @@ namespace MoreMountains.Feedbacks
             }
             return null;
         }
-        
+
         /// <summary>
         /// A test method that creates an audiosource, plays it, and destroys itself after play
         /// </summary>
@@ -256,7 +253,7 @@ namespace MoreMountains.Feedbacks
 
             if (tmpAudioClip == null)
             {
-                Debug.LogError(Label + " on "+this.gameObject.name + " can't play in editor mode, you haven't set its Sfx.");
+                Debug.LogError(Label + " on " + this.gameObject.name + " can't play in editor mode, you haven't set its Sfx.");
                 return;
             }
 
@@ -264,7 +261,7 @@ namespace MoreMountains.Feedbacks
             float pitch = Random.Range(MinPitch, MaxPitch);
             GameObject temporaryAudioHost = new GameObject("EditorTestAS_WillAutoDestroy");
             temporaryAudioHost.transform.position = this.transform.position;
-            AudioSource audioSource = temporaryAudioHost.AddComponent<AudioSource>() as AudioSource;
+            AudioSource audioSource = temporaryAudioHost.AddComponent<AudioSource>();
             PlayAudioSource(audioSource, tmpAudioClip, volume, pitch);
             float length = 1000 * tmpAudioClip.length;
             await Task.Delay((int)length);

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -28,7 +27,7 @@ namespace MoreMountains.Tools
 
         /// the possible directions for this countdown
         public enum MMCountdownDirections { Ascending, Descending }
-        
+
         [Header("Debug")]
         [MMReadOnly]
         /// the time left in our countdown 
@@ -66,7 +65,7 @@ namespace MoreMountains.Tools
         [Header("Floors")]
         /// a list of floors this countdown will evaluate and trigger if met
         public List<MMCountdownFloor> Floors;
-        
+
         [Header("Events")]
         /// an event to trigger when the countdown reaches its destination
         public UnityEvent CountdownCompleteEvent;
@@ -112,7 +111,7 @@ namespace MoreMountains.Tools
             {
                 return;
             }
-            
+
             // we update our current time
             UpdateTime();
             UpdateText();
@@ -151,7 +150,7 @@ namespace MoreMountains.Tools
                     else
                     {
                         _text.text = CurrentTime.ToString(Format);
-                    }                    
+                    }
                 }
                 if (CountdownRefreshEvent != null)
                 {
@@ -190,7 +189,7 @@ namespace MoreMountains.Tools
         /// </summary>
         protected virtual void CheckForFloors()
         {
-            foreach(MMCountdownFloor floor in Floors)
+            foreach (MMCountdownFloor floor in Floors)
             {
                 if (Mathf.Abs(CurrentTime - floor.LastChangedAt) >= floor.FloorValue)
                 {
@@ -202,7 +201,7 @@ namespace MoreMountains.Tools
                     if (Direction == MMCountdownDirections.Descending)
                     {
                         if (floor.LastChangedAt == CountdownFrom)
-                        {                         
+                        {
                             floor.LastChangedAt = CountdownFrom - floor.FloorValue;
                         }
                         else
@@ -220,7 +219,7 @@ namespace MoreMountains.Tools
                         {
                             floor.LastChangedAt = floor.LastChangedAt + floor.FloorValue;
                         }
-                    }                    
+                    }
                 }
             }
         }

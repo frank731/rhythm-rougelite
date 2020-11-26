@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -129,7 +128,7 @@ namespace MoreMountains.Feedbacks
                 {
                     DestinationPosition = RelativePosition ? GetPosition(AnimatePositionTarget.transform) + DestinationPosition : DestinationPosition;
                 }
-            }  
+            }
         }
 
         /// <summary>
@@ -160,7 +159,7 @@ namespace MoreMountains.Feedbacks
                         case Modes.AlongCurve:
                             StartCoroutine(MoveAlongCurve(AnimatePositionTarget, InitialPosition, AnimatePositionDuration));
                             break;
-                    }                    
+                    }
                 }
             }
         }
@@ -245,7 +244,7 @@ namespace MoreMountains.Feedbacks
 
             // set final position
             SetPosition(movingObject.transform, pointB);
-             yield break;
+            yield break;
         }
 
         protected virtual Vector3 GetPosition(Transform target)

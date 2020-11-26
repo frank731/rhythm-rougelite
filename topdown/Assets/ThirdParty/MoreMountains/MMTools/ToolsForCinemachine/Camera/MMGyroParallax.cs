@@ -1,7 +1,5 @@
 ﻿using Cinemachine;
-using MoreMountains.Tools;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -39,7 +37,7 @@ namespace MoreMountains.Tools
         [Header("Cameras")]
         /// the list of cameras to move as the gyro moves
         public List<MMGyroCam> Cams;
-        
+
         protected Vector3 _newAngles;
 
         /// <summary>
@@ -76,7 +74,7 @@ namespace MoreMountains.Tools
         /// Moves cameras around based on gyro input
         /// </summary>
         protected virtual void MoveCameras()
-        {            
+        {
             foreach (MMGyroCam cam in Cams)
             {
                 float newX = MMMaths.Remap(LerpedCalibratedGyroscopeGravity.x, 0.5f, -0.5f, cam.MinRotation.x, cam.MaxRotation.x);

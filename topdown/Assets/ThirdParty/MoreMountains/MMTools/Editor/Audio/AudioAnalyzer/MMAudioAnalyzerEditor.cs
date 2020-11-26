@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 
 namespace MoreMountains.Tools
@@ -43,9 +41,9 @@ namespace MoreMountains.Tools
         protected Color _amplitudeColor = MMColors.DarkOrange;
         protected Color _normalizedAmplitudeColor = MMColors.Aquamarine;
         protected Color _spectrumColor = MMColors.HotPink;
-        
+
         protected Color _beatColor;
-        
+
         protected bool _bandValuesFoldout = false;
         protected float _peakShowDuration = 0.5f;
 
@@ -66,7 +64,7 @@ namespace MoreMountains.Tools
         protected float _boxBottomY;
         protected float _positionX;
         protected float _positionY;
-        
+
         // column
         protected float _columnWidth;
         protected float _columnHeight;
@@ -108,7 +106,7 @@ namespace MoreMountains.Tools
             _redLabel.normal.textColor = Color.red;
             _rect = new Rect();
         }
-        
+
         /// <summary>
         /// Forces constant repaint of the inspector, making for much faster display of the bands bars.
         /// </summary>
@@ -207,7 +205,7 @@ namespace MoreMountains.Tools
                 {
                     GUILayout.BeginHorizontal();
                     GUILayout.Label(i.ToString(), EditorStyles.boldLabel, GUILayout.Width(w1));
-                    GUILayout.Label(BandLevels.GetArrayElementAtIndex(i).floatValue.ToString(),  GUILayout.Width(w2));
+                    GUILayout.Label(BandLevels.GetArrayElementAtIndex(i).floatValue.ToString(), GUILayout.Width(w2));
                     if (Time.time - LastPeaksAt.GetArrayElementAtIndex(i).floatValue < _peakShowDuration)
                     {
                         _normalLabelColor = GUI.skin.label.normal.textColor;
@@ -217,7 +215,7 @@ namespace MoreMountains.Tools
                     }
                     else
                     {
-                        GUILayout.Label(BandPeaks.GetArrayElementAtIndex(i).floatValue.ToString(),  GUILayout.Width(w3));
+                        GUILayout.Label(BandPeaks.GetArrayElementAtIndex(i).floatValue.ToString(), GUILayout.Width(w3));
                     }
                     GUILayout.Label(NormalizedBandLevels.GetArrayElementAtIndex(i).floatValue.ToString(), GUILayout.Width(w4));
                     GUILayout.Label(NormalizedBufferedBandLevels.GetArrayElementAtIndex(i).floatValue.ToString(), GUILayout.Width(w5));
@@ -245,7 +243,7 @@ namespace MoreMountains.Tools
             float margin = _beatsBoxHeight / 10;
             float beatsBoxSquareSize = _beatsBoxHeight - (2 * margin);
 
-            int boxesPerLine = (int)Mathf.Round((_inspectorWidth - margin - 3*_externalMargin) / (beatsBoxSquareSize + margin)) ;
+            int boxesPerLine = (int)Mathf.Round((_inspectorWidth - margin - 3 * _externalMargin) / (beatsBoxSquareSize + margin));
             int numberOfLines = (int)(length / boxesPerLine) + 1;
             float boxHeight = (_beatsBoxHeight) * numberOfLines - margin * (numberOfLines - 1);
 
@@ -292,7 +290,7 @@ namespace MoreMountains.Tools
 
                 // draw number
                 float labelX = (i > 9) ? boxX + beatsBoxSquareSize / 4 - 2 : boxX + beatsBoxSquareSize / 4 + 2;
-                
+
                 _rect.x = labelX;
                 _rect.y = boxY + beatsBoxSquareSize / 4;
                 _rect.width = beatsBoxSquareSize;
@@ -352,7 +350,7 @@ namespace MoreMountains.Tools
                     else
                     {
                         Handles.color = _peakColor;
-                    }                    
+                    }
                     _axisOrigin.x = _boxPosition.x + _internalMargin * (i + 1) + _columnWidth * i;
                     _axisOrigin.y = _boxBottomY - MMMaths.Remap(peak, 0f, 1f, 0f, _maxColumnHeight);
                     _axisDestination.x = _axisOrigin.x + _columnWidth;
@@ -365,7 +363,7 @@ namespace MoreMountains.Tools
 
             // amplitude cursors
             _columnHeight = MMMaths.Remap(Amplitude.floatValue, 0f, 1f, 0f, _maxColumnHeight);
-            _positionX = _boxPosition.x - _externalMargin/4 ;
+            _positionX = _boxPosition.x - _externalMargin / 4;
             _positionY = _boxBottomY - _columnHeight;
 
             _rect.x = _positionX;
@@ -391,7 +389,7 @@ namespace MoreMountains.Tools
                 {
                     float bandLevel = BufferedBandLevels.GetArrayElementAtIndex(i).floatValue;
                     _columnHeight = MMMaths.Remap(bandLevel, 0f, 1f, 0f, _maxColumnHeight);
-                    _barColor = (Time.time - LastPeaksAt.GetArrayElementAtIndex(i).floatValue < _peakShowDuration/3f) ? _activePeakColor : _bufferedBarColor;
+                    _barColor = (Time.time - LastPeaksAt.GetArrayElementAtIndex(i).floatValue < _peakShowDuration / 3f) ? _activePeakColor : _bufferedBarColor;
 
                     _positionX = _boxPosition.x + _internalMargin * (i + 1) + _columnWidth * i;
                     _positionY = _boxBottomY;
@@ -577,16 +575,16 @@ namespace MoreMountains.Tools
                 {
 
                     float xPosition = _spectrumBoxPosition.x + _externalMargin + MMMaths.Remap(i, 0, RawSpectrum.arraySize, 0f, _spectrumBoxSize.x - _externalMargin * 2);
-                    float yPosition = _spectrumBoxPosition.y + _spectrumBoxSize.y / 2 ;
+                    float yPosition = _spectrumBoxPosition.y + _spectrumBoxSize.y / 2;
                     float deltaX = (_spectrumBoxSize.x - _externalMargin * 2) / RawSpectrum.arraySize;
 
                     float spectrumValue = RawSpectrum.GetArrayElementAtIndex(i).floatValue;
                     float spectrumValuePrevious = RawSpectrum.GetArrayElementAtIndex(i - 1).floatValue;
 
-                    float factor = _spectrumBoxSize.y/2;
+                    float factor = _spectrumBoxSize.y / 2;
 
-                    spectrumValue = - (1 / Mathf.Log(spectrumValue)) * factor; ;
-                    spectrumValuePrevious = - (1 / Mathf.Log(spectrumValuePrevious)) * factor;
+                    spectrumValue = -(1 / Mathf.Log(spectrumValue)) * factor; ;
+                    spectrumValuePrevious = -(1 / Mathf.Log(spectrumValuePrevious)) * factor;
 
                     spectrumValue = Mathf.Clamp(spectrumValue, 0f, _spectrumBoxSize.y / 2f);
                     spectrumValuePrevious = Mathf.Clamp(spectrumValuePrevious, 0f, _spectrumBoxSize.y / 2f);
@@ -609,7 +607,7 @@ namespace MoreMountains.Tools
                     float deltaX = (_spectrumBoxSize.x - _externalMargin * 2) / points;
 
                     float spectrumValue = Foobar(i);
-                    float spectrumValuePrevious = Foobar(i-1);
+                    float spectrumValuePrevious = Foobar(i - 1);
 
                     float factor = _spectrumBoxSize.y / 2;
 
@@ -617,7 +615,7 @@ namespace MoreMountains.Tools
                     _axisOrigin.x = xPosition - deltaX;
                     _axisOrigin.y = yPosition + spectrumValuePrevious;
                     _axisDestination.x = xPosition;
-                    _axisDestination.y = yPosition + spectrumValue ;
+                    _axisDestination.y = yPosition + spectrumValue;
                     Handles.DrawLine(_axisOrigin, _axisDestination);
                 }
             }
@@ -638,7 +636,7 @@ namespace MoreMountains.Tools
 
             GUILayout.Space(10);
             GUILayout.Label("Peaks preprocessing", EditorStyles.boldLabel);
-            
+
             if (!PeaksPasted.boolValue)
             {
                 if ((PeaksSaver.Peaks == null) || (PeaksSaver.Peaks.Length == 0))
@@ -659,13 +657,13 @@ namespace MoreMountains.Tools
                         {
                             (target as MMAudioAnalyzer).PastePeaks();
                         }
-                    }                    
+                    }
                 }
-            }            
+            }
             if (GUILayout.Button("Clear Peaks"))
             {
                 (target as MMAudioAnalyzer).ClearPeaks();
-            }        
+            }
         }
     }
 #endif

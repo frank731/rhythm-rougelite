@@ -58,7 +58,7 @@ public class BPMDetector : MonoBehaviour
         int channels = clip.channels;
         Debug.Log("Channels : " + channels);
 
-        int splitFrameSize = Mathf.FloorToInt(((float)frequency / (float)BASE_FREQUENCY) * ((float)channels / (float)BASE_CHANNELS) * (float)BASE_SPLIT_SAMPLE_SIZE);
+        int splitFrameSize = Mathf.FloorToInt((frequency / (float)BASE_FREQUENCY) * (channels / (float)BASE_CHANNELS) * BASE_SPLIT_SAMPLE_SIZE);
 
         // Get all sample data from audioclip
         var allSamples = new float[clip.samples * channels];
@@ -87,7 +87,7 @@ public class BPMDetector : MonoBehaviour
     private static float[] CreateVolumeArray(float[] allSamples, int frequency, int channels, int splitFrameSize)
     {
         // Initialize volume array
-        var volumeArr = new float[Mathf.CeilToInt((float)allSamples.Length / (float)splitFrameSize)];
+        var volumeArr = new float[Mathf.CeilToInt(allSamples.Length / (float)splitFrameSize)];
         int powerIndex = 0;
 
         // Sample data analysis start
@@ -140,12 +140,12 @@ public class BPMDetector : MonoBehaviour
 
         // Calculate the degree of coincidence in each BPM
         int index = 0;
-        float splitFrequency = (float)frequency / (float)splitFrameSize;
+        float splitFrequency = frequency / (float)splitFrameSize;
         for (int bpm = MIN_BPM; bpm <= MAX_BPM; bpm++)
         {
             float sinMatch = 0f;
             float cosMatch = 0f;
-            float bps = (float)bpm / 60f;
+            float bps = bpm / 60f;
 
             if (diffList.Count > 0)
             {
@@ -155,8 +155,8 @@ public class BPMDetector : MonoBehaviour
                     cosMatch += (diffList[i] * Mathf.Sin(i * 2f * Mathf.PI * bps / splitFrequency));
                 }
 
-                sinMatch *= (1f / (float)diffList.Count);
-                cosMatch *= (1f / (float)diffList.Count);
+                sinMatch *= (1f / diffList.Count);
+                cosMatch *= (1f / diffList.Count);
             }
 
             float match = Mathf.Sqrt((sinMatch * sinMatch) + (cosMatch * cosMatch));

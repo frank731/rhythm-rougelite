@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using MoreMountains.Feedbacks;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
-using MoreMountains.Feedbacks;
 
 namespace MoreMountains.FeedbacksForThirdParty
 {
@@ -174,7 +172,7 @@ namespace MoreMountains.FeedbacksForThirdParty
         protected override void ResetTargetValues()
         {
             base.ResetTargetValues();
-            
+
             _depthOfField.focusDistance.Override(_initialFocusDistance);
             _depthOfField.aperture.Override(_initialAperture);
             _depthOfField.focalLength.Override(_initialFocalLength);
@@ -245,13 +243,13 @@ namespace MoreMountains.FeedbacksForThirdParty
         }
 
         static public void Trigger(AnimationCurve focusDistance, float duration, float remapFocusDistanceMin, float remapFocusDistanceMax,
-            AnimationCurve aperture, float remapApertureMin, float remapApertureMax, 
+            AnimationCurve aperture, float remapApertureMin, float remapApertureMax,
             AnimationCurve focalLength, float remapFocalLengthMin, float remapFocalLengthMax,
             bool relativeValues = false,
             float attenuation = 1.0f, int channel = 0, bool resetShakerValuesAfterShake = true, bool resetTargetValuesAfterShake = true)
         {
-            OnEvent?.Invoke(focusDistance, duration, remapFocusDistanceMin, remapFocusDistanceMax, 
-                aperture, remapApertureMin, remapApertureMax, 
+            OnEvent?.Invoke(focusDistance, duration, remapFocusDistanceMin, remapFocusDistanceMax,
+                aperture, remapApertureMin, remapApertureMax,
                 focalLength, remapFocalLengthMin, remapFocalLengthMax, relativeValues,
                 attenuation, channel, resetShakerValuesAfterShake, resetTargetValuesAfterShake);
         }

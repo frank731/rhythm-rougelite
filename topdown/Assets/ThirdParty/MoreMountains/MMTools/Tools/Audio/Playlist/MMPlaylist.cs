@@ -207,7 +207,7 @@ namespace MoreMountains.Tools
 
         protected int _songsPlayedSoFar = 0;
         protected int _songsPlayedThisCycle = 0;
-        
+
         /// <summary>
         /// On Start we initialize our playlist
         /// </summary>
@@ -263,7 +263,7 @@ namespace MoreMountains.Tools
             {
                 yield break;
             }
-            
+
             // we stop our current track                        
             if (PlaylistState.CurrentState == PlaylistStates.Playing)
             {
@@ -284,8 +284,8 @@ namespace MoreMountains.Tools
                         song.Fading = false;
                     }
                 }
-            }            
-            
+            }
+
             // initial delay
             yield return new WaitForSeconds(Random.Range(Songs[index].InitialDelay.x, Songs[index].InitialDelay.y));
 
@@ -368,7 +368,7 @@ namespace MoreMountains.Tools
                 while (newIndex == CurrentlyPlayingIndex)
                 {
                     newIndex = Random.Range(0, Songs.Count);
-                }                
+                }
             }
             else
             {
@@ -478,7 +478,7 @@ namespace MoreMountains.Tools
             MMPlaylistStopEvent.Unregister(OnStopEvent);
             MMPlaylistPlayIndexEvent.Unregister(OnPlayIndexEvent);
         }
-        
+
         protected bool _firstDeserialization = true;
         protected int _listCount = 0;
 
@@ -498,7 +498,7 @@ namespace MoreMountains.Tools
                 {
                     _listCount = Songs.Count;
                     _firstDeserialization = false;
-                }                
+                }
             }
             else
             {
@@ -506,10 +506,10 @@ namespace MoreMountains.Tools
                 {
                     if (Songs.Count > _listCount)
                     {
-                        foreach(MMPlaylistSong song in Songs)
+                        foreach (MMPlaylistSong song in Songs)
                         {
                             song.Initialization();
-                        }                            
+                        }
                     }
                     _listCount = Songs.Count;
                 }

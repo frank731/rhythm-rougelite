@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using MoreMountains.Feedbacks;
 using UnityEngine;
-using MoreMountains.Feedbacks;
 
 namespace MoreMountains.FeedbacksForThirdParty
 {
@@ -41,7 +39,7 @@ namespace MoreMountains.FeedbacksForThirdParty
                 }
             }
         }
-               
+
         [Header("PostProcess Volume Blend")]
         /// the target auto blend to pilot with this feedback
         public MMGlobalPostProcessingVolumeAutoBlend_URP TargetAutoBlend;
@@ -61,7 +59,7 @@ namespace MoreMountains.FeedbacksForThirdParty
         public float InitialWeight = 0f;
         /// the weight to blend to
         [MMFEnumCondition("Mode", (int)Modes.Override)]
-        public float FinalWeight = 1f;        
+        public float FinalWeight = 1f;
 
         /// <summary>
         /// On custom play, triggers a blend on the target blender, overriding its settings if needed

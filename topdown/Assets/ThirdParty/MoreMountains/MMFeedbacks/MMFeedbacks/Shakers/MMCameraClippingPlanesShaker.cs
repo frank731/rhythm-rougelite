@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MoreMountains.Feedbacks
 {
@@ -14,7 +12,7 @@ namespace MoreMountains.Feedbacks
         [Header("Clipping Planes")]
         /// whether or not to add to the initial value
         public bool RelativeClippingPlanes = false;
-        
+
         [Header("Near Plane")]
         /// the curve used to animate the intensity value on
         public AnimationCurve ShakeNear = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
@@ -99,7 +97,7 @@ namespace MoreMountains.Feedbacks
             {
                 return;
             }
-            
+
             _resetShakerValuesAfterShake = resetShakerValuesAfterShake;
             _resetTargetValuesAfterShake = resetTargetValuesAfterShake;
 

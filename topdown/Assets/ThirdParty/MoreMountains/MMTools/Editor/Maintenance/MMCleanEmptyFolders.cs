@@ -1,11 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using System.IO;
-using System.Text;
-using System.Linq;
-using System;
 
 namespace MoreMountains.Tools
 {
@@ -29,12 +26,12 @@ namespace MoreMountains.Tools
 
             if (0 < _listOfEmptyDirectories.Count)
             {
-                _consoleLog = "[MMCleanEmptyFolders] Removed "+ _listOfEmptyDirectories.Count + " empty directories:\n";
+                _consoleLog = "[MMCleanEmptyFolders] Removed " + _listOfEmptyDirectories.Count + " empty directories:\n";
                 foreach (var d in _listOfEmptyDirectories)
                 {
-                    _consoleLog += "· "+ d.FullName.Replace(assetsDir, "") + "\n";
+                    _consoleLog += "· " + d.FullName.Replace(assetsDir, "") + "\n";
                     FileUtil.DeleteFileOrDirectory(d.FullName);
-                    FileUtil.DeleteFileOrDirectory(d.FullName+".meta");
+                    FileUtil.DeleteFileOrDirectory(d.FullName + ".meta");
                 }
 
                 Debug.Log(_consoleLog);
@@ -58,8 +55,8 @@ namespace MoreMountains.Tools
             if (directoryIsEmpty)
             {
                 listOfEmptyDirectories.Add(directory);
-            }      
-            
+            }
+
             return directoryIsEmpty;
         }
     }

@@ -1,7 +1,7 @@
-﻿using UnityEngine;
-using System.Collections;
-using UnityEngine.Events;
+﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Events;
 
 namespace MoreMountains.Tools
 {
@@ -154,7 +154,7 @@ namespace MoreMountains.Tools
                         return false;
                     }
                 case TriggerModes.Tag:
-                    return (target.CompareTag(TargetTriggerTag));                    
+                    return (target.CompareTag(TargetTriggerTag));
             }
             return false;
         }
@@ -193,7 +193,7 @@ namespace MoreMountains.Tools
         /// </summary>
         protected virtual void StateChange()
         {
-            foreach(GameObject targetGameObject in TargetGameObjects)
+            foreach (GameObject targetGameObject in TargetGameObjects)
             {
                 switch (TimeDestructionMode)
                 {
@@ -209,7 +209,7 @@ namespace MoreMountains.Tools
                         targetGameObject.SetActive(true);
                         break;
                 }
-            }            
+            }
         }
     }
 }

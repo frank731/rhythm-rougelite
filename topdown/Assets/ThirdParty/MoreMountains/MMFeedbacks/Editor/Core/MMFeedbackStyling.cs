@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using UnityEditor;
+﻿using UnityEditor;
+using UnityEngine;
 
 namespace MoreMountains.Feedbacks
 {
@@ -24,7 +24,7 @@ namespace MoreMountains.Feedbacks
 
         static readonly Color _timingDark = new Color(1f, 1f, 1f, 0.5f);
         static readonly Color _timingLight = new Color(0f, 0f, 0f, 0.5f);
-        
+
         static readonly Texture2D _paneoptionsicondark;
         static readonly Texture2D _paneoptionsiconlight;
         public static Texture2D PaneOptionsIcon { get { return EditorGUIUtility.isProSkin ? _paneoptionsicondark : _paneoptionsiconlight; } }
@@ -80,7 +80,7 @@ namespace MoreMountains.Feedbacks
             // Initialize Rects
 
             var backgroundRect = GUILayoutUtility.GetRect(1f, 17f);
-            
+
             var reorderRect = backgroundRect;
             reorderRect.xMin -= 8f;
             reorderRect.y += 5f;
@@ -104,7 +104,7 @@ namespace MoreMountains.Feedbacks
 
             var menuIcon = PaneOptionsIcon;
             var menuRect = new Rect(labelRect.xMax + 4f, labelRect.y + 4f, menuIcon.width, menuIcon.height);
-            
+
             // Background rect should be full-width
             backgroundRect.xMin = 0f;
             backgroundRect.width += 4f;
@@ -123,9 +123,9 @@ namespace MoreMountains.Feedbacks
 
             // Active checkbox
             activeField = GUI.Toggle(toggleRect, activeField, GUIContent.none, SmallTickbox);
-            
+
             // Handle events
-            
+
             if (e.type == EventType.MouseDown && labelRect.Contains(e.mousePosition) && e.button == 0)
             {
                 expanded = !expanded;
@@ -138,7 +138,7 @@ namespace MoreMountains.Feedbacks
         /// <summary>
         /// Draw a header similar to the one used for the post-process stack
         /// </summary>
-        static public Rect DrawHeader(ref bool expanded, ref bool activeField, string title, Color feedbackColor, System.Action<GenericMenu> fillGenericMenu, 
+        static public Rect DrawHeader(ref bool expanded, ref bool activeField, string title, Color feedbackColor, System.Action<GenericMenu> fillGenericMenu,
             float startedAt, float duration, MMFeedbackTiming timing, bool pause)
         {
             var e = Event.current;
@@ -202,7 +202,7 @@ namespace MoreMountains.Feedbacks
                 headerBackgroundColor = feedbackColor;
             }
             EditorGUI.DrawRect(backgroundRect, headerBackgroundColor);
-            
+
             // Foldout
             expanded = GUI.Toggle(foldoutRect, expanded, GUIContent.none, EditorStyles.foldout);
 
@@ -211,7 +211,7 @@ namespace MoreMountains.Feedbacks
             {
                 EditorGUI.LabelField(labelRect, title, EditorStyles.boldLabel);
             }
-            
+
             float timingRectWidth = 150f;
 
 
@@ -223,7 +223,7 @@ namespace MoreMountains.Feedbacks
                 //fullTimingInfo += timing.InitialDelay.ToString() + "s + ";
                 totalTime += timing.InitialDelay;
             }
-            
+
             //fullTimingInfo += duration.ToString("F2") + "s";
             totalTime += duration;
 
@@ -285,7 +285,7 @@ namespace MoreMountains.Feedbacks
             // Dropdown menu icon
             GUI.DrawTexture(menuRect, menuIcon);
 
-            for(int i = 0; i < 3; i++)
+            for (int i = 0; i < 3; i++)
             {
                 Rect r = reorderRect;
                 r.height = 1;
@@ -306,7 +306,7 @@ namespace MoreMountains.Feedbacks
                     e.Use();
                 }
             }
-            
+
             if (e.type == EventType.MouseDown && labelRect.Contains(e.mousePosition) && e.button == 0)
             {
                 expanded = !expanded;

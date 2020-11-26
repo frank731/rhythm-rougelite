@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
 using System.Reflection;
+using UnityEngine;
 
 namespace MoreMountains.Tools
 {
@@ -87,7 +87,7 @@ namespace MoreMountains.Tools
         [Header("Random")]
         [MMVector("Min", "Max")]
         /// the noise amplitude
-        public Vector2 Amplitude = new Vector2(0f,5f);
+        public Vector2 Amplitude = new Vector2(0f, 5f);
         [MMVector("Min", "Max")]
         /// the noise frequency
         public Vector2 Frequency = new Vector2(1f, 1f);
@@ -258,7 +258,7 @@ namespace MoreMountains.Tools
             {
                 return;
             }
-            
+
             _elapsedTime = 0f;
             _randomAmplitude = Random.Range(Amplitude.x, Amplitude.y);
             _randomFrequency = Random.Range(Frequency.x, Frequency.y);
@@ -352,7 +352,7 @@ namespace MoreMountains.Tools
             switch (ControlMode)
             {
                 case ControlModes.PingPong:
-                    
+
                     if (GetTime() - _lastPingPongPauseAt < PingPongPauseDuration)
                     {
                         return;
@@ -403,7 +403,7 @@ namespace MoreMountains.Tools
                     CurrentValue = Mathf.LerpUnclamped(_initialValue, ToDestinationValue, time);
                     break;
             }
-                                   
+
 
             if (AddToInitialValue)
             {
@@ -456,24 +456,24 @@ namespace MoreMountains.Tools
                     }
                     return;
                 }
-            }            
+            }
 
             TargetAttribute.SetValue(CurrentValue);
         }
-        
+
         /// <summary>
         /// When the contents of the inspector change, and if the target changed, we grab all its properties and store them
         /// </summary>
         protected virtual void OnValidate()
         {
             FillDropDownList();
-            if ( Application.isPlaying 
-                && ((_targetAttributeLastFrame != TargetAttribute) || (_targetObjectLastFrame != TargetObject)) )
+            if (Application.isPlaying
+                && ((_targetAttributeLastFrame != TargetAttribute) || (_targetObjectLastFrame != TargetObject)))
             {
                 Initialization();
             }
         }
-               
+
         /// <summary>
         /// On disable we revert to the previous value if needed
         /// </summary>
@@ -490,7 +490,7 @@ namespace MoreMountains.Tools
         /// Fills the inspector dropdown with all the possible choices
         /// </summary>
         public virtual void FillDropDownList()
-        {            
+        {
             AttributeNames = new string[0];
 
             if (TargetObject == null)

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class AimAtPlayer : EnemyController
 {
@@ -39,6 +37,6 @@ public class AimAtPlayer : EnemyController
             Vector2 direction = new Vector2(player.position.x - transform.position.x, player.position.y - transform.position.y);
             transform.right = direction;
         }
-        
+
     }
 }

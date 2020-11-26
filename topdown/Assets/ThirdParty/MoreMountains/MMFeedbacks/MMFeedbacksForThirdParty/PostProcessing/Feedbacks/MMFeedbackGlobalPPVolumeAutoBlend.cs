@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using MoreMountains.Feedbacks;
 using UnityEngine;
-using MoreMountains.Feedbacks;
 
 namespace MoreMountains.FeedbacksForThirdParty
 {
@@ -45,7 +43,7 @@ namespace MoreMountains.FeedbacksForThirdParty
                 }
             }
         }
-               
+
         [Header("PostProcess Volume Blend")]
         /// the target auto blend to pilot with this feedback
         public MMGlobalPostProcessingVolumeAutoBlend TargetAutoBlend;

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7239188407951871396}
   - component: {fileID: 4419782661939992284}
   m_Layer: 18
-  m_Name: ak bullet
+  m_Name: Ak Bullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -104,7 +104,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!70 &7239188407951871396
 CapsuleCollider2D:
@@ -135,5 +135,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 8667592225171454765}
+  bulletDestroyedEffect: {fileID: 8418206535150618518, guid: 799e48f6ef961994ca804ddb86258e10,
+    type: 3}
   bulletSpeed: 100
   bulletDamage: 10

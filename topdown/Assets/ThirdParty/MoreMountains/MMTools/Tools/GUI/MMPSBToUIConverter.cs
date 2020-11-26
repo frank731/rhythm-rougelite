@@ -1,9 +1,6 @@
-﻿using UnityEngine;
-using System.Collections;
-using System;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
-using MoreMountains.Tools;
-using System.Collections.Generic;
 
 namespace MoreMountains.Tools
 {

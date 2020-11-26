@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MoreMountains.Tools
 {
@@ -19,7 +17,7 @@ namespace MoreMountains.Tools
             Triangle,
             WhiteNoise
         }
-                
+
         /// <summary>
         /// Returns the corresponding value based on the selected SignalType for a given time value
         /// </summary>
@@ -38,8 +36,8 @@ namespace MoreMountains.Tools
             float t = frequency * time + phase;
 
             switch (signalType)
-            { 
-                case SignalType.Sine: 
+            {
+                case SignalType.Sine:
                     value = (float)Mathf.Sin(2f * Mathf.PI * t);
                     break;
                 case SignalType.Square:
@@ -51,19 +49,19 @@ namespace MoreMountains.Tools
                 case SignalType.Sawtooth:
                     value = 2f * (t - (float)Mathf.Floor(t + 0.5f));
                     break;
-                case SignalType.Pulse: 
+                case SignalType.Pulse:
                     value = (Mathf.Abs(Mathf.Sin(2 * Mathf.PI * t)) < 1.0 - 10E-3) ? (0) : (1);
                     break;
                 case SignalType.WhiteNoise:
-                    value = 2f * Random.Range(0,int.MaxValue) / int.MaxValue - 1f;
+                    value = 2f * Random.Range(0, int.MaxValue) / int.MaxValue - 1f;
                     break;
                 case SignalType.DigitalNoise:
-                    value = Random.Range(0,2);
+                    value = Random.Range(0, 2);
                     break;
             }
 
             return (invert * amplitude * value + offset);
         }
-    }      
+    }
 }
 

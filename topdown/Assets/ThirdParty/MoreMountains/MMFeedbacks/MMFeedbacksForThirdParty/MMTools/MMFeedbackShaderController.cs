@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using MoreMountains.Tools;
 using UnityEngine;
-using MoreMountains.Tools;
 
 namespace MoreMountains.Feedbacks
 {
@@ -109,7 +107,7 @@ namespace MoreMountains.Feedbacks
                     TargetShaderController.ToDestinationDuration = ToDestinationDuration;
                     TargetShaderController.ToDestinationValue = ToDestinationValue;
                     TargetShaderController.ToDestination();
-                }                
+                }
             }
         }
 

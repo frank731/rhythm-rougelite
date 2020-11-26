@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class AdjacencyCheck : MonoBehaviour
 {
@@ -18,7 +16,7 @@ public class AdjacencyCheck : MonoBehaviour
     }
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "RoomSpawnPoint")
+        if (collision.CompareTag("RoomSpawnPoint"))
         {
             RoomController adjRoom = collision.transform.parent.gameObject.GetComponent<RoomController>();
             adjRoom.AddAdjacencies(needOpening, transform.parent.GetComponent<RoomController>().distance + 1);

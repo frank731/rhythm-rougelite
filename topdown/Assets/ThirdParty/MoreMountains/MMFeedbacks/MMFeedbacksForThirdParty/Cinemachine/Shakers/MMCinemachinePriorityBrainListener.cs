@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Cinemachine;
+using System.Collections;
 using UnityEngine;
-using Cinemachine;
-using MoreMountains.Feedbacks;
 
 namespace MoreMountains.FeedbacksForThirdParty
 {
@@ -47,7 +45,7 @@ namespace MoreMountains.FeedbacksForThirdParty
                     _initialDefinition = _brain.m_DefaultBlend;
                 }
                 _brain.m_DefaultBlend = blendDefinition;
-                _coroutine = StartCoroutine(ResetBlendDefinition(blendDefinition.m_Time));                
+                _coroutine = StartCoroutine(ResetBlendDefinition(blendDefinition.m_Time));
             }
         }
 

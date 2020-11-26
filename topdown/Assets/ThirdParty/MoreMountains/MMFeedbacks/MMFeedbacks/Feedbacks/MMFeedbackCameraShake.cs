@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MoreMountains.Feedbacks
 {
@@ -22,7 +20,7 @@ namespace MoreMountains.Feedbacks
         public int Channel = 0;
         /// the properties of the shake (duration, intensity, frequenc)
         public MMCameraShakeProperties CameraShakeProperties = new MMCameraShakeProperties(0.1f, 0.2f, 40f);
-        
+
         /// the duration of this feedback is the duration of the shake
         public override float FeedbackDuration { get { return CameraShakeProperties.Duration; } }
 

@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
-using MoreMountains.Feedbacks;
 
 namespace MoreMountains.FeedbacksForThirdParty
 {
@@ -29,7 +26,7 @@ namespace MoreMountains.FeedbacksForThirdParty
         protected PostProcessVolume _volume;
         protected PostProcessProfile _profile;
         protected DepthOfField _depthOfField;
-               
+
         /// <summary>
         /// On start we grab our volume and profile
         /// </summary>

@@ -1,8 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
-using System.Collections.Generic;
-using MoreMountains.Tools;
 
 namespace MoreMountains.Tools
 {
@@ -64,7 +60,7 @@ namespace MoreMountains.Tools
         /// the maximum distance at which the object can be away from its target
         public float MaximumDistance = 1f;
 
-        protected Vector3 _newTargetPosition;        
+        protected Vector3 _newTargetPosition;
         protected Vector3 _initialPosition;
         protected Vector3 _lastTargetPosition;
         protected Vector3 _direction;
@@ -192,7 +188,7 @@ namespace MoreMountains.Tools
 
             float trueDistance = Vector3.Distance(this.transform.position, _newTargetPosition);
             _direction = (_newTargetPosition - this.transform.position).normalized;
-            
+
             float interpolatedDistance = trueDistance;
             if (InterpolatePosition)
             {

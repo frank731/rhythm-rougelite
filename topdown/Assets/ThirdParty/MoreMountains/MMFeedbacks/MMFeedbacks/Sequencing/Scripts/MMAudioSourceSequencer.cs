@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace MoreMountains.Feedbacks
 {
@@ -14,7 +11,7 @@ namespace MoreMountains.Feedbacks
     {
         /// the list of audio sources to play (one per track)
         public List<AudioSource> AudioSources;
-                
+
         /// <summary>
         /// On beat we play our audio sources
         /// </summary>
@@ -85,5 +82,5 @@ namespace MoreMountains.Feedbacks
                 }
             }
         }
-    }    
+    }
 }

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ShotgunShoot : PlayerShoot
 {
@@ -12,6 +10,9 @@ public class ShotgunShoot : PlayerShoot
     {
         playerController.canShoot = false;
         currentAmmo--;
+
+        audioSource.PlayOneShot(shootSFX, 0.3f);
+
         if (currentAmmo <= 0)
         {
             outOfAmmo = true;
@@ -21,6 +22,7 @@ public class ShotgunShoot : PlayerShoot
             GameObject bullet = Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
             bullet.transform.Rotate(0, 0, Random.Range(minSpread, maxSpread));
         }
+
         animator.SetTrigger("hasShot");
         SendMessageUpwards("OnBeatAction");
         playerController.gunAmmoText.text = currentAmmo.ToString() + "/" + maxAmmo.ToString();

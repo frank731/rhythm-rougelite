@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using MoreMountains.Feedbacks;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
-using MoreMountains.Feedbacks;
 
 namespace MoreMountains.FeedbacksForThirdParty
 {
@@ -48,7 +46,7 @@ namespace MoreMountains.FeedbacksForThirdParty
         protected AnimationCurve _originalShakeThreshold;
         protected float _originalRemapThresholdZero;
         protected float _originalRemapThresholdOne;
-        
+
         /// <summary>
         /// On init we initialize our values
         /// </summary>
@@ -88,8 +86,8 @@ namespace MoreMountains.FeedbacksForThirdParty
         /// <param name="relativeIntensity"></param>
         /// <param name="attenuation"></param>
         /// <param name="channel"></param>
-        public virtual void OnBloomShakeEvent(AnimationCurve intensity, float duration, float remapMin, float remapMax, 
-            AnimationCurve threshold, float remapThresholdMin, float remapThresholdMax, bool relativeIntensity = false,            
+        public virtual void OnBloomShakeEvent(AnimationCurve intensity, float duration, float remapMin, float remapMax,
+            AnimationCurve threshold, float remapThresholdMin, float remapThresholdMax, bool relativeIntensity = false,
             float attenuation = 1.0f, int channel = 0, bool resetShakerValuesAfterShake = true, bool resetTargetValuesAfterShake = true)
         {
             if (!CheckEventAllowed(channel) || Shaking)
@@ -193,7 +191,7 @@ namespace MoreMountains.FeedbacksForThirdParty
             AnimationCurve threshold, float remapThresholdMin, float remapThresholdMax, bool relativeIntensity = false,
             float attenuation = 1.0f, int channel = 0, bool resetShakerValuesAfterShake = true, bool resetTargetValuesAfterShake = true)
         {
-            OnEvent?.Invoke(intensity, duration, remapMin, remapMax, threshold, remapThresholdMin, remapThresholdMax, relativeIntensity, 
+            OnEvent?.Invoke(intensity, duration, remapMin, remapMax, threshold, remapThresholdMin, remapThresholdMax, relativeIntensity,
                 attenuation, channel, resetShakerValuesAfterShake, resetTargetValuesAfterShake);
         }
     }

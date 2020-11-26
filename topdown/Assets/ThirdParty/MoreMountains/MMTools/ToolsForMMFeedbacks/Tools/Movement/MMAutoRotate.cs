@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
-using MoreMountains.Feedbacks;
 
 namespace MoreMountains.Tools
 {
@@ -58,7 +56,7 @@ namespace MoreMountains.Tools
         [MMCondition("DrawGizmos", true)]
         /// the color of the orbit line
         public Color OrbitLineColor = new Color(225f, 225f, 225f, 0.1f);
-        
+
         [HideInInspector]
         public Vector3 _orbitCenter;
         [HideInInspector]
@@ -92,10 +90,10 @@ namespace MoreMountains.Tools
                 Rotate();
             }
         }
-        
+
         /// <summary>
-         /// Makes the object rotate on its center at FixedUpdate
-         /// </summary>
+        /// Makes the object rotate on its center at FixedUpdate
+        /// </summary>
         protected virtual void FixedUpdate()
         {
             if (UpdateMode == UpdateModes.FixedUpdate)
@@ -103,10 +101,10 @@ namespace MoreMountains.Tools
                 Rotate();
             }
         }
-        
+
         /// <summary>
-         /// Makes the object rotate on its center at LateUpdate
-         /// </summary>
+        /// Makes the object rotate on its center at LateUpdate
+        /// </summary>
         protected virtual void LateUpdate()
         {
             if (UpdateMode == UpdateModes.LateUpdate)

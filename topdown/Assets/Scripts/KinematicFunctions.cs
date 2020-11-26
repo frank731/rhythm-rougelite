@@ -1,11 +1,10 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class KinematicFunctions : MonoBehaviour
+public class KinematicFunctions
 {
     //lerps object from one place to another
-    public IEnumerator MoveObject(Transform obj, Vector3 Origin, Vector3 Destination, float totalMovementTime)
+    public static IEnumerator MoveObject(Transform obj, Vector3 Origin, Vector3 Destination, float totalMovementTime)
     {
         float currentMovementTime = 0f;//The amount of time that has passed
         while (Vector3.Distance(obj.localPosition, Destination) > 0)

@@ -1,9 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
-using UnityEditor.UIElements;
+﻿using UnityEditor;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace MoreMountains.Tools
 {
@@ -21,11 +17,11 @@ namespace MoreMountains.Tools
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             var type = property.FindPropertyRelative("MMTweenDefinitionType");
-            
+
             EditorGUI.BeginProperty(position, label, property);
 
             position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
-            
+
             var definitionTypeRect = new Rect(position.x, position.y, position.width, _lineHeight);
             var curveRect = new Rect(position.x, position.y + _lineHeight + _lineMargin, position.width, _lineHeight);
 
@@ -38,7 +34,7 @@ namespace MoreMountains.Tools
             {
                 EditorGUI.PropertyField(curveRect, property.FindPropertyRelative("Curve"), GUIContent.none);
             }
-            
+
             EditorGUI.EndProperty();
         }
     }

@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace MoreMountains.Tools
@@ -42,7 +41,7 @@ namespace MoreMountains.Tools
                 return;
             }
             SetState();
-        }        
+        }
 
         /// <summary>
         /// Sets the state of all target objects

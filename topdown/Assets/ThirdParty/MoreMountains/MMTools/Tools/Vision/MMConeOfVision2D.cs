@@ -1,8 +1,6 @@
-﻿using UnityEngine;
-using System.Collections;
-using MoreMountains.Tools;
+﻿using System;
 using System.Collections.Generic;
-using System;
+using UnityEngine;
 
 namespace MoreMountains.Tools
 {
@@ -54,7 +52,7 @@ namespace MoreMountains.Tools
         public float ScanFrequencyInSeconds = 1f;
         [MMReadOnly]
         public List<Transform> VisibleTargets = new List<Transform>();
-        
+
         [Header("Mesh")]
         public float MeshDensity = 0.2f;
         public int EdgePrecision = 3;
@@ -89,7 +87,7 @@ namespace MoreMountains.Tools
             Direction = direction;
             EulerAngles = eulerAngles;
         }
-        
+
         protected virtual void ScanForTargets()
         {
             _lastScanTimestamp = Time.time;
@@ -111,7 +109,7 @@ namespace MoreMountains.Tools
                 }
             }
         }
-        
+
         protected virtual void DrawMesh()
         {
             int steps = Mathf.RoundToInt(MeshDensity * VisionAngle);

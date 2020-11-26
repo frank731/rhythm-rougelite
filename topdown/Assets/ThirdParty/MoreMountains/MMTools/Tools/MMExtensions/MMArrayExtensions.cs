@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MoreMountains.Tools
 {
@@ -19,6 +17,6 @@ namespace MoreMountains.Tools
         {
             int newIndex = Random.Range(0, array.Length);
             return array[newIndex];
-        }        
+        }
     }
 }

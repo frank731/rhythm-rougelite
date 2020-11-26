@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace MoreMountains.Tools
 {
     [Serializable]
-    public class MMAim 
+    public class MMAim
     {
         /// the list of possible control modes
         public enum AimControls { Off, PrimaryMovement, SecondaryMovement, Mouse, Script }
@@ -90,7 +88,7 @@ namespace MoreMountains.Tools
 
                     break;
 
-                case AimControls.PrimaryMovement:                    
+                case AimControls.PrimaryMovement:
                     _currentAim = PrimaryMovement;
                     break;
 

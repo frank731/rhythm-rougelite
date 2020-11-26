@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine;
 
 public class AimAtCursor : MonoBehaviour
 {
@@ -10,17 +8,16 @@ public class AimAtCursor : MonoBehaviour
     public Transform leftHand = null;
     public Transform rightHand = null;
     public SpriteRenderer playerSprite;
-    private FloorGlobal floorGlobal;
-    Vector3 mousePos;
+    private Vector2 direction;
+    private Vector3 mousePos;
     private void Start()
     {
-        floorGlobal = GameObject.FindGameObjectWithTag("FloorGlobalHolder").GetComponent<FloorGlobal>();
-        floorGlobal.pausableScripts.Add(this);
+        FloorGlobal.Instance.pausableScripts.Add(this);
         player = transform.parent.parent;
         playerSprite = player.GetComponent<SpriteRenderer>();
-        foreach(Transform child in player)
+        foreach (Transform child in player)
         {
-            if(child.tag == "LeftHand")
+            if (child.CompareTag("LeftHand"))
             {
                 leftHand = child;
                 if (rightHand)
@@ -28,7 +25,7 @@ public class AimAtCursor : MonoBehaviour
                     break;
                 }
             }
-            else if(child.tag == "RightHand")
+            else if (child.CompareTag("RightHand"))
             {
                 rightHand = child;
                 if (leftHand)
@@ -42,11 +39,11 @@ public class AimAtCursor : MonoBehaviour
     {
         mousePos = Mouse.current.position.ReadValue();
         mousePos = Camera.main.ScreenToWorldPoint(mousePos);
-        
+
         //flip gun and player left when mouse moves to the left of player
-        if(mousePos.x < player.position.x && mouseFacingRight == true)
+        if (mousePos.x < player.position.x && mouseFacingRight == true)
         {
-            transform.localScale = new Vector3(1f, -1f, 1f);
+            transform.localScale = new Vector3(1, -1, 1); //cant use vector.set for some reason idk
             transform.position = leftHand.position;
             playerSprite.flipX = true;
             mouseFacingRight = false;
@@ -54,15 +51,15 @@ public class AimAtCursor : MonoBehaviour
         //flip gun and player right when mouse moves to the right of player
         if (mousePos.x > player.position.x && mouseFacingRight == false)
         {
-            transform.localScale = new Vector3(1f, 1f, 1f);
+            transform.localScale = new Vector3(1, 1, 1);
             transform.position = rightHand.position;
             playerSprite.flipX = false;
             mouseFacingRight = true;
         }
         //rotate gun towards mouse
-        Vector2 direction = new Vector2(mousePos.x - transform.position.x, mousePos.y - transform.position.y);
+        direction.Set(mousePos.x - transform.position.x, mousePos.y - transform.position.y);
 
         transform.right = direction;
     }
-   
+
 }

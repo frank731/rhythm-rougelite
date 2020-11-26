@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace MoreMountains.Feedbacks
@@ -14,14 +13,14 @@ namespace MoreMountains.Feedbacks
     public abstract class MMFeedback : MonoBehaviour
     {
         /// whether or not this feedback is active
-        public bool Active = true;        
+        public bool Active = true;
         /// the name of this feedback to display in the inspector
         public string Label = "MMFeedback";
         /// the chance of this feedback happening (in percent : 100 : happens all the time, 0 : never happens, 50 : happens once every two calls, etc)
-        [Range(0,100)]
+        [Range(0, 100)]
         public float Chance = 100f;
         /// a number of timing-related values (delay, repeat, etc)
-        public MMFeedbackTiming Timing; 
+        public MMFeedbackTiming Timing;
         /// the Owner of the feedback, as defined when calling the Initialization method
         public GameObject Owner { get; set; }
         [HideInInspector]
@@ -37,10 +36,13 @@ namespace MoreMountains.Feedbacks
         public virtual bool LooperStart { get { return false; } }
         /// an overridable color for your feedback, that can be redefined per feedback. White is the only reserved color, and the feedback will revert to 
         /// normal (light or dark skin) when left to White
-        public virtual Color FeedbackColor { get { return Color.white;  } }
-        
+        public virtual Color FeedbackColor { get { return Color.white; } }
+
         /// the time (or unscaled time) based on the selected Timing settings
-        public float FeedbackTime { get {
+        public float FeedbackTime
+        {
+            get
+            {
                 if (Timing.TimescaleMode == TimescaleModes.Scaled)
                 {
                     return Time.time;
@@ -49,7 +51,8 @@ namespace MoreMountains.Feedbacks
                 {
                     return Time.unscaledTime;
                 }
-        } }
+            }
+        }
         /// the delta time (or unscaled delta time) based on the selected Timing settings
         public float FeedbackDeltaTime
         {
@@ -105,7 +108,7 @@ namespace MoreMountains.Feedbacks
             {
                 _betweenDelayWaitForSeconds = new WaitForSeconds(Timing.DelayBetweenRepeats + FeedbackDuration);
             }
-            
+
             if (Timing.Sequence != null)
             {
                 _sequenceDelayWaitForSeconds = new WaitForSeconds(Timing.DelayBetweenRepeats + Timing.Sequence.Length);
@@ -119,7 +122,7 @@ namespace MoreMountains.Feedbacks
                 }
             }
 
-            CustomInitialization(owner);            
+            CustomInitialization(owner);
         }
 
         /// <summary>
@@ -138,14 +141,14 @@ namespace MoreMountains.Feedbacks
             {
                 Debug.LogWarning("The " + this + " feedback is being played without having been initialized. Call Initialization() first.");
             }
-            
+
             // we check the cooldown
             if ((Timing.CooldownDuration > 0f) && (FeedbackTime - _lastPlayTimestamp < Timing.CooldownDuration))
             {
                 return;
             }
 
-            if (Timing.InitialDelay > 0f) 
+            if (Timing.InitialDelay > 0f)
             {
                 _playCoroutine = StartCoroutine(PlayCoroutine(position, attenuation));
             }
@@ -153,9 +156,9 @@ namespace MoreMountains.Feedbacks
             {
                 _lastPlayTimestamp = FeedbackTime;
                 RegularPlay(position, attenuation);
-            }  
+            }
         }
-        
+
         /// <summary>
         /// An internal coroutine delaying the initial play of the feedback
         /// </summary>
@@ -199,7 +202,7 @@ namespace MoreMountains.Feedbacks
             {
                 _repeatedPlayCoroutine = StartCoroutine(RepeatedPlay(position, attenuation));
                 return;
-            }            
+            }
             if (Timing.Sequence == null)
             {
                 CustomPlayFeedback(position, attenuation);
@@ -208,7 +211,7 @@ namespace MoreMountains.Feedbacks
             {
                 _sequenceCoroutine = StartCoroutine(SequenceCoroutine(position, attenuation));
             }
-            
+
         }
 
         /// <summary>
@@ -317,7 +320,7 @@ namespace MoreMountains.Feedbacks
                     yield return null;
                 }
             }
-                    
+
         }
 
         /// <summary>
@@ -329,8 +332,8 @@ namespace MoreMountains.Feedbacks
         {
             if (_playCoroutine != null) { StopCoroutine(_playCoroutine); }
             if (_infinitePlayCoroutine != null) { StopCoroutine(_infinitePlayCoroutine); }
-            if (_repeatedPlayCoroutine != null) { StopCoroutine(_repeatedPlayCoroutine); }            
-            if (_sequenceCoroutine != null) { StopCoroutine(_sequenceCoroutine);  }
+            if (_repeatedPlayCoroutine != null) { StopCoroutine(_repeatedPlayCoroutine); }
+            if (_sequenceCoroutine != null) { StopCoroutine(_sequenceCoroutine); }
 
             _lastPlayTimestamp = 0f;
             _playsLeft = Timing.NumberOfRepeats + 1;
@@ -342,7 +345,7 @@ namespace MoreMountains.Feedbacks
             _playsLeft = Timing.NumberOfRepeats + 1;
             CustomReset();
         }
-        
+
         /// <summary>
         /// This method describes all custom initialization processes the feedback requires, in addition to the main Initialization method
         /// </summary>
@@ -367,6 +370,6 @@ namespace MoreMountains.Feedbacks
         /// This method describes what happens when the feedback gets reset
         /// </summary>
         protected virtual void CustomReset() { }
-    }   
+    }
 }
 

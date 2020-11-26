@@ -1,10 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System.IO;
-using System.Text;
-using System.Security.Cryptography;
+﻿using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Security.Cryptography;
+using UnityEngine;
 
 namespace MoreMountains.Tools
 {

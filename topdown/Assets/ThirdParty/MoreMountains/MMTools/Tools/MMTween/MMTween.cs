@@ -1,7 +1,5 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
-using System;
+﻿using System.Collections;
+using UnityEngine;
 
 namespace MoreMountains.Tools
 {
@@ -17,17 +15,17 @@ namespace MoreMountains.Tools
         /// </summary>
         public enum MMTweenCurve
         {
-            LinearTween,        
-            EaseInQuadratic,    EaseOutQuadratic,   EaseInOutQuadratic,
-            EaseInCubic,        EaseOutCubic,       EaseInOutCubic,
-            EaseInQuartic,      EaseOutQuartic,     EaseInOutQuartic,
-            EaseInQuintic,      EaseOutQuintic,     EaseInOutQuintic,
-            EaseInSinusoidal,   EaseOutSinusoidal,  EaseInOutSinusoidal,
-            EaseInBounce,       EaseOutBounce,      EaseInOutBounce,
-            EaseInOverhead,     EaseOutOverhead,    EaseInOutOverhead,
-            EaseInExponential,  EaseOutExponential, EaseInOutExponential,
-            EaseInElastic,      EaseOutElastic,     EaseInOutElastic,
-            EaseInCircular,     EaseOutCircular,    EaseInOutCircular,
+            LinearTween,
+            EaseInQuadratic, EaseOutQuadratic, EaseInOutQuadratic,
+            EaseInCubic, EaseOutCubic, EaseInOutCubic,
+            EaseInQuartic, EaseOutQuartic, EaseInOutQuartic,
+            EaseInQuintic, EaseOutQuintic, EaseInOutQuintic,
+            EaseInSinusoidal, EaseOutSinusoidal, EaseInOutSinusoidal,
+            EaseInBounce, EaseOutBounce, EaseInOutBounce,
+            EaseInOverhead, EaseOutOverhead, EaseInOutOverhead,
+            EaseInExponential, EaseOutExponential, EaseInOutExponential,
+            EaseInElastic, EaseOutElastic, EaseInOutElastic,
+            EaseInCircular, EaseOutCircular, EaseInOutCircular,
             AntiLinearTween
         }
 

@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace MoreMountains.Feedbacks
@@ -140,7 +139,7 @@ namespace MoreMountains.Feedbacks
                 Debug.LogWarning("The " + gameObject.name + " ObjectPooler doesn't have any GameObjectToPool defined.", gameObject);
                 return null;
             }
-            GameObject newGameObject = (GameObject)Instantiate(GameObjectToPool);
+            GameObject newGameObject = Instantiate(GameObjectToPool);
             newGameObject.gameObject.SetActive(false);
             if (NestWaitingPool)
             {

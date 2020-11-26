@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -22,7 +21,7 @@ namespace MoreMountains.Feedbacks
         protected Color _buttonColor;
         protected Color _trackControlColor;
 
-        protected Color _emptyButtonColor = new Color(0,0,0,0.5f);
+        protected Color _emptyButtonColor = new Color(0, 0, 0, 0.5f);
         protected Color _empty4ButtonColor = new Color(0, 0, 0, 0.75f);
         protected const float _buttonWidth = 24;
         protected const float _trackControlWidth = 11;
@@ -61,7 +60,7 @@ namespace MoreMountains.Feedbacks
             _trackControlStyle.normal.background = _dotBackground;
             _trackControlStyle.normal.textColor = (Application.isPlaying) ? Color.black : Color.white;
             _trackControlStyle.fixedWidth = _trackControlWidth;
-            _trackControlStyle.fixedHeight = _trackControlWidth;            
+            _trackControlStyle.fixedHeight = _trackControlWidth;
             _trackControlStyle.margin = new RectOffset(0, 0, 1, 0);
             _trackControlStyle.alignment = TextAnchor.MiddleCenter;
             _trackControlStyle.fontSize = 10;
@@ -114,7 +113,7 @@ namespace MoreMountains.Feedbacks
                         ) + 1;
 
             LookForChanges();
-            
+
             // separator
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Sequencer", EditorStyles.boldLabel);
@@ -143,7 +142,7 @@ namespace MoreMountains.Feedbacks
                 EditorUtility.SetDirty(_targetSequencer.Sequence);
             }
             EditorGUILayout.EndHorizontal();
-            
+
             EditorGUILayout.Space();
             EditorGUILayout.Space();
             DrawSequenceIndexes();
@@ -180,9 +179,9 @@ namespace MoreMountains.Feedbacks
                     _targetSequencer.ApplySequencerLengthToSequence();
                     _targetSequencer.LastSequence = _targetSequencer.Sequence;
                     EditorUtility.SetDirty(_targetSequencer.Sequence);
-                }                
-            }   
-            
+                }
+            }
+
             if (_targetSequencer.LastSequence == _targetSequencer.Sequence)
             {
                 if (_targetSequencer.LastTracksCount != _targetSequencer.Sequence.SequenceTracks.Count)
@@ -325,7 +324,7 @@ namespace MoreMountains.Feedbacks
             for (int i = 0; i < _targetSequencer.Sequence.QuantizedSequence[trackIndex].Line.Count; i++)
             {
                 // handle new lines
-                if (counter > _boxesPerLine )
+                if (counter > _boxesPerLine)
                 {
                     GUILayout.EndHorizontal();
                     GUILayout.Space(_distanceBetweenButtons);
@@ -355,7 +354,7 @@ namespace MoreMountains.Feedbacks
                 }
 
                 DrawSequenceButton(trackIndex, i, _buttonColor);
-                
+
                 counter++;
             }
             GUILayout.FlexibleSpace();

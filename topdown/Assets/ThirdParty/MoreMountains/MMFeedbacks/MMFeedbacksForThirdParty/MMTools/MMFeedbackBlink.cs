@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using MoreMountains.Tools;
+﻿using UnityEngine;
 
 namespace MoreMountains.Feedbacks
 {
@@ -30,7 +27,7 @@ namespace MoreMountains.Feedbacks
         /// <param name="attenuation"></param>
         protected override void CustomPlayFeedback(Vector3 position, float attenuation = 1.0f)
         {
-            if (Active &&  (TargetBlink != null))
+            if (Active && (TargetBlink != null))
             {
                 switch (BlinkMode)
                 {

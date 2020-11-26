@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MoreMountains.Tools
 {
@@ -17,7 +15,7 @@ namespace MoreMountains.Tools
     /// A State is a combination of one or more actions, and one or more transitions. An example of a state could be "_patrolling until an enemy gets in range_".
     /// </summary>
     [System.Serializable]
-    public class AIState 
+    public class AIState
     {
         /// the name of the state (will be used as a reference in Transitions
         public string StateName;
@@ -42,7 +40,7 @@ namespace MoreMountains.Tools
         {
             _brain = brain;
         }
-                	
+
         /// <summary>
         /// On enter state we pass that info to our actions and decisions
         /// </summary>
@@ -85,7 +83,7 @@ namespace MoreMountains.Tools
         public virtual void PerformActions()
         {
             if (Actions.Count == 0) { return; }
-            for (int i=0; i<Actions.Count; i++) 
+            for (int i = 0; i < Actions.Count; i++)
             {
                 if (Actions[i] != null)
                 {
@@ -104,7 +102,7 @@ namespace MoreMountains.Tools
         public virtual void EvaluateTransitions()
         {
             if (Transitions.Count == 0) { return; }
-            for (int i = 0; i < Transitions.Count; i++) 
+            for (int i = 0; i < Transitions.Count; i++)
             {
                 if (Transitions[i].Decision != null)
                 {
@@ -122,8 +120,8 @@ namespace MoreMountains.Tools
                             _brain.TransitionToState(Transitions[i].FalseState);
                         }
                     }
-                }                
+                }
             }
-        }        
-	}
+        }
+    }
 }

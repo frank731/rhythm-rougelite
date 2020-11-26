@@ -1,7 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
-using System;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -28,8 +25,8 @@ namespace MoreMountains.Tools
         private bool GetConditionAttributeResult(MMConditionAttribute condHAtt, SerializedProperty property)
         {
             bool enabled = true;
-            string propertyPath = property.propertyPath; 
-            string conditionPath = propertyPath.Replace(property.name, condHAtt.ConditionBoolean); 
+            string propertyPath = property.propertyPath;
+            string conditionPath = propertyPath.Replace(property.name, condHAtt.ConditionBoolean);
             SerializedProperty sourcePropertyValue = property.serializedObject.FindProperty(conditionPath);
 
             if (sourcePropertyValue != null)

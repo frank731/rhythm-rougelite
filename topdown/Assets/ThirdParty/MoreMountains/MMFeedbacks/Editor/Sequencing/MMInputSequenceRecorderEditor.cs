@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 
 namespace MoreMountains.Feedbacks
@@ -16,7 +14,7 @@ namespace MoreMountains.Feedbacks
         protected float _inspectorWidth;
         protected int _externalMargin = 10;
         protected Rect _rect;
-        protected Color _recordingColor =  Color.red;
+        protected Color _recordingColor = Color.red;
         protected Color _recordingTextColor = Color.white;
         protected Vector2 _boxPosition;
         protected Vector2 _boxSize;
@@ -64,7 +62,7 @@ namespace MoreMountains.Feedbacks
 
             HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));
             _currentEvent = Event.current;
-            
+
             if (_currentEvent == null)
             {
                 return;
@@ -156,7 +154,7 @@ namespace MoreMountains.Feedbacks
                 _rect.width = _boxSize.x;
                 _rect.height = _boxSize.y;
                 EditorGUI.DrawRect(_rect, _recordingColor);
-                
+
                 EditorGUI.LabelField(_rect, "RECORDING", _recordingStyle);
             }
 

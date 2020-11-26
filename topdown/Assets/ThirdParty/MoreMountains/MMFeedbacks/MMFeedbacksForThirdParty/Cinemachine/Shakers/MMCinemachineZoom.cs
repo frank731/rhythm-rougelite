@@ -1,9 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using MoreMountains.Feedbacks;
 using UnityEngine;
-using UnityEngine.Rendering;
-using Cinemachine;
-using MoreMountains.Feedbacks;
 
 namespace MoreMountains.FeedbacksForThirdParty
 {
@@ -54,8 +50,8 @@ namespace MoreMountains.FeedbacksForThirdParty
         {
             _virtualCamera = this.gameObject.GetComponent<Cinemachine.CinemachineVirtualCamera>();
             _initialFieldOfView = _virtualCamera.m_Lens.FieldOfView;
-        }	
-        
+        }
+
         /// <summary>
         /// On Update if we're zooming we modify our field of view accordingly
         /// </summary>
@@ -87,12 +83,12 @@ namespace MoreMountains.FeedbacksForThirdParty
                         _startFieldOfView = _targetFieldOfView;
                         _targetFieldOfView = _initialFieldOfView;
                         _delta = 0f;
-                    }                    
+                    }
                 }
                 else
                 {
                     _zooming = false;
-                }                
+                }
             }
         }
 

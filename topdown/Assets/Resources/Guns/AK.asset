@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e64b1340fd93be64288fc8df648934b8, type: 3}
+  m_Name: AK
+  m_EditorClassIdentifier: 
+  itemId: 2
+  displayName: AK
+  description: A regular AK
+  gunSprite: {fileID: 21300002, guid: 75df1bb8b302ceb4a9230d70d1b2e97e, type: 3}
+  gunObject: {fileID: 6559611390352724442, guid: c626f681cdc17694d92145b33984c4c4,
+    type: 3}

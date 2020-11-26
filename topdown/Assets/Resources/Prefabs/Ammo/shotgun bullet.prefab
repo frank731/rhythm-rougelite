@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7239188407951871396}
   - component: {fileID: 4419782661939992284}
   m_Layer: 18
-  m_Name: shotgun bullet
+  m_Name: Shotgun Bullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -104,7 +104,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!70 &7239188407951871396
 CapsuleCollider2D:

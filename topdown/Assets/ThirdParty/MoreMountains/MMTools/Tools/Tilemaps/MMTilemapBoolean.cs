@@ -1,9 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
-using MoreMountains.Tools;
-using System;
-using System.Collections.Generic;
 using UnityEngine.Tilemaps;
 
 namespace MoreMountains.Tools
@@ -40,10 +35,10 @@ namespace MoreMountains.Tools
                     {
                         TilemapToClean.SetTile(localPlace, null);
                     }
-                }                
+                }
             }
             // we clear our tilemap and resize it
-            _tilemap.RefreshAllTiles();            
+            _tilemap.RefreshAllTiles();
         }
     }
 }

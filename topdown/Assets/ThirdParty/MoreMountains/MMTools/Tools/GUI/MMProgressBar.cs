@@ -1,7 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
-using MoreMountains.Tools;
 
 namespace MoreMountains.Tools
 {
@@ -11,7 +10,7 @@ namespace MoreMountains.Tools
     /// </summary>
     [AddComponentMenu("More Mountains/Tools/GUI/MMProgressBar")]
     public class MMProgressBar : MonoBehaviour
-	{
+    {
         /// the possible fill modes 
         public enum FillModes { LocalScale, FillAmount, Width, Height }
         /// the possible directions for the fill (for local scale and fill amount only)
@@ -32,32 +31,32 @@ namespace MoreMountains.Tools
         public TimeScales TimeScale = TimeScales.UnscaledTime;
 
         [Header("Foreground Bar Settings")]
-		/// whether or not the foreground bar should lerp
-		public bool LerpForegroundBar = true;
-		/// the speed at which to lerp the foreground bar
+        /// whether or not the foreground bar should lerp
+        public bool LerpForegroundBar = true;
+        /// the speed at which to lerp the foreground bar
         [MMCondition("LerpForegroundBar", true)]
-		public float LerpForegroundBarSpeed = 15f;
+        public float LerpForegroundBarSpeed = 15f;
 
-		[Header("Delayed Bar Settings")]
-		/// the delay before the delayed bar moves (in seconds)
-		public float Delay = 1f;
-		/// whether or not the delayed bar's animation should lerp
-		public bool LerpDelayedBar = true;
+        [Header("Delayed Bar Settings")]
+        /// the delay before the delayed bar moves (in seconds)
+        public float Delay = 1f;
+        /// whether or not the delayed bar's animation should lerp
+        public bool LerpDelayedBar = true;
         /// the speed at which to lerp the delayed bar
         [MMCondition("LerpDelayedBar", true)]
         public float LerpDelayedBarSpeed = 15f;
 
-		[Header("Bindings")]
-		/// optional - the ID of the player associated to this bar
-		public string PlayerID;
-		/// the delayed bar
-		public Transform DelayedBar;
-		/// the main, foreground bar
-		public Transform ForegroundBar;
+        [Header("Bindings")]
+        /// optional - the ID of the player associated to this bar
+        public string PlayerID;
+        /// the delayed bar
+        public Transform DelayedBar;
+        /// the main, foreground bar
+        public Transform ForegroundBar;
 
-		[Header("Bump")]
-		/// whether or not the bar should "bump" when changing value
-		public bool BumpScaleOnChange = true;
+        [Header("Bump")]
+        /// whether or not the bar should "bump" when changing value
+        public bool BumpScaleOnChange = true;
         /// whether or not the bar should bump when its value increases
         [MMCondition("BumpScaleOnChange", true)]
         public bool BumpOnIncrease = false;
@@ -83,7 +82,7 @@ namespace MoreMountains.Tools
         /// whether or not this progress bar should update itself every update (if not, you'll have to update it using the UpdateBar method
         public bool AutoUpdating = false;
         /// the current progress of the bar
-        [Range(0f,1f)]
+        [Range(0f, 1f)]
         public float BarProgress;
 
         [MMInspectorButton("Bump")]
@@ -91,11 +90,11 @@ namespace MoreMountains.Tools
 
         protected float _targetFill;
         protected Vector3 _targetLocalScale = Vector3.one;
-		protected float _newPercent;
+        protected float _newPercent;
         protected float _lastPercent;
-		protected float _lastUpdateTimestamp;
-		protected bool _bump = false;
-		protected Color _initialColor;
+        protected float _lastUpdateTimestamp;
+        protected bool _bump = false;
+        protected Color _initialColor;
         protected Vector3 _initialScale;
         protected Vector3 _newScale;
         protected Image _foregroundImage;
@@ -107,30 +106,30 @@ namespace MoreMountains.Tools
         /// On start we store our image component
         /// </summary>
         protected virtual void Start()
-		{
+        {
             _initialScale = this.transform.localScale;
-            
+
             if (ForegroundBar != null)
             {
                 _foregroundImage = ForegroundBar.GetComponent<Image>();
                 _initialFrontBarSize = _foregroundImage.rectTransform.sizeDelta;
             }
-			if (DelayedBar != null)
+            if (DelayedBar != null)
             {
                 _delayedImage = DelayedBar.GetComponent<Image>();
             }
             _initialized = true;
         }
 
-		/// <summary>
-		/// On Update we update our bars
-		/// </summary>
-		protected virtual void Update()
-		{
+        /// <summary>
+        /// On Update we update our bars
+        /// </summary>
+        protected virtual void Update()
+        {
             AutoUpdate();
-			UpdateFrontBar();
-			UpdateDelayedBar();
-		}
+            UpdateFrontBar();
+            UpdateDelayedBar();
+        }
 
         protected virtual void AutoUpdate()
         {
@@ -144,15 +143,15 @@ namespace MoreMountains.Tools
             _lastUpdateTimestamp = (TimeScale == TimeScales.Time) ? Time.time : Time.unscaledTime;
         }
 
-		/// <summary>
-		/// Updates the front bar's scale
-		/// </summary>
-		protected virtual void UpdateFrontBar()
-		{
+        /// <summary>
+        /// Updates the front bar's scale
+        /// </summary>
+        protected virtual void UpdateFrontBar()
+        {
             float currentDeltaTime = (TimeScale == TimeScales.Time) ? Time.deltaTime : Time.unscaledTime;
 
-			if (ForegroundBar != null)
-			{
+            if (ForegroundBar != null)
+            {
                 switch (FillMode)
                 {
                     case FillModes.LocalScale:
@@ -221,20 +220,20 @@ namespace MoreMountains.Tools
                         break;
                 }
             }
-		}
+        }
 
-		/// <summary>
-		/// Updates the delayed bar's scale
-		/// </summary>
-		protected virtual void UpdateDelayedBar()
-		{
+        /// <summary>
+        /// Updates the delayed bar's scale
+        /// </summary>
+        protected virtual void UpdateDelayedBar()
+        {
             float currentDeltaTime = (TimeScale == TimeScales.Time) ? Time.deltaTime : Time.unscaledDeltaTime;
             float currentTime = (TimeScale == TimeScales.Time) ? Time.time : Time.unscaledTime;
 
             if (DelayedBar != null)
-			{
-				if (currentTime - _lastUpdateTimestamp > Delay)
-				{
+            {
+                if (currentTime - _lastUpdateTimestamp > Delay)
+                {
                     if (FillMode == FillModes.LocalScale)
                     {
                         _targetLocalScale = Vector3.one;
@@ -278,81 +277,81 @@ namespace MoreMountains.Tools
                         }
                     }
                 }
-			}
-		}
+            }
+        }
 
-		/// <summary>
-		/// Updates the bar's values based on the specified parameters
-		/// </summary>
-		/// <param name="currentValue">Current value.</param>
-		/// <param name="minValue">Minimum value.</param>
-		/// <param name="maxValue">Max value.</param>
-		public virtual void UpdateBar(float currentValue,float minValue,float maxValue)
-		{
-			_newPercent = MMMaths.Remap(currentValue, minValue, maxValue, StartValue, EndValue);
+        /// <summary>
+        /// Updates the bar's values based on the specified parameters
+        /// </summary>
+        /// <param name="currentValue">Current value.</param>
+        /// <param name="minValue">Minimum value.</param>
+        /// <param name="maxValue">Max value.</param>
+        public virtual void UpdateBar(float currentValue, float minValue, float maxValue)
+        {
+            _newPercent = MMMaths.Remap(currentValue, minValue, maxValue, StartValue, EndValue);
             if ((_newPercent != BarProgress) && !Bumping)
             {
                 Bump();
             }
             BarProgress = _newPercent;
-			_targetFill = _newPercent;
-			_lastUpdateTimestamp = (TimeScale == TimeScales.Time) ? Time.time : Time.unscaledTime;
+            _targetFill = _newPercent;
+            _lastUpdateTimestamp = (TimeScale == TimeScales.Time) ? Time.time : Time.unscaledTime;
             _lastPercent = _newPercent;
         }
 
-		/// <summary>
-		/// Triggers a camera bump
-		/// </summary>
-		public virtual void Bump()
-		{
-			if (!BumpScaleOnChange || !_initialized)
-			{
-				return;
-			}
+        /// <summary>
+        /// Triggers a camera bump
+        /// </summary>
+        public virtual void Bump()
+        {
+            if (!BumpScaleOnChange || !_initialized)
+            {
+                return;
+            }
             if (!BumpOnIncrease && (_lastPercent < _newPercent))
             {
                 return;
             }
-			if (this.gameObject.activeInHierarchy)
-			{
-				StartCoroutine(BumpCoroutine());
-			}
-		}
+            if (this.gameObject.activeInHierarchy)
+            {
+                StartCoroutine(BumpCoroutine());
+            }
+        }
 
-		/// <summary>
-		/// A coroutine that (usually quickly) changes the scale of the bar 
-		/// </summary>
-		/// <returns>The coroutine.</returns>
-		protected virtual IEnumerator BumpCoroutine()
-		{
-			float journey = 0f;
+        /// <summary>
+        /// A coroutine that (usually quickly) changes the scale of the bar 
+        /// </summary>
+        /// <returns>The coroutine.</returns>
+        protected virtual IEnumerator BumpCoroutine()
+        {
+            float journey = 0f;
             float currentDeltaTime = (TimeScale == TimeScales.Time) ? Time.deltaTime : Time.unscaledDeltaTime;
 
-			Bumping = true;
-			if (_foregroundImage != null)
-			{
-				_initialColor = _foregroundImage.color;
-			}
+            Bumping = true;
+            if (_foregroundImage != null)
+            {
+                _initialColor = _foregroundImage.color;
+            }
 
-			while (journey <= BumpDuration)
-			{
-				journey = journey + currentDeltaTime;
-				float percent = Mathf.Clamp01(journey / BumpDuration);
+            while (journey <= BumpDuration)
+            {
+                journey = journey + currentDeltaTime;
+                float percent = Mathf.Clamp01(journey / BumpDuration);
                 float curvePercent = BumpAnimationCurve.Evaluate(percent);
                 float colorCurvePercent = BumpColorAnimationCurve.Evaluate(percent);
                 this.transform.localScale = curvePercent * _initialScale;
 
-				if (ChangeColorWhenBumping && (_foregroundImage != null))
-				{
-					_foregroundImage.color = Color.Lerp(_initialColor, BumpColor, colorCurvePercent);
-				}
+                if (ChangeColorWhenBumping && (_foregroundImage != null))
+                {
+                    _foregroundImage.color = Color.Lerp(_initialColor, BumpColor, colorCurvePercent);
+                }
 
-				yield return null;
-			}
+                yield return null;
+            }
             _foregroundImage.color = _initialColor;
             Bumping = false;
-			yield return null;
+            yield return null;
 
-		}
-	}
+        }
+    }
 }

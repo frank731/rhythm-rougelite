@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MoreMountains.Tools
 {
@@ -8,12 +6,12 @@ namespace MoreMountains.Tools
     public class MMGyroscope : MonoBehaviour
     {
         public enum TimeScales { Scaled, Unscaled }
-               
+
         [Header("Settings")]
         /// whether this rig should move in scaled or unscaled time
         public TimeScales TimeScale = TimeScales.Scaled;
         /// the clamps to apply to the values
-        [MMVector("Min","Max")]
+        [MMVector("Min", "Max")]
         public Vector2 Clamps = new Vector2(-1f, 1f);
         /// the speed at which to move towards the new position
         public float LerpSpeed = 1f;
@@ -105,7 +103,7 @@ namespace MoreMountains.Tools
             HandleTestMode();
 
             ClampAcceleration();
-            
+
             CalibratedInputAcceleration = CalibratedAcceleration(InputAcceleration, _accelerationMatrix);
             CalibratedGyroscopeGravity = CalibratedAcceleration(GyroscopeGravity, _gravityMatrix);
 

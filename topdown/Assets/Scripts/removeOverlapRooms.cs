@@ -1,12 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class RemoveOverlapRooms : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.transform.tag == "RoomSpawnPoint")
+        if (collision.CompareTag("RoomSpawnPoint"))
         {
             if (!collision.transform.parent.gameObject.GetComponent<RoomController>().isDestroyed)
             {

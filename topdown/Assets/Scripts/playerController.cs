@@ -1,28 +1,17 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.UI;
 using UnityEngine.Events;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : PlayerData
 {
-    public float startHealth = 6;
-    public float health = 0;
-    public float iFrames = 1f;
     public bool isInvincible = false;
     public bool isDead = false;
-    public GameObject currentGun;
+
     public Transform rightHand;
     public Transform gunsHolder;
-    public int currentGunIndex = 0;
-    public List<GameObject> guns = new List<GameObject>();
-    public List<Item> items = new List<Item>();
-    public List<int> gunIndexes;
-    public List<int> itemIndexes;
     public RoomController currentRoom;
-    public ItemDatabase itemDatabase;
-    public FloorGlobal floorGlobal;
     public bool canShoot = false;
     public GameObject inventory;
     public Transform itemInventoryHolder;
@@ -32,20 +21,35 @@ public class PlayerController : MonoBehaviour
     public Transform heartUIGrid;
     public bool viewingMap = false;
     public GameObject heartTemplate;
-    private List<GameObject> hearts = new List<GameObject>();
-    public float heartContainers = 3;
     public TMPro.TextMeshProUGUI gunAmmoText;
     public Image gunUIImage;
     public UnityEvent resetStats = new UnityEvent();
-    private int heartEmptyIndex = 0;
+    public UnityEvent playerKilled = new UnityEvent();
+    public AudioClip playerHurtSFX;
     private Animator playerAnimator;
-    
+    private AudioSource playerAudioSource;
+    private PlayerMovement playerMovement;
+
     private void Awake()
     {
-        playerAnimator = GetComponent<Animator>();
-        floorGlobal.pausableScripts.Add(this);
-        AddHealth(startHealth, heartContainers);
+        DontDestroyOnLoad(gameObject);
+
+        LoadPlayerData();
+        foreach (int gunIndex in gunIndexes)
+        {
+            AddItem(gunIndex, "gun", true);
+        }
+        foreach (int itemIndex in itemIndexes)
+        {
+            AddItem(itemIndex, "item", true);
+        }
         inventory.SetActive(false); //inventory canvas must be enabled at start to place images on it correctly
+        playerAnimator = GetComponent<Animator>();
+        playerMovement = GetComponent<PlayerMovement>();
+        playerAudioSource = GetComponent<AudioSource>();
+        FloorGlobal.Instance.pausableScripts.Add(this);
+        FloorGlobal.Instance.levelChanged.AddListener(OnLevelChanged);
+        AddHealth(health, heartContainers, true);
         SwitchToNewWeapon(currentGun);
     }
 
@@ -54,13 +58,16 @@ public class PlayerController : MonoBehaviour
         onBeatRange.BeatAction();
     }
 
-    public void AddItem(int itemId, string itemType)
+    public void AddItem(int itemId, string itemType, bool initializing = false)
     {
         switch (itemType)
         {
             case "gun":
-                gunIndexes.Add(itemId);
-                Gun gun = itemDatabase.guns[itemId];
+                if (!initializing)
+                {
+                    gunIndexes.Add(itemId);
+                }
+                Gun gun = ItemDatabase.Instance.guns[itemId];
                 GameObject newGun = Instantiate(gun.gunObject, rightHand.position, rightHand.rotation);
                 newGun.transform.SetParent(gunsHolder);
                 //create icon for inventory
@@ -73,30 +80,32 @@ public class PlayerController : MonoBehaviour
                 break;
 
             case "item":
-                itemIndexes.Add(itemId);
-                Item databaseItem = itemDatabase.items[itemId];
-                Item newItem = new Item(databaseItem.itemId, databaseItem.displayName, databaseItem.description, databaseItem.itemSprite, databaseItem.function); //create copy of item instead of pointer to databases item
+                if (!initializing)
+                {
+                    itemIndexes.Add(itemId);
+                }
+                Item databaseItem = ItemDatabase.Instance.items[itemId];
+                Item newItem = databaseItem;
+                //Item newItem = new Item(databaseItem.itemId, databaseItem.displayName, databaseItem.description, databaseItem.itemSprite, databaseItem.function); //create copy of item instead of pointer to databases item
                 //create icon for inventory
                 GameObject itemSprite = Instantiate(itemInventoryImageTemplate, itemInventoryImageTemplate.transform.position, itemInventoryImageTemplate.transform.rotation);
                 itemSprite.GetComponent<Image>().sprite = newItem.itemSprite;
                 itemSprite.GetComponent<ShowDescription>().description = newItem.description;
                 itemSprite.transform.SetParent(itemInventoryHolder);
-                Debug.Log(itemSprite.GetInstanceID() + "new");
                 newItem.inventoryIcon = itemSprite;
                 items.Add(newItem);
                 foreach (Item item in items)
                 {
-                    item.function();
-                    Debug.Log(item.inventoryIcon.GetInstanceID());
+                    item.action();
                 }
                 break;
         }
-        
+
     }
 
     public void RemoveItem(int removeItemId)
     {
-        foreach(Item i in items)
+        foreach (Item i in items)
         {
             Debug.Log(i.inventoryIcon.GetInstanceID());
         }
@@ -108,7 +117,7 @@ public class PlayerController : MonoBehaviour
         resetStats.Invoke();
         foreach (Item item in items)
         {
-            item.function();
+            item.action();
         }
         //TODO make item effects reversible by keeping list of all current effects and calling when item is added or removed
     }
@@ -142,16 +151,22 @@ public class PlayerController : MonoBehaviour
 
     public void OnPause()
     {
-        floorGlobal.OnPause();
+        FloorGlobal.Instance.OnPause(FloorGlobal.Instance.pauseCanvas);
     }
+
+    public void OnViewInventory()
+    {
+        FloorGlobal.Instance.OnPause(inventory);
+    }
+
     public void OnViewMap()
     {
         //calls when tab is pressed and when tab is released
         viewingMap = !viewingMap;
-        floorGlobal.OnViewMap(viewingMap);
+        FloorGlobal.Instance.OnViewMap(viewingMap);
     }
 
-    public void AddHealth(float healthAdded, float containerCount = 0)
+    public void AddHealth(float healthAdded, float containerCount = 0, bool initializing = false)
     {
         //create new heart containers
         for (int i = 0; i < containerCount; i++)
@@ -159,20 +174,29 @@ public class PlayerController : MonoBehaviour
             GameObject newHeartContainer = Instantiate(heartTemplate, heartTemplate.transform.position, heartTemplate.transform.rotation);
             newHeartContainer.transform.SetParent(heartUIGrid);
             hearts.Add(newHeartContainer);
-            heartContainers++;
+            if (!initializing)
+            {
+                heartContainers++;
+            }
         }
         //fill heart containers
         if (hearts[heartEmptyIndex].GetComponent<Image>().sprite.name == "hearts_half") //if the current "empty" heart is a half heart add +1 to health so it will call the next two loops properly
         {
             healthAdded++;
-            health -= 1;
+            if (!initializing)
+            {
+                health -= 1;
+            }
         }
 
         for (int i = 0; i < (healthAdded / 2) - (healthAdded % 2); i++) //fill full hearts
         {
             //changes last empty heart to full
-            hearts[heartEmptyIndex].GetComponent<Image>().sprite = floorGlobal.heartSprites[1];
-            health += 2;
+            hearts[heartEmptyIndex].GetComponent<Image>().sprite = FloorGlobal.Instance.heartSprites[1];
+            if (!initializing)
+            {
+                health += 2;
+            }
             heartEmptyIndex++;
             if (heartEmptyIndex == hearts.Count)
             {
@@ -185,8 +209,11 @@ public class PlayerController : MonoBehaviour
             //changes empty hearts to half hearts
             if (heartEmptyIndex != hearts.Count && hearts[heartEmptyIndex].GetComponent<Image>().sprite.name == "hearts_empty")
             {
-                hearts[heartEmptyIndex].GetComponent<Image>().sprite = floorGlobal.heartSprites[2];
-                health++;
+                hearts[heartEmptyIndex].GetComponent<Image>().sprite = FloorGlobal.Instance.heartSprites[2];
+                if (!initializing)
+                {
+                    health++;
+                }
             }
         }
 
@@ -194,13 +221,14 @@ public class PlayerController : MonoBehaviour
 
     public void RemoveHealth(float damage)
     {
-        if (!isInvincible)
+        if (!isInvincible && !isDead)
         {
             StartCoroutine(IFrameDelay());
 
             health -= damage;
 
             playerAnimator.SetTrigger("Player Damaged");
+            playerAudioSource.PlayOneShot(playerHurtSFX, 0.3f);
 
             //remove health from ui
             if (hearts[heartEmptyIndex].GetComponent<Image>().sprite.name == "hearts_half") //if the current "empty" heart is a half heart add +1 to health so it will call the next two loops properly
@@ -210,7 +238,7 @@ public class PlayerController : MonoBehaviour
             for (int i = 0; i < (damage / 2) - (damage % 2); i++) //destroy full hearts
             {
                 //changes last full heart to empty
-                hearts[heartEmptyIndex].GetComponent<Image>().sprite = floorGlobal.heartSprites[0];
+                hearts[heartEmptyIndex].GetComponent<Image>().sprite = FloorGlobal.Instance.heartSprites[0];
                 heartEmptyIndex--;
                 if (heartEmptyIndex == -1)
                 {
@@ -223,7 +251,7 @@ public class PlayerController : MonoBehaviour
                 //changes full hearts to half hearts
                 if (heartEmptyIndex > -1 && hearts[heartEmptyIndex].GetComponent<Image>().sprite.name == "hearts_full")
                 {
-                    hearts[heartEmptyIndex].GetComponent<Image>().sprite = floorGlobal.heartSprites[2];
+                    hearts[heartEmptyIndex].GetComponent<Image>().sprite = FloorGlobal.Instance.heartSprites[2];
                 }
             }
 
@@ -232,24 +260,21 @@ public class PlayerController : MonoBehaviour
             {
                 isDead = true;
                 playerAnimator.SetTrigger("Player Killed");
-                Debug.Log("dead");
-                //Destroy(gameObject);
+                playerMovement.rb.isKinematic = false;
+                playerMovement.enabled = false;
+                gunsHolder.gameObject.SetActive(false);
+                GetComponent<Collider2D>().enabled = false;
+                playerKilled.Invoke();
             }
         }
-        
+
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            RemoveItem(1);
-        }
-    }
+
     public IEnumerator IFrameDelay()
     {
         isInvincible = true;
         yield return new WaitForSeconds(iFrames);
-        isInvincible = false; 
+        isInvincible = false;
     }
 }

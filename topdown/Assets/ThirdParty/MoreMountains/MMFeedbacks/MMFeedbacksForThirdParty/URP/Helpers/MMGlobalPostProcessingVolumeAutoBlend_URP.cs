@@ -1,7 +1,6 @@
-﻿using UnityEngine;
-using MoreMountains.Feedbacks;
+﻿using MoreMountains.Feedbacks;
+using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.Rendering.Universal;
 
 namespace MoreMountains.FeedbacksForThirdParty
 {
@@ -143,7 +142,7 @@ namespace MoreMountains.FeedbacksForThirdParty
 
             float timeElapsed = (GetTime() - _startTime);
             if (timeElapsed < BlendDuration)
-            {                
+            {
                 float remapped = MMFeedbacksHelpers.Remap(timeElapsed, 0f, BlendDuration, 0f, 1f);
                 _volume.weight = Mathf.LerpUnclamped(_initial, _destination, Curve.Evaluate(remapped));
             }
@@ -160,7 +159,7 @@ namespace MoreMountains.FeedbacksForThirdParty
                 {
                     this.enabled = false;
                 }
-            }            
+            }
         }
     }
 }

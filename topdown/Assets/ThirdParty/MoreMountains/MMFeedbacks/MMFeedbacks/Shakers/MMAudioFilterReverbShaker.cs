@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MoreMountains.Feedbacks
 {
@@ -82,7 +80,7 @@ namespace MoreMountains.Feedbacks
             {
                 return;
             }
-            
+
             _resetShakerValuesAfterShake = resetShakerValuesAfterShake;
             _resetTargetValuesAfterShake = resetTargetValuesAfterShake;
 

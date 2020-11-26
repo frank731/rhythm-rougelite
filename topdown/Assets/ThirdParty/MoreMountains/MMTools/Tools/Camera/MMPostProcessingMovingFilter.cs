@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 namespace MoreMountains.Tools
 {
@@ -53,7 +52,7 @@ namespace MoreMountains.Tools
         /// whether the filter is active at start or not
         public bool Active = false;
 
-        [MMVector("On","Off")]
+        [MMVector("On", "Off")]
         /// the vertical offsets to apply when the filter is on or off
         public Vector2 FilterOffset = new Vector2(0f, 5f);
         /// whether or not to add the initial position
@@ -101,9 +100,9 @@ namespace MoreMountains.Tools
             {
                 _initialPosition = Vector3.zero;
             }
-            
+
             _newPosition = _initialPosition;
-            _newPosition.y = Active ? _initialPosition.y + FilterOffset.x : _initialPosition.y + FilterOffset.y;            
+            _newPosition.y = Active ? _initialPosition.y + FilterOffset.x : _initialPosition.y + FilterOffset.y;
             this.transform.localPosition = _newPosition;
             _lastReachedState = Active;
         }
@@ -137,7 +136,7 @@ namespace MoreMountains.Tools
 
             _newPosition = this.transform.localPosition;
             _newPosition.y = MMTween.Tween(currentTime - _lastMovementStartedAt, 0f, _duration, originY, targetY, Curve);
-          
+
             if (currentTime - _lastMovementStartedAt > _duration)
             {
                 _newPosition.y = targetY;
@@ -169,7 +168,7 @@ namespace MoreMountains.Tools
             else
             {
                 Active = active;
-            }            
+            }
 
             float currentTime = (TimeScale == TimeScales.Unscaled) ? Time.unscaledTime : Time.time;
             _lastMovementStartedAt = currentTime;

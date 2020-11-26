@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.InputSystem;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -9,14 +6,15 @@ public class PlayerMovement : MonoBehaviour
     public float speed;
     public Rigidbody2D rb;
     public Animator animator;
-    private Vector2 move;
     private Vector2 direction;
     private PlayerController playerController;
     private void Awake()
     {
         speed = baseSpeed;
         playerController = GetComponent<PlayerController>();
-        playerController.resetStats.AddListener(ResetStats);    
+        playerController.resetStats.AddListener(ResetStats);
+        FloorGlobal.Instance.levelChanged.AddListener(SaveSpeed);
+        playerController.loadPlayerData.AddListener(LoadSpeed);
     }
 
     private void ResetStats()
@@ -24,12 +22,21 @@ public class PlayerMovement : MonoBehaviour
         speed = baseSpeed;
     }
 
+    private void SaveSpeed()
+    {
+        ES3.Save("playerSpeed", speed);
+    }
+
+    private void LoadSpeed()
+    {
+        speed = ES3.Load("playerSpeed", baseSpeed);
+    }
+
     private void FixedUpdate()
     {
-        direction = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        direction.Set(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         //move the character
-        move = new Vector2(direction.x, direction.y);
-        rb.velocity = (move * speed * Time.deltaTime * 50);
+        rb.velocity = (direction * speed * Time.deltaTime * 50);
         // change idle to run anim
         animator.SetFloat("player_speed", Mathf.Max(Mathf.Abs(rb.velocity.y), Mathf.Abs(rb.velocity.x)));
     }

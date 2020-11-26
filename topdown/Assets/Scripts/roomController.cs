@@ -1,9 +1,5 @@
-﻿using Microsoft.Unity.VisualStudio.Editor;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEditor.UI;
-using UnityEngine.UI;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -24,14 +20,14 @@ public class RoomController : MonoBehaviour
     public bool endRoom = false;
     public bool bossRoom = false;
     public bool itemRoom = false;
+    public bool createdLargeRoom = false;
     public int distance;
     public int enemyCount = 0;
     public List<GameObject> adjacentRooms = new List<GameObject>();
     private List<int> adjacencies = new List<int>();
     private List<GameObject> enemies = new List<GameObject>();
-    private FloorGlobal floorGlobal;
     private PlayerController PlayerController = null;
-    
+
     public void RevealMap()
     {
         adjacentRooms.RemoveAll(item => item == null);
@@ -62,7 +58,7 @@ public class RoomController : MonoBehaviour
 
     public void DisableRoom()
     {
-        foreach(Transform child in transform)
+        foreach (Transform child in transform)
         {
             child.gameObject.SetActive(false);
         }
@@ -76,7 +72,7 @@ public class RoomController : MonoBehaviour
         {
             ChangeMapIconTransparency(0.2f);
         }
-        
+
     }
     public void EnableRoom()
     {
@@ -87,7 +83,8 @@ public class RoomController : MonoBehaviour
     }
     public void AddEnemy(GameObject enemy)
     {
-        if (!enemies.Contains(enemy)){
+        if (!enemies.Contains(enemy))
+        {
             enemyCount += 1;
             enemies.Add(enemy);
         }
@@ -102,20 +99,20 @@ public class RoomController : MonoBehaviour
             if (bossRoom)
             {
                 foreach (Transform child in layout.transform)
-                { 
-                    if (child.tag == "Exit")
+                {
+                    if (child.CompareTag("Exit"))
                     {
                         child.gameObject.SetActive(true);
                         break;
                     }
-                        
+
                 }
             }
         }
     }
     public void SpawnPointDestroyed()
     {
-        if(spawnHolder.childCount == 0)
+        if (spawnHolder.childCount == 0)
         {
             endRoom = true;
         }
@@ -143,7 +140,8 @@ public class RoomController : MonoBehaviour
     }
     public void AddDoor(int roomType, Transform doorPos)
     {
-        GameObject door = Instantiate(floorGlobal.doors[roomType - 1], doorPos.position, floorGlobal.doors[roomType - 1].transform.rotation);
+        GameObject door = Instantiate(FloorGlobal.Instance.doors[roomType - 1], doorPos.position, FloorGlobal.Instance.doors[roomType - 1].transform.rotation);
+        Destroy(doorPos.gameObject);
         door.transform.SetParent(transform);
         door.transform.position = doorPos.position;
         door.SetActive(true);
@@ -152,17 +150,16 @@ public class RoomController : MonoBehaviour
 
     private void Awake()
     {
-        floorGlobal = GameObject.FindGameObjectWithTag("FloorGlobalHolder").GetComponent<FloorGlobal>();
-        floorGlobal.rooms.Add(gameObject);
+        FloorGlobal.Instance.rooms.Add(gameObject);
         if (!startingRoom)
         {
-            distance = floorGlobal.maxRoomCount + 1;
+            distance = FloorGlobal.Instance.maxRoomCount + 1;
         }
         else
         {
             //create first map icon
-            GameObject minimapRoom = Instantiate(floorGlobal.minimapRoomPrefabs[roomShape], floorGlobal.minimapCanvas.transform.position, transform.rotation);
-            minimapRoom.transform.SetParent(floorGlobal.minimapCanvas.transform);
+            GameObject minimapRoom = Instantiate(FloorGlobal.Instance.minimapRoomPrefabs[roomShape], FloorGlobal.Instance.minimapCanvas.transform.position, transform.rotation);
+            minimapRoom.transform.SetParent(FloorGlobal.Instance.minimapCanvas.transform);
             mapIcon = minimapRoom.transform.GetChild(0).gameObject;
             mapIcon.SetActive(true);
         }
@@ -173,15 +170,15 @@ public class RoomController : MonoBehaviour
         //sets room layout
         if (!startingRoom)
         {
-            int layoutType = Random.Range(0, floorGlobal.layouts[roomShape].Length);
-            ChangeLayout(floorGlobal.layouts[roomShape][layoutType]);
+            int layoutType = Random.Range(0, FloorGlobal.Instance.layouts[roomShape].Length);
+            ChangeLayout(FloorGlobal.Instance.layouts[roomShape][layoutType]);
             //disable room as optimization
             Invoke("DisableRoom", 0.2f);
             StartCoroutine(ChangeDoors(false));
         }
         else
         {
-            ChangeLayout(floorGlobal.emptyLayout);
+            ChangeLayout(FloorGlobal.Instance.emptyLayout);
             layout.SetActive(true);
             inPlayerRange = true;
             Invoke("RevealMap", 0.2f);
@@ -192,14 +189,17 @@ public class RoomController : MonoBehaviour
     public void OnDestroy()
     {
         //destroy its corresponding map icon on destroy
-        Destroy(mapIcon.transform.parent.gameObject);
+        if (mapIcon.transform.parent.gameObject != null)
+        {
+            Destroy(mapIcon.transform.parent.gameObject);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         //turns on gate and enemes when player enters room and room hasn't been cleared already
-        if(collision.gameObject.tag == "Player")
-        { 
+        if (collision.CompareTag("Player"))
+        {
             if (!PlayerController)
             {
                 PlayerController = collision.gameObject.GetComponent<PlayerController>();
@@ -214,7 +214,22 @@ public class RoomController : MonoBehaviour
             if (!roomCleared)
             {
                 StartCoroutine(ChangeDoors(false));
-                //Invoke("ActivateEnemies", 0.5f);
+            }
+        }
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            isPlayerIn = false;
+            //delete enemy corpses
+            if (roomCleared)
+            {
+                foreach (GameObject enemy in enemies)
+                {
+                    Destroy(enemy);
+                }
+                enemies.Clear();
             }
         }
     }

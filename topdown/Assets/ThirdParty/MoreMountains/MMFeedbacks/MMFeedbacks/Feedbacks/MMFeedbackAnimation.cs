@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MoreMountains.Feedbacks
 {
@@ -21,7 +19,7 @@ namespace MoreMountains.Feedbacks
         [Header("Animation")]
         /// the animator whose parameters you want to update
         public Animator BoundAnimator;
-        
+
         [Header("Trigger")]
         /// if this is true, will update the specified trigger parameter
         public bool UpdateTrigger = false;
@@ -38,10 +36,10 @@ namespace MoreMountains.Feedbacks
         /// the bool parameter to turn true when the feedback gets played
         [MMFCondition("UpdateBool", true)]
         public string BoolParameterName;
-        
+
         protected int _triggerParameter;
         protected int _boolParameter;
-        
+
         /// <summary>
         /// Custom Init
         /// </summary>
@@ -86,7 +84,7 @@ namespace MoreMountains.Feedbacks
                 }
             }
         }
-        
+
         /// <summary>
         /// On stop, turns the bool parameter to false
         /// </summary>

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
 using System.Linq;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -18,7 +16,7 @@ namespace MoreMountains.Feedbacks
         /// <summary>
         /// A list of all the symbols you want added to the build settings
         /// </summary>
-        public static readonly string[] Symbols = new string[] 
+        public static readonly string[] Symbols = new string[]
         {
          "MOREMOUNTAINS_TOOLS"
         };

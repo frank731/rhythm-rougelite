@@ -1,9 +1,8 @@
 ﻿#if UNITY_EDITOR
 
-using UnityEngine;
-using UnityEditor;
-using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
+using UnityEngine;
 
 namespace MoreMountains.Tools
 {
@@ -68,7 +67,7 @@ namespace MoreMountains.Tools
                     name = "horizontalPadded",
                     padding = _horizontalPaddingOnly
                 };
-            }                 
+            }
         }
 
         /// <summary>
@@ -78,8 +77,8 @@ namespace MoreMountains.Tools
         {
             GUI.skin.box.padding = _padding;
             GUILayout.BeginHorizontal("box");
-                GUILayout.Space(10);            
-                _selectedTab = GUILayout.Toolbar(_selectedTab, _tabs);
+            GUILayout.Space(10);
+            _selectedTab = GUILayout.Toolbar(_selectedTab, _tabs);
             GUILayout.EndHorizontal();
         }
 
@@ -119,38 +118,38 @@ namespace MoreMountains.Tools
         protected virtual void DrawSearchByMonoBehaviour()
         {
             GUILayout.BeginHorizontal("box");
-                GUILayout.Space(20);
-                GUILayout.BeginVertical();
-                    GUILayout.Label("Select a MonoBehaviour to search for:");
-                    _searchedMonoBehaviour = (MonoScript)EditorGUILayout.ObjectField(_searchedMonoBehaviour, typeof(MonoScript), false);
-                GUILayout.EndVertical();
-                GUILayout.Space(10);
+            GUILayout.Space(20);
+            GUILayout.BeginVertical();
+            GUILayout.Label("Select a MonoBehaviour to search for:");
+            _searchedMonoBehaviour = (MonoScript)EditorGUILayout.ObjectField(_searchedMonoBehaviour, typeof(MonoScript), false);
+            GUILayout.EndVertical();
+            GUILayout.Space(10);
 
-                if (_searchedMonoBehaviour != _lastSearchedMonoBehaviour)
+            if (_searchedMonoBehaviour != _lastSearchedMonoBehaviour)
+            {
+                string[] allPrefabsInProject = GetAllPrefabsInProject();
+
+                _lastSearchedMonoBehaviour = _searchedMonoBehaviour;
+                _searchedMonoBehaviourName = _searchedMonoBehaviour.name;
+                AssetDatabase.SaveAssets();
+                string searchedMonoBehaviourPath = AssetDatabase.GetAssetPath(_searchedMonoBehaviour);
+                _resultsList = new List<string>();
+                foreach (string prefab in allPrefabsInProject)
                 {
-                    string[] allPrefabsInProject = GetAllPrefabsInProject();
-
-                    _lastSearchedMonoBehaviour = _searchedMonoBehaviour;
-                    _searchedMonoBehaviourName = _searchedMonoBehaviour.name;
-                    AssetDatabase.SaveAssets();
-                    string searchedMonoBehaviourPath = AssetDatabase.GetAssetPath(_searchedMonoBehaviour);
-                    _resultsList = new List<string>();
-                    foreach (string prefab in allPrefabsInProject)
+                    string[] pathName = new string[] { prefab };
+                    string[] monoDependenciesPaths = AssetDatabase.GetDependencies(pathName, false);
+                    foreach (string monoDependencyPath in monoDependenciesPaths)
                     {
-                        string[] pathName = new string[] { prefab };
-                        string[] monoDependenciesPaths = AssetDatabase.GetDependencies(pathName, false);
-                        foreach (string monoDependencyPath in monoDependenciesPaths)
+                        if (monoDependencyPath == searchedMonoBehaviourPath)
                         {
-                            if (monoDependencyPath == searchedMonoBehaviourPath)
-                            {
-                                _resultsList.Add(prefab);
-                            }
+                            _resultsList.Add(prefab);
                         }
                     }
                 }
+            }
             GUILayout.EndHorizontal();
         }
-        
+
         /// <summary>
         /// Draws the search missing form
         /// </summary>
@@ -192,7 +191,7 @@ namespace MoreMountains.Tools
         /// </summary>
         protected virtual void DrawResultsList()
         {
-            GUILayout.BeginHorizontal(_padded); 
+            GUILayout.BeginHorizontal(_padded);
             if (_resultsList != null)
             {
                 if (_resultsList.Count == 0)
@@ -207,7 +206,7 @@ namespace MoreMountains.Tools
                             if (!string.IsNullOrEmpty(_searchedMonoBehaviourName))
                             {
                                 GUILayout.Label("No prefabs use component " + _searchedMonoBehaviourName, EditorStyles.boldLabel);
-                            }                            
+                            }
                             break;
                     }
                     GUILayout.EndHorizontal(); // end padded
@@ -245,7 +244,7 @@ namespace MoreMountains.Tools
                 }
             }
         }
-        
+
         /// <summary>
         /// On GUI we draw our window's contents
         /// </summary>

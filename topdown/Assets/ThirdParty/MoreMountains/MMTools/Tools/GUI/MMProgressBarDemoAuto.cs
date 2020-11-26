@@ -1,17 +1,14 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
-using MoreMountains.Tools;
 
 namespace MoreMountains.Tools
-{	
-	public class MMProgressBarDemoAuto : MonoBehaviour 
-	{
+{
+    public class MMProgressBarDemoAuto : MonoBehaviour
+    {
         public enum TestModes { Permanent, OneTime }
         public TestModes TestMode = TestModes.Permanent;
 
         [MMEnumCondition("TestMode", (int)TestModes.Permanent)]
-		public float CurrentValue = 0f;
+        public float CurrentValue = 0f;
         [MMEnumCondition("TestMode", (int)TestModes.Permanent)]
         public float MinValue = 0f;
         [MMEnumCondition("TestMode", (int)TestModes.Permanent)]
@@ -30,20 +27,20 @@ namespace MoreMountains.Tools
         public bool OneTimeButton;
 
         protected float _direction = 1f;
-		protected MMProgressBar _progressBar;
+        protected MMProgressBar _progressBar;
 
-		protected virtual void Start()
-		{
-			Initialization ();
-		}
+        protected virtual void Start()
+        {
+            Initialization();
+        }
 
-		protected virtual void Initialization()
-		{
-			_progressBar = GetComponent<MMProgressBar> ();
-		}
+        protected virtual void Initialization()
+        {
+            _progressBar = GetComponent<MMProgressBar>();
+        }
 
-		protected virtual void Update()
-		{
+        protected virtual void Update()
+        {
             if (TestMode == TestModes.Permanent)
             {
                 _progressBar.UpdateBar(CurrentValue, MinValue, MaxValue);
@@ -53,11 +50,11 @@ namespace MoreMountains.Tools
                     _direction *= -1;
                 }
             }
-		}
+        }
 
         protected virtual void OneTime()
         {
             _progressBar.UpdateBar(OneTimeNewValue, OneTimeMinValue, OneTimeMaxValue);
         }
-	}
+    }
 }

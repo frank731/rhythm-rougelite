@@ -21,6 +21,7 @@ TagManager:
   - FloorGlobalHolder
   - BPMIndicator
   - RoomSpawner
+  - ItemDatabase
   layers:
   - Default
   - TransparentFX

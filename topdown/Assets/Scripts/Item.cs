@@ -1,22 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
 
-public class Item 
+[CreateAssetMenu(fileName = "New Item", menuName = "Items", order = 1)]
+public class Item : ScriptableObject
 {
     public int itemId;
     public string displayName;
     public string description;
     public Sprite itemSprite;
-    public UnityAction function;
+    public UnityAction action;
     public GameObject inventoryIcon;
-    public Item(int itemId, string displayName, string description, Sprite sprite, UnityAction function)
-    {
-        this.itemId = itemId;
-        this.displayName = displayName;
-        this.description = description;
-        this.itemSprite = sprite;
-        this.function = function;
-    }
 }

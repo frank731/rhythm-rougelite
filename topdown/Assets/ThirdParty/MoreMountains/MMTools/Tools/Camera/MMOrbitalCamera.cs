@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 namespace MoreMountains.Tools
 {
@@ -23,7 +22,7 @@ namespace MoreMountains.Tools
         [Header("Zoom")]
         public bool ZoomEnabled = true;
         public float MinimumZoomDistance = 0.6f;
-        public float MaximumZoomDistance = 20;     
+        public float MaximumZoomDistance = 20;
         public int ZoomSpeed = 40;
         public float ZoomDampening = 5f;
 
@@ -124,7 +123,7 @@ namespace MoreMountains.Tools
                 _currentRotation = transform.rotation;
                 _rotation = Quaternion.Lerp(_currentRotation, _desiredRotation, Time.deltaTime * ZoomDampening);
                 transform.rotation = _rotation;
-            }            
+            }
         }
 
         protected virtual void Zoom()
@@ -155,9 +154,9 @@ namespace MoreMountains.Tools
             }
             else if (Mode == Modes.Mouse)
             {
-                _scrollWheelAmount += - Input.GetAxis("Mouse ScrollWheel") * MouseWheelSpeed;
+                _scrollWheelAmount += -Input.GetAxis("Mouse ScrollWheel") * MouseWheelSpeed;
                 _scrollWheelAmount = Mathf.Clamp(_scrollWheelAmount, -MaxMouseWheelClamp, MaxMouseWheelClamp);
-                
+
                 float deltaMagnitudeDifference = _scrollWheelAmount;
 
                 _desiredDistance += deltaMagnitudeDifference * Time.deltaTime * ZoomSpeed * Mathf.Abs(_desiredDistance) * 0.001f;

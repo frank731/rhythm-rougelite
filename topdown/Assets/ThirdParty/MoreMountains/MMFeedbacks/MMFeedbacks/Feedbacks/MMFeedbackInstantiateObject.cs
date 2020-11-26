@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MoreMountains.Feedbacks
 {
@@ -44,7 +42,7 @@ namespace MoreMountains.Feedbacks
         /// the initial and planned size of this object pool
         public int VfxObjectPoolSize = 5;
 
-        protected MMMiniObjectPooler _objectPool; 
+        protected MMMiniObjectPooler _objectPool;
         protected GameObject _newGameObject;
 
         /// <summary>
@@ -92,7 +90,7 @@ namespace MoreMountains.Feedbacks
                 }
                 else
                 {
-                    _newGameObject = GameObject.Instantiate(VfxToInstantiate) as GameObject;
+                    _newGameObject = GameObject.Instantiate(VfxToInstantiate);
                     _newGameObject.transform.position = GetPosition(position);
                 }
             }

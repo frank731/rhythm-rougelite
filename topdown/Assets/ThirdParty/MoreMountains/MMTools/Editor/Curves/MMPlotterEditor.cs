@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 
 namespace MoreMountains.Tools
@@ -15,7 +11,7 @@ namespace MoreMountains.Tools
     public class MMPlotterEditor : Editor
     {
         protected string[] _typeDisplays;
-        protected string[] _excludedProperties = new string[] { "TweenMethod", "m_Script" }; 
+        protected string[] _excludedProperties = new string[] { "TweenMethod", "m_Script" };
 
         protected MMPlotter _mmPlotter;
 

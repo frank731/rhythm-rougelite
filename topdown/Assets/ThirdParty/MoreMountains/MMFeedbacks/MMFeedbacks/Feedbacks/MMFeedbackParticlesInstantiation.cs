@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Assertions;
+﻿using UnityEngine;
 
 namespace MoreMountains.Feedbacks
 {
@@ -80,7 +77,7 @@ namespace MoreMountains.Feedbacks
                 }
             }
 
-            _instantiatedParticleSystem = GameObject.Instantiate(ParticlesPrefab) as ParticleSystem;
+            _instantiatedParticleSystem = GameObject.Instantiate(ParticlesPrefab);
             _instantiatedParticleSystem.Stop();
 
             if (InstantiateParticlesPosition == null)
@@ -145,7 +142,7 @@ namespace MoreMountains.Feedbacks
                 _instantiatedParticleSystem?.Stop();
             }
 
-            _instantiatedParticleSystem.transform.position = GetPosition(position);                        
+            _instantiatedParticleSystem.transform.position = GetPosition(position);
             _instantiatedParticleSystem?.Play();
         }
 
@@ -163,7 +160,7 @@ namespace MoreMountains.Feedbacks
             if (_instantiatedParticleSystem != null)
             {
                 _instantiatedParticleSystem?.Stop();
-            }            
+            }
         }
 
         /// <summary>
@@ -181,7 +178,7 @@ namespace MoreMountains.Feedbacks
             if (_instantiatedParticleSystem != null)
             {
                 _instantiatedParticleSystem?.Stop();
-            }            
+            }
         }
     }
 }

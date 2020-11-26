@@ -1,8 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System;
-using UnityEngine.UI;
-using MoreMountains.Tools;
 
 namespace MoreMountains.Tools
 {
@@ -17,7 +13,7 @@ namespace MoreMountains.Tools
 
         [Header("Bindings")]
         public CameraModes CameraMode = CameraModes.Main;
-        [MMEnumCondition("CameraMode",(int)CameraModes.Override)]
+        [MMEnumCondition("CameraMode", (int)CameraModes.Override)]
         /// the camera to pick the position from (usually the "regular" game camera)
         public Camera TargetCamera;
         /// the background to fade 
@@ -185,7 +181,7 @@ namespace MoreMountains.Tools
             _canvasGroup.alpha = 1;
         }
 
-        protected virtual void StartFading(float initialAlpha, float endAlpha, float duration, MMTweenType curve, int id, 
+        protected virtual void StartFading(float initialAlpha, float endAlpha, float duration, MMTweenType curve, int id,
             bool ignoreTimeScale, Vector3 worldPosition)
         {
             if (id != ID)
@@ -205,7 +201,7 @@ namespace MoreMountains.Tools
             viewportPosition.x = Mathf.Clamp01(viewportPosition.x);
             viewportPosition.y = Mathf.Clamp01(viewportPosition.y);
             viewportPosition.z = Mathf.Clamp01(viewportPosition.z);
-            
+
             FaderMask.anchorMin = viewportPosition;
             FaderMask.anchorMax = viewportPosition;
 
@@ -226,7 +222,7 @@ namespace MoreMountains.Tools
         public virtual void OnMMEvent(MMFadeEvent fadeEvent)
         {
             _currentTargetScale = (fadeEvent.TargetAlpha == -1) ? MaskScale.y : fadeEvent.TargetAlpha;
-            StartFading(FaderMask.transform.localScale.x, _currentTargetScale, fadeEvent.Duration, fadeEvent.Curve, fadeEvent.ID, 
+            StartFading(FaderMask.transform.localScale.x, _currentTargetScale, fadeEvent.Duration, fadeEvent.Curve, fadeEvent.ID,
                 fadeEvent.IgnoreTimeScale, fadeEvent.WorldPosition);
         }
 
@@ -236,7 +232,7 @@ namespace MoreMountains.Tools
         /// <param name="fadeEvent">Fade event.</param>
         public virtual void OnMMEvent(MMFadeInEvent fadeEvent)
         {
-            StartFading(MaskScale.y, MaskScale.x, fadeEvent.Duration, fadeEvent.Curve, fadeEvent.ID, 
+            StartFading(MaskScale.y, MaskScale.x, fadeEvent.Duration, fadeEvent.Curve, fadeEvent.ID,
                 fadeEvent.IgnoreTimeScale, fadeEvent.WorldPosition);
         }
 
@@ -246,7 +242,7 @@ namespace MoreMountains.Tools
         /// <param name="fadeEvent">Fade event.</param>
         public virtual void OnMMEvent(MMFadeOutEvent fadeEvent)
         {
-            StartFading(MaskScale.x, MaskScale.y, fadeEvent.Duration, fadeEvent.Curve, fadeEvent.ID, 
+            StartFading(MaskScale.x, MaskScale.y, fadeEvent.Duration, fadeEvent.Curve, fadeEvent.ID,
                 fadeEvent.IgnoreTimeScale, fadeEvent.WorldPosition);
         }
 

@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using MoreMountains.Feedbacks;
 using UnityEngine;
-using MoreMountains.Feedbacks;
 
 namespace MoreMountains.FeedbacksForThirdParty
 {
@@ -40,7 +38,7 @@ namespace MoreMountains.FeedbacksForThirdParty
         public float RemapIntensityOne = 1.0f;
         /// whether or not to add to the initial intensity
         public bool RelativeIntensity = false;
-        
+
         /// the duration of this feedback is the duration of the shake
         public override float FeedbackDuration { get { return Duration; } }
 
@@ -53,7 +51,7 @@ namespace MoreMountains.FeedbacksForThirdParty
         {
             if (Active)
             {
-                MMVignetteShakeEvent.Trigger(Intensity, Duration, RemapIntensityZero, RemapIntensityOne, RelativeIntensity, attenuation, 
+                MMVignetteShakeEvent.Trigger(Intensity, Duration, RemapIntensityZero, RemapIntensityOne, RelativeIntensity, attenuation,
                     Channel, ResetShakerValuesAfterShake, ResetTargetValuesAfterShake);
             }
         }

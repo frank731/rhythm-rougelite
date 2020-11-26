@@ -1,10 +1,8 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
 using System;
 using System.Reflection;
 #if UNITY_EDITOR
-    using UnityEditor;
+using UnityEditor;
 #endif
 
 namespace MoreMountains.Tools
@@ -34,7 +32,7 @@ namespace MoreMountains.Tools
         protected Keyframe _keyframe = new Keyframe();
         protected MethodInfo _addMethodInfo;
         protected object[] _parameters;
-        
+
         /// <summary>
         /// Generates the asset and saves it at the requested path
         /// </summary>
@@ -46,7 +44,7 @@ namespace MoreMountains.Tools
 
             // we create a new instance of our curve asset
             ScriptableObject curveAsset = ScriptableObject.CreateInstance(_scriptableObjectType);
-            
+
             // for each type of curve, we create an animation curve
             foreach (MMTween.MMTweenCurve curve in Enum.GetValues(typeof(MMTween.MMTweenCurve)))
             {
@@ -54,11 +52,11 @@ namespace MoreMountains.Tools
             }
 
             // we save it to file
-            #if UNITY_EDITOR
-                AssetDatabase.CreateAsset(curveAsset, AnimationCurveFilePath + AnimationCurveFileName);
-                AssetDatabase.SaveAssets();
-                AssetDatabase.Refresh();
-            #endif
+#if UNITY_EDITOR
+            AssetDatabase.CreateAsset(curveAsset, AnimationCurveFilePath + AnimationCurveFileName);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+#endif
         }
 
         /// <summary>
@@ -83,7 +81,7 @@ namespace MoreMountains.Tools
                 else
                 {
                     _keyframe.value = MMTween.Tween(_keyframe.time, 0f, 1f, 0f, 1f, curveType);
-                }                
+                }
                 animationCurve.AddKey(_keyframe);
             }
             // smoothes the curve's tangents

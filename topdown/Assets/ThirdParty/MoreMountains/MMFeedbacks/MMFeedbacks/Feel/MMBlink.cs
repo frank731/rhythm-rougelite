@@ -1,8 +1,6 @@
-﻿using UnityEngine;
-using System.Collections;
-using MoreMountains.Feedbacks;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace MoreMountains.Feedbacks
 {
@@ -126,7 +124,7 @@ namespace MoreMountains.Feedbacks
             Blinking = false;
             ResetBlinkProperties();
         }
-                
+
         /// <summary>
         /// On Update, we blink if we are supposed to
         /// </summary>
@@ -148,7 +146,7 @@ namespace MoreMountains.Feedbacks
         protected virtual void DetermineState()
         {
             DetermineCurrentPhase();
-            
+
             if (!Blinking)
             {
                 return;
@@ -230,7 +228,7 @@ namespace MoreMountains.Feedbacks
                 CurrentPhaseIndex++;
                 _currentPhaseStartedAt = Time.time;
             }
-            if (CurrentPhaseIndex > Phases.Count -1)
+            if (CurrentPhaseIndex > Phases.Count - 1)
             {
                 CurrentPhaseIndex = 0;
                 if (RepeatCount != -1)
@@ -241,16 +239,16 @@ namespace MoreMountains.Feedbacks
                         ResetBlinkProperties();
                         Blinking = false;
                     }
-                }                
+                }
             }
         }
-        
+
         /// <summary>
         /// On enable, initializes blink properties
         /// </summary>
         protected virtual void OnEnable()
         {
-            InitializeBlinkProperties();            
+            InitializeBlinkProperties();
         }
 
         /// <summary>

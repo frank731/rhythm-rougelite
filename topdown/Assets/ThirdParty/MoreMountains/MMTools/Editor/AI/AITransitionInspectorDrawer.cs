@@ -1,6 +1,5 @@
-﻿using UnityEngine;
-using UnityEditor;
- using System.Collections;
+﻿using UnityEditor;
+using UnityEngine;
 
 namespace MoreMountains.Tools
 {
@@ -17,7 +16,7 @@ namespace MoreMountains.Tools
                 var height = Mathf.Max(LineHeight, EditorGUI.GetPropertyHeight(a));
                 position.height = height;
 
-                if(a.name == "Decision")
+                if (a.name == "Decision")
                 {
                     EditorGUI.PropertyField(position, a, new GUIContent(a.name));
                     position.y += height;
@@ -48,7 +47,7 @@ namespace MoreMountains.Tools
             foreach (SerializedProperty a in property)
             {
                 var h = Mathf.Max(LineHeight, EditorGUI.GetPropertyHeight(a));
-                if(a.name == "Decision")
+                if (a.name == "Decision")
                 {
                     height += h;
 

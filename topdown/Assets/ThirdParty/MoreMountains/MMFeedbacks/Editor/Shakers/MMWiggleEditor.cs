@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 
 namespace MoreMountains.Feedbacks
@@ -41,7 +39,7 @@ namespace MoreMountains.Feedbacks
             public SerializedProperty LimitedTimeFalloff;
             public SerializedProperty LimitedTimeResetValue;
         }
-        
+
         protected SerializedProperty _positionActive;
         protected SerializedProperty _rotationActive;
         protected SerializedProperty _scaleActive;
@@ -104,14 +102,14 @@ namespace MoreMountains.Feedbacks
             editorProperties.LimitedTimeLeft = targetProperty.FindPropertyRelative("LimitedTimeLeft");
             editorProperties.LimitedTimeFalloff = targetProperty.FindPropertyRelative("LimitedTimeFalloff");
             editorProperties.LimitedTimeResetValue = targetProperty.FindPropertyRelative("LimitedTimeResetValue");
-    }
+        }
 
         public override void OnInspectorGUI()
         {
 
             serializedObject.Update();
             Undo.RecordObject(target, "Modified MMWiggle");
-            
+
 
             EditorGUILayout.Space();
 

@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using MoreMountains.Feedbacks;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
-using MoreMountains.Feedbacks;
 
 namespace MoreMountains.FeedbacksForThirdParty
 {
@@ -170,7 +168,7 @@ namespace MoreMountains.FeedbacksForThirdParty
             RemapPostExposureOne = remapPostExposureOne;
             ShakeHueShift = shakeHueShift;
             RemapHueShiftZero = remapHueShiftZero;
-            RemapHueShiftOne  = remapHueShiftOne;
+            RemapHueShiftOne = remapHueShiftOne;
             ShakeSaturation = shakeSaturation;
             RemapSaturationZero = remapSaturationZero;
             RemapSaturationOne = remapSaturationOne;

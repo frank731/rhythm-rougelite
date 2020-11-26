@@ -1,16 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class OnBeatRange : MonoBehaviour
 {
-    public FloorGlobal floorGlobal;
     private List<GameObject> beatMarkers = new List<GameObject>();
 
     public void BeatAction()
     {
-        if (floorGlobal.isOnBeat)
+        if (FloorGlobal.Instance.isOnBeat)
         {
             beatMarkers.RemoveAll(item => item == null);
             foreach (GameObject indicator in beatMarkers)
@@ -21,18 +19,15 @@ public class OnBeatRange : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        floorGlobal.isOnBeat = true;
-        floorGlobal.onBeat.Invoke();
         beatMarkers.Add(collision.gameObject);
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        floorGlobal.isOnBeat = false;
+        FloorGlobal.Instance.isOnBeat = false;
         beatMarkers.RemoveAll(item => item == null);
-        //destroy later to give bit of extra hang time for on beat
         foreach (GameObject indicator in beatMarkers)
         {
-            Destroy(indicator, 1f);
+            Destroy(indicator);
         }
     }
 }

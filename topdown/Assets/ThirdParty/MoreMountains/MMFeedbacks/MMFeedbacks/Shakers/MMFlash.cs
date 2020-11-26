@@ -1,8 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
-using System.Collections.Generic;
-using MoreMountains.Feedbacks;
 
 namespace MoreMountains.Feedbacks
 {
@@ -27,8 +24,8 @@ namespace MoreMountains.Feedbacks
             OnEvent?.Invoke(flashColor, duration, alpha, flashID, channel);
         }
     }
-    
-	[RequireComponent(typeof(Image))]
+
+    [RequireComponent(typeof(Image))]
     [RequireComponent(typeof(CanvasGroup))]
     [AddComponentMenu("More Mountains/Feedbacks/Shakers/Various/MMFlash")]
     /// <summary>
@@ -41,35 +38,35 @@ namespace MoreMountains.Feedbacks
         /// the ID of this MMFlash object. When triggering a MMFlashEvent you can specify an ID, and only MMFlash objects with this ID will answer the call and flash, allowing you to have more than one flash object in a scene
         public int FlashID = 0;
 
-		protected Image _image;
+        protected Image _image;
         protected CanvasGroup _canvasGroup;
-		protected bool _flashing = false;
+        protected bool _flashing = false;
         protected float _targetAlpha;
         protected Color _initialColor;
         protected float _delta;
         protected float _flashStartedTimestamp;
         protected int _direction = 1;
-        protected float _duration;        
+        protected float _duration;
 
-		/// <summary>
-		/// On start we grab our image component
-		/// </summary>
-		protected virtual void Start()
-		{
-			_image = GetComponent<Image>();
+        /// <summary>
+        /// On start we grab our image component
+        /// </summary>
+        protected virtual void Start()
+        {
+            _image = GetComponent<Image>();
             _canvasGroup = GetComponent<CanvasGroup>();
             _initialColor = _image.color;
 
         }
 
-		/// <summary>
-		/// On update we flash our image if needed
-		/// </summary>
-		protected virtual void Update()
-		{
-			if (_flashing)
-			{
-				_image.enabled = true;
+        /// <summary>
+        /// On update we flash our image if needed
+        /// </summary>
+        protected virtual void Update()
+        {
+            if (_flashing)
+            {
+                _image.enabled = true;
 
 
                 if (Time.time - _flashStartedTimestamp > _duration / 2f)
@@ -85,7 +82,7 @@ namespace MoreMountains.Feedbacks
                 {
                     _delta -= Time.deltaTime / (_duration / 2f);
                 }
-                
+
                 if (Time.time - _flashStartedTimestamp > _duration)
                 {
                     _flashing = false;
@@ -93,18 +90,18 @@ namespace MoreMountains.Feedbacks
 
                 _canvasGroup.alpha = Mathf.Lerp(0f, _targetAlpha, _delta);
             }
-			else
-			{
-				_image.enabled = false;
-			}
-		}
+            else
+            {
+                _image.enabled = false;
+            }
+        }
 
-		/// <summary>
-		/// When getting a flash event, we turn our image on
-		/// </summary>
-		public void OnMMFlashEvent(Color flashColor, float duration, float alpha, int flashID, int channel)
+        /// <summary>
+        /// When getting a flash event, we turn our image on
+        /// </summary>
+        public void OnMMFlashEvent(Color flashColor, float duration, float alpha, int flashID, int channel)
         {
-            if (flashID != FlashID) 
+            if (flashID != FlashID)
             {
                 return;
             }
@@ -125,22 +122,22 @@ namespace MoreMountains.Feedbacks
                 _duration = duration;
                 _flashStartedTimestamp = Time.time;
             }
-        } 
+        }
 
-		/// <summary>
-		/// On enable we start listening for events
-		/// </summary>
-		protected virtual void OnEnable()
-		{
+        /// <summary>
+        /// On enable we start listening for events
+        /// </summary>
+        protected virtual void OnEnable()
+        {
             MMFlashEvent.Register(OnMMFlashEvent);
-		}
+        }
 
-		/// <summary>
-		/// On disable we stop listening for events
-		/// </summary>
-		protected virtual void OnDisable()
-		{
+        /// <summary>
+        /// On disable we stop listening for events
+        /// </summary>
+        protected virtual void OnDisable()
+        {
             MMFlashEvent.Unregister(OnMMFlashEvent);
-        }		
-	}
+        }
+    }
 }

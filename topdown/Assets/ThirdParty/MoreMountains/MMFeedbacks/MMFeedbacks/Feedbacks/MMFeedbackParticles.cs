@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Assertions;
+﻿using UnityEngine;
 
 namespace MoreMountains.Feedbacks
 {
@@ -49,7 +46,7 @@ namespace MoreMountains.Feedbacks
             }
             BoundParticleSystem?.Play();
         }
-        
+
         /// <summary>
         /// On Stop, stops the particle system
         /// </summary>

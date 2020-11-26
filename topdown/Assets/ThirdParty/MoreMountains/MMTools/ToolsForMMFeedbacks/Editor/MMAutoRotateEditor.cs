@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using UnityEditor;
 using UnityEngine;
-using UnityEditor;
 
 namespace MoreMountains.Tools
 {
@@ -39,7 +37,7 @@ namespace MoreMountains.Tools
 
                     myTarget._snappedPosition = myTarget._rotationPlane.ClosestPointOnPlane(myTarget.transform.position);
                     myTarget._radius = myTarget.OrbitRadius * Vector3.Normalize(myTarget._snappedPosition - myTarget._orbitCenter);
-                }                
+                }
             }
 
             // draws a plane disc
@@ -49,7 +47,7 @@ namespace MoreMountains.Tools
             // draws a circle to mark the orbit
             Handles.color = myTarget.OrbitLineColor;
             Handles.DrawWireArc(myTarget._orbitCenter, myTarget._rotationPlane.normal, Vector3.ProjectOnPlane(myTarget._orbitCenter + Vector3.forward, myTarget._rotationPlane.normal), 360f, myTarget.OrbitRadius);
-            
+
             // draws an arrow to mark the direction
             Quaternion newRotation = Quaternion.AngleAxis(1f, myTarget._worldRotationAxis);
             Vector3 origin = myTarget._orbitCenter + newRotation * myTarget._radius;

@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 namespace MoreMountains.Tools
 {
@@ -49,6 +48,6 @@ namespace MoreMountains.Tools
             }
             _stateInfo = _animator.GetCurrentAnimatorStateInfo(AnimationLayerID);
             _animator.Play(_stateInfo.fullPathHash, -1, Random.Range(MinimumRandomRange, MaximumRandomRange));
-        }	
-	}
+        }
+    }
 }

@@ -1,14 +1,9 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
-using System;
-using MoreMountains.Tools;
-using MoreMountains.Feedbacks;
+﻿using MoreMountains.Feedbacks;
+using UnityEngine;
 #if UNITY_EDITOR
-using UnityEditor;
 #endif
 
-namespace MoreMountains.Tools 
+namespace MoreMountains.Tools
 {
     /// <summary>
     /// Add this class to a camera and you'll be able to pilot it using the horizontal/vertical axis, and up/down controls set via its inspector. 
@@ -144,7 +139,7 @@ namespace MoreMountains.Tools
 
             if (Input.GetKey(UpButton))
             {
-                _currentInput.y = 1f; 
+                _currentInput.y = 1f;
             }
             if (Input.GetKey(DownButton))
             {
@@ -153,7 +148,7 @@ namespace MoreMountains.Tools
 
             _speedMultiplier = Input.GetKey(RunButton) ? RunFactor : 1f;
             _normalizedInput = _currentInput.normalized;
-            
+
             if (Input.GetKeyDown(TimescaleModificationButton))
             {
                 ToggleSlowMotion();
@@ -246,7 +241,7 @@ namespace MoreMountains.Tools
             {
                 _newEulerAngles.x += -RightStick._joystickValue.y * MobileStickSensitivity;
                 _newEulerAngles.y += RightStick._joystickValue.x * MobileStickSensitivity;
-            }                
+            }
 
             _newEulerAngles = Vector3.Lerp(this.transform.eulerAngles, _newEulerAngles, Time.deltaTime * RotationSpeed);
         }

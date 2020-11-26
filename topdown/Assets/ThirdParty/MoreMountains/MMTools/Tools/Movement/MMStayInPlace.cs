@@ -1,8 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
-using System.Collections.Generic;
-using MoreMountains.Tools;
 
 namespace MoreMountains.Tools
 {
@@ -102,7 +98,7 @@ namespace MoreMountains.Tools
                 if (FixedRotation)
                 {
                     this.transform.rotation = _initialRotation;
-                }              
+                }
             }
             else
             {

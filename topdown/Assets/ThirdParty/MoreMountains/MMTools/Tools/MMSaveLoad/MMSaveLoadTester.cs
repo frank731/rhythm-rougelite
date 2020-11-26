@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace MoreMountains.Tools
@@ -52,7 +51,7 @@ namespace MoreMountains.Tools
         protected virtual void Save()
         {
             InitializeSaveLoadMethod();
-            MMSaveLoadManager.Save(TestObject, FileName+SaveFileExtension, FolderName);
+            MMSaveLoadManager.Save(TestObject, FileName + SaveFileExtension, FolderName);
         }
 
         /// <summary>
@@ -77,7 +76,7 @@ namespace MoreMountains.Tools
         /// </summary>
         protected virtual void InitializeSaveLoadMethod()
         {
-            switch(SaveLoadMethod)
+            switch (SaveLoadMethod)
             {
                 case MMSaveLoadManagerMethods.Binary:
                     _saveLoadManagerMethod = new MMSaveLoadManagerMethodBinary();

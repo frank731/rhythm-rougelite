@@ -1,36 +1,46 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
-public class ItemDatabase : MonoBehaviour
+public class ItemDatabase : Singleton<ItemDatabase>
 {
-    public IDictionary<int, Gun> guns;
-    public IDictionary<int, Item> items;
+    public IDictionary<int, Gun> guns = new Dictionary<int, Gun>();
+    public IDictionary<int, Item> items = new Dictionary<int, Item>();
+    public IDictionary<int, UnityAction> itemEffects;
     public PlayerMovement playerMovement;
-    public Sprite[] gunSprites;
     public void BuildDatabase()
     {
-        gunSprites = Resources.LoadAll<Sprite>("Sprites/Koala/Sprites/Weapons/KoalaWeapons");
-        //add guns here
-        guns = new Dictionary<int, Gun>
+        foreach (Gun gun in Resources.LoadAll<Gun>("Guns"))
         {
-            { 1, new Gun(1, "Shotgun", "A regular shotgun", gunSprites[6], Resources.Load<GameObject>("Prefabs/Weapons/Shotgun"))},
-            { 2, new Gun(2, "AK", "A regular AK", gunSprites[4], Resources.Load<GameObject>("Prefabs/Weapons/AK"))}
+            guns[gun.itemId] = gun;
+        }
+
+        itemEffects = new Dictionary<int, UnityAction>
+        {
+            {1, SPEED}
         };
         //add items here
-        items = new Dictionary<int, Item>
+        foreach (Item item in Resources.LoadAll<Item>("Items"))
         {
-            { 1, new Item(1, "SPEED", "Boosts player speed", Resources.Load<Sprite>("Sprites/SPEED"), SPEED)}
-        };
+            item.action = itemEffects[item.itemId];
+            items[item.itemId] = item;
+        }
     }
+    UnityAction stringFunctionToUnityAction(object target, string functionName)
+    {
+        UnityAction action = (UnityAction)Delegate.CreateDelegate(typeof(UnityAction), target, functionName);
+        return action;
+    }
+
     public void SPEED()
     {
         playerMovement.speed += 3f;
     }
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         BuildDatabase();
+        DontDestroyOnLoad(gameObject);
     }
-
-    
 }

@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerShoot : MonoBehaviour
@@ -12,8 +11,10 @@ public class PlayerShoot : MonoBehaviour
     public GameObject bulletPrefab;
     public Transform bulletSpawn;
     public Animator animator;
+    public AudioClip shootSFX;
+    public AudioClip reloadSFX;
     protected PlayerController playerController;
-    protected FloorGlobal floorGlobal;
+    protected AudioSource audioSource;
 
     public void Awake()
     {
@@ -22,15 +23,16 @@ public class PlayerShoot : MonoBehaviour
 
     public void Start()
     {
-        floorGlobal = GameObject.FindGameObjectWithTag("FloorGlobalHolder").GetComponent<FloorGlobal>();
-        floorGlobal.pausableScripts.Add(this);
-        floorGlobal.onBeat.AddListener(OnBeat);
+        FloorGlobal.Instance.pausableScripts.Add(this);
+        FloorGlobal.Instance.onBeat.AddListener(OnBeat);
+        audioSource = GetComponent<AudioSource>();
         playerController = transform.parent.parent.GetComponent<PlayerController>();
     }
 
-    private void OnBeat()
+    public void OnBeat()
     {
         playerController.canShoot = true;
+        //Shoot();
     }
 
     protected virtual void Shoot()
@@ -38,6 +40,7 @@ public class PlayerShoot : MonoBehaviour
         Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
         playerController.canShoot = false;
         currentAmmo--;
+        audioSource.PlayOneShot(shootSFX, 0.4f);
         if (currentAmmo <= 0)
         {
             outOfAmmo = true;
@@ -52,7 +55,7 @@ public class PlayerShoot : MonoBehaviour
     public void OnFire()
     {
         //create bullet if mouse clicked and on beat 
-        if (playerController.canShoot && floorGlobal.isOnBeat && !outOfAmmo && !reloading)
+        if (playerController.canShoot && FloorGlobal.Instance.isOnBeat && !outOfAmmo && !reloading)
         {
             Shoot();
         }
@@ -60,9 +63,10 @@ public class PlayerShoot : MonoBehaviour
 
     public void OnReload()
     {
-        if (currentAmmo < maxAmmo && !reloading && floorGlobal.isOnBeat)
+        if (currentAmmo < maxAmmo && !reloading && FloorGlobal.Instance.isOnBeat)
         {
             StartCoroutine(ReloadDelay());
+            audioSource.PlayOneShot(reloadSFX, 0.3f);
             reloading = true;
         }
     }

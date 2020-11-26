@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using System.Reflection;
 
 namespace MoreMountains.Tools
 {
@@ -29,7 +28,7 @@ namespace MoreMountains.Tools
         [Header("Color")]
         /// the new color
         public Color LightColor;
-        
+
         /// <summary>
         /// On Start, we initialize our light
         /// </summary>
@@ -72,7 +71,7 @@ namespace MoreMountains.Tools
         /// </summary>
         protected virtual void Update()
         {
-            ApplyLightSettings();           
+            ApplyLightSettings();
         }
 
         /// <summary>

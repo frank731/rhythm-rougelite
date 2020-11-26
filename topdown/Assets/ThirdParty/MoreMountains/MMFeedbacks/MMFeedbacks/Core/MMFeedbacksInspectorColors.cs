@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using MoreMountains.Feedbacks;
+﻿using UnityEngine;
 
 namespace MoreMountains.Feedbacks
 {
@@ -21,6 +18,6 @@ namespace MoreMountains.Feedbacks
         public static Color32 PauseColor = new Color32(98, 115, 0, 255);
         public static Color32 HoldingPauseColor = new Color32(0, 114, 61, 255);
         public static Color32 LooperColor = new Color32(12, 100, 128, 255);
-        public static Color32 LooperStartColor = new Color32(166, 75, 5, 255); 
+        public static Color32 LooperStartColor = new Color32(166, 75, 5, 255);
     }
 }

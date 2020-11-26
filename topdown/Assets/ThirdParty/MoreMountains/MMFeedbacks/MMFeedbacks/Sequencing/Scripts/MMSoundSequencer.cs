@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace MoreMountains.Feedbacks
 {
@@ -16,7 +13,7 @@ namespace MoreMountains.Feedbacks
         public List<AudioClip> Sounds;
 
         protected List<AudioSource> _audioSources;
-        
+
         /// <summary>
         /// On Initialization we create our audiosources to play later
         /// </summary>
@@ -24,7 +21,7 @@ namespace MoreMountains.Feedbacks
         {
             base.Initialization();
             _audioSources = new List<AudioSource>();
-            foreach(AudioClip sound in Sounds)
+            foreach (AudioClip sound in Sounds)
             {
                 GameObject asGO = new GameObject();
                 asGO.name = "AudioSource - " + sound.name;
@@ -67,7 +64,7 @@ namespace MoreMountains.Feedbacks
             {
                 return;
             }
-            base.PlayTrackEvent(index);            
+            base.PlayTrackEvent(index);
             _audioSources[index].Play();
         }
 
@@ -109,5 +106,5 @@ namespace MoreMountains.Feedbacks
                 }
             }
         }
-    }    
+    }
 }

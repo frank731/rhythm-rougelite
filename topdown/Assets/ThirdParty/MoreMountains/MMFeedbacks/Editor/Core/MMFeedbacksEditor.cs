@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -30,7 +29,7 @@ namespace MoreMountains.Feedbacks
 
             static public System.Type Type { get; private set; }
             static List<SerializedProperty> Properties = new List<SerializedProperty>();
-            
+
             static string[] IgnoreList = new string[]
             {
             "m_ObjectHideFlags",
@@ -88,7 +87,7 @@ namespace MoreMountains.Feedbacks
 
             static public bool HasMultipleCopies()
             {
-                return (CopyAllSourceFeedbacks != null); 
+                return (CopyAllSourceFeedbacks != null);
             }
 
             static public void PasteAll(MMFeedbacksEditor targetEditor)
@@ -139,9 +138,9 @@ namespace MoreMountains.Feedbacks
 
             // Retrieve available feedbacks
             List<System.Type> types = (from domainAssembly in System.AppDomain.CurrentDomain.GetAssemblies()
-                     from assemblyType in domainAssembly.GetTypes()
-                     where assemblyType.IsSubclassOf(typeof(MMFeedback))
-                     select assemblyType).ToList();
+                                       from assemblyType in domainAssembly.GetTypes()
+                                       where assemblyType.IsSubclassOf(typeof(MMFeedback))
+                                       select assemblyType).ToList();
 
             // Create display list from types
             List<string> typeNames = new List<string>();
@@ -154,7 +153,7 @@ namespace MoreMountains.Feedbacks
             }
 
             _typesAndNames = _typesAndNames.OrderBy(t => t.FeedbackName).ToList();
-            
+
             typeNames.Add("Add new feedback...");
             for (int i = 0; i < types.Count; i++)
             {
@@ -248,7 +247,7 @@ namespace MoreMountains.Feedbacks
                                 menu.AddItem(new GUIContent("Paste"), false, () => PasteFeedback(id));
                             else
                                 menu.AddDisabledItem(new GUIContent("Paste"));
-                        }, 
+                        },
                         feedback.FeedbackStartedAt,
                         feedback.FeedbackDuration,
                         feedback.Timing,
@@ -308,7 +307,7 @@ namespace MoreMountains.Feedbacks
                         style.richText = true;
                         float newHeight = style.CalcHeight(new GUIContent(helpText), EditorGUIUtility.currentViewWidth);
                         EditorGUILayout.LabelField(helpText, style);
-                    }                    
+                    }
 
                     EditorGUILayout.Space();
 
@@ -380,7 +379,7 @@ namespace MoreMountains.Feedbacks
                 {
                     CopyAll();
                 }
-            }                
+            }
 
             EditorGUILayout.EndHorizontal();
 
@@ -478,7 +477,7 @@ namespace MoreMountains.Feedbacks
 
             // Debug draw
 
-            
+
 
             if (_debugView)
             {
@@ -533,7 +532,7 @@ namespace MoreMountains.Feedbacks
                 Editor editor = null;
                 CreateCachedEditor(feedback, null, ref editor);
 
-                _editors.Add(feedback, editor as Editor);
+                _editors.Add(feedback, editor);
             }
         }
 

@@ -1,19 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System;
 using UnityEditor;
-using System;
+using UnityEngine;
 
 namespace MoreMountains.Tools
 {
     [CustomPropertyDrawer(typeof(MMDropdownAttribute))]
     public class MMDropdownAttributeDrawer : PropertyDrawer
-    {        
+    {
         protected MMDropdownAttribute _dropdownAttribute;
         protected string[] _dropdownValues;
         protected int _selectedDropdownValueIndex = -1;
         protected Type _propertyType;
-        
+
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             if (_dropdownAttribute == null)
@@ -25,7 +23,7 @@ namespace MoreMountains.Tools
                 }
 
                 _propertyType = _dropdownAttribute.DropdownValues[0].GetType();
-                
+
                 _dropdownValues = new string[_dropdownAttribute.DropdownValues.Length];
                 for (int i = 0; i < _dropdownAttribute.DropdownValues.Length; i++)
                 {

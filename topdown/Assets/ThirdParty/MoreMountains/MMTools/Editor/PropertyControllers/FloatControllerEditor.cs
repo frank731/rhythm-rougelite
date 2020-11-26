@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEditor;
+﻿using UnityEditor;
 
 namespace MoreMountains.Tools
 {
@@ -9,7 +6,7 @@ namespace MoreMountains.Tools
     /// Custom editor for the FloatController, conditional hiding and dropdown fill
     /// </summary>
     [CustomEditor(typeof(FloatController), true)]
-    [CanEditMultipleObjects]    
+    [CanEditMultipleObjects]
     public class FloatControllerEditor : Editor
     {
         protected SerializedProperty _TargetObject;
@@ -83,7 +80,7 @@ namespace MoreMountains.Tools
 
             _InitialValue = serializedObject.FindProperty("InitialValue");
             _CurrentValue = serializedObject.FindProperty("CurrentValue");
-            
+
             _ChoiceIndex = serializedObject.FindProperty("ChoiceIndex");
             _PropertyName = serializedObject.FindProperty("PropertyName");
 
@@ -149,7 +146,7 @@ namespace MoreMountains.Tools
             VerifyChosenIndex();
             serializedObject.ApplyModifiedProperties();
         }
-        
+
         /// <summary>
         /// Draws a custom conditional inspector
         /// </summary>
@@ -223,7 +220,7 @@ namespace MoreMountains.Tools
                     EditorGUILayout.PropertyField(_CurrentValue);
                 }
             }
-            
+
 
             serializedObject.ApplyModifiedProperties();
         }

@@ -1,17 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
-public class FloorGlobal : MonoBehaviour
+public class FloorGlobal : Singleton<FloorGlobal>
 {
-    public GameObject[] topRooms;
-    public GameObject[] downRooms;
-    public GameObject[] leftRooms;
-    public GameObject[] rightRooms;
-    public GameObject[] endRooms;
     public GameObject[] roomShapes;
     public GameObject[] normalLayouts;
     public GameObject[] largeLayouts;
@@ -23,25 +18,32 @@ public class FloorGlobal : MonoBehaviour
     public int roomCount = 0;
     public int roomArrSize;
     public List<GameObject> rooms = new List<GameObject>();
-    public IDictionary<int, GameObject[]> numToRoom = new Dictionary<int, GameObject[]>() {};
-    public IDictionary<int, Vector3> numToMap;
-    public IDictionary<int, List<GameObject>> roomDistances = new Dictionary<int, List<GameObject>>() {};
+    public IDictionary<int, List<GameObject>> roomDistances = new Dictionary<int, List<GameObject>>() { };
     public GameObject emptyLayout;
     public GameObject minimapCanvas;
     public GameObject[] minimapRoomPrefabs;
     public GameObject bossIcon;
     public GameObject itemIcon;
     public GameObject pauseCanvas;
+    public GameObject deathCanvas;
     public Sprite[] heartSprites;
     public bool isPaused = false;
     public bool isOnBeat = false;
+    public bool restarted = false;
     public UnityEvent onBeat = new UnityEvent();
+    public UnityEvent levelChanged = new UnityEvent();
     public List<MonoBehaviour> pausableScripts;
     public RectMask2D minimapMask;
     public CameraFollowPlayer cameraFollowPlayer;
+    public PlayerController playerController;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+        DontDestroyOnLoad(gameObject);
+
+        //Debug.Log(Instance.transform.position);
+
         roomArrSize = roomShapes.Length;
         normalLayouts = Resources.LoadAll<GameObject>("Prefabs/Layouts/Room Layouts");
         largeLayouts = Resources.LoadAll<GameObject>("Prefabs/Layouts/Large Room Layouts");
@@ -49,16 +51,17 @@ public class FloorGlobal : MonoBehaviour
         itemLayouts = Resources.LoadAll<GameObject>("Prefabs/Layouts/Item Layouts");
         heartSprites = Resources.LoadAll<Sprite>("Sprites/HeartsUI");
 
-        layouts = new GameObject[][]{normalLayouts, largeLayouts};
+        layouts = new GameObject[][] { normalLayouts, largeLayouts };
+
+        levelChanged.AddListener(OnLevelChanged);
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        
     }
+
     private void Start()
     {
-        numToRoom.Add(1, downRooms);
-        numToRoom.Add(2, topRooms);
-        numToRoom.Add(3, rightRooms);
-        numToRoom.Add(4, leftRooms);
-
         Invoke("GetMaxDistance", 0.5f);
+        playerController.playerKilled.AddListener(OnKilled);
     }
 
     void CreateSpecialRoom(GameObject room, GameObject[] layouts, ref bool roomType, GameObject icon)
@@ -139,10 +142,10 @@ public class FloorGlobal : MonoBehaviour
         }
         int farthestDistance = roomDistances.Keys.Max();
         CreateSpecialRooms(farthestDistance);
-        
-        
+
+
     }
-    public void OnPause()
+    public void OnPause(GameObject pauseCanvas)
     {
         //removes any scripts that have been deleted
         pausableScripts.RemoveAll(script => script == null);
@@ -168,20 +171,40 @@ public class FloorGlobal : MonoBehaviour
         }
     }
 
+    public void OnKilled()
+    {
+        deathCanvas.SetActive(true);
+    }
+
+    private void OnLevelChanged()
+    {
+        roomDistances.Clear();
+        rooms.Clear();
+    }
+
     public void OnViewMap(bool viewingMap)
     {
         minimapMask.enabled = !minimapMask.enabled;
         if (viewingMap)
         {
-            minimapCanvas.transform.localScale = new Vector3(1.5f, 1.5f, 1);
+            minimapCanvas.transform.localScale.Set(1.5f, 1.5f, 1);
             minimapCanvas.transform.position -= new Vector3(100f, 100f, 1);
         }
         else
         {
-            minimapCanvas.transform.localScale = new Vector3(1, 1, 1);
+            minimapCanvas.transform.localScale.Set(1, 1, 1);
             minimapCanvas.transform.position += new Vector3(100f, 100f, 1);
         }
-       
-        Debug.Log("br");
+
+    }
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        cameraFollowPlayer = Camera.main.GetComponent<CameraFollowPlayer>();
+    }
+
+    protected override void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        base.OnDestroy();
     }
 }

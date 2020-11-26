@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MoreMountains.Feedbacks
 {
@@ -81,7 +78,7 @@ namespace MoreMountains.Feedbacks
             if (!AdditiveRecording)
             {
                 SequenceScriptableObject.OriginalSequence.Line.Clear();
-            }            
+            }
             _recordingStartedAt = Time.realtimeSinceStartup;
         }
 
@@ -136,11 +133,11 @@ namespace MoreMountains.Feedbacks
             if (Recording && (SequenceScriptableObject != null))
             {
                 foreach (MMSequenceTrack track in SequenceScriptableObject.SequenceTracks)
-                {                    
+                {
                     if (Input.GetKeyDown(track.Key))
                     {
                         AddNoteToTrack(track);
-                    }                    
+                    }
                 }
             }
         }
@@ -151,7 +148,7 @@ namespace MoreMountains.Feedbacks
         /// <param name="track"></param>
         public virtual void AddNoteToTrack(MMSequenceTrack track)
         {
-           if ((SequenceScriptableObject.OriginalSequence.Line.Count == 0) && RemoveInitialSilence)
+            if ((SequenceScriptableObject.OriginalSequence.Line.Count == 0) && RemoveInitialSilence)
             {
                 _recordingStartedAt = Time.realtimeSinceStartup;
             }

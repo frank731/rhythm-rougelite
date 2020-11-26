@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 namespace MoreMountains.Tools
 {
@@ -51,7 +50,7 @@ namespace MoreMountains.Tools
         public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             base.OnStateExit(animator, stateInfo, layerIndex);
-            animator.speed = _initialSpeed;            
+            animator.speed = _initialSpeed;
         }
     }
 }

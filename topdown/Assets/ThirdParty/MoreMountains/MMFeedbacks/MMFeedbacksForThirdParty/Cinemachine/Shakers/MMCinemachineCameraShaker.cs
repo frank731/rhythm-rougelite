@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Cinemachine;
+﻿using Cinemachine;
 using MoreMountains.Feedbacks;
+using System.Collections;
+using UnityEngine;
 
 namespace MoreMountains.FeedbacksForThirdParty
 {
@@ -66,7 +65,7 @@ namespace MoreMountains.FeedbacksForThirdParty
             {
                 IdleAmplitude = _perlin.m_AmplitudeGain;
                 IdleFrequency = _perlin.m_FrequencyGain;
-            }            
+            }
 
             _targetAmplitude = IdleAmplitude;
             _targetFrequency = IdleFrequency;
@@ -114,13 +113,13 @@ namespace MoreMountains.FeedbacksForThirdParty
         /// <param name="frequency">Frequency.</param>
         protected virtual IEnumerator ShakeCameraCo(float duration, float amplitude, float frequency, bool infinite)
         {
-            _targetAmplitude  = amplitude;
+            _targetAmplitude = amplitude;
             _targetFrequency = frequency;
             if (!infinite)
             {
                 yield return new WaitForSeconds(duration);
                 CameraReset();
-            }                        
+            }
         }
 
         /// <summary>
@@ -150,7 +149,7 @@ namespace MoreMountains.FeedbacksForThirdParty
             if (_shakeCoroutine != null)
             {
                 StopCoroutine(_shakeCoroutine);
-            }            
+            }
             CameraReset();
         }
 

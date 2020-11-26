@@ -1,14 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using UnityEditor;
 using UnityEngine;
-using UnityEditor;
 
 namespace MoreMountains.Tools
 {
     /// <summary>
     /// A class used to add a menu item and a shortcut to group objects together under a parent game object
     /// </summary>
-    public class MMGroupSelection 
+    public class MMGroupSelection
     {
         /// <summary>
         /// Creates a parent object and puts all selected transforms under it

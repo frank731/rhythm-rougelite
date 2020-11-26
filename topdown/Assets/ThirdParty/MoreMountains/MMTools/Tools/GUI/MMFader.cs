@@ -1,8 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System;
 using UnityEngine.UI;
-using MoreMountains.Tools;
 
 namespace MoreMountains.Tools
 {
@@ -30,7 +27,7 @@ namespace MoreMountains.Tools
         /// </summary>
         /// <param name="duration">Duration, in seconds.</param>
         /// <param name="targetAlpha">Target alpha, from 0 to 1.</param>
-        public MMFadeEvent(float duration, float targetAlpha, MMTweenType tween, int id=0, 
+        public MMFadeEvent(float duration, float targetAlpha, MMTweenType tween, int id = 0,
             bool ignoreTimeScale = true, Vector3 worldPosition = new Vector3())
         {
             ID = id;
@@ -41,7 +38,7 @@ namespace MoreMountains.Tools
             WorldPosition = worldPosition;
         }
         static MMFadeEvent e;
-        public static void Trigger(float duration, float targetAlpha, MMTweenType tween, int id = 0, 
+        public static void Trigger(float duration, float targetAlpha, MMTweenType tween, int id = 0,
             bool ignoreTimeScale = true, Vector3 worldPosition = new Vector3())
         {
             e.ID = id;
@@ -53,7 +50,7 @@ namespace MoreMountains.Tools
             MMEventManager.TriggerEvent(e);
         }
     }
-     
+
     public struct MMFadeInEvent
     {
         /// an ID that has to match the one on the fader
@@ -71,7 +68,7 @@ namespace MoreMountains.Tools
         /// Initializes a new instance of the <see cref="MoreMountains.MMInterface.MMFadeInEvent"/> struct.
         /// </summary>
         /// <param name="duration">Duration.</param>
-        public MMFadeInEvent(float duration, MMTweenType tween, int id = 0, 
+        public MMFadeInEvent(float duration, MMTweenType tween, int id = 0,
             bool ignoreTimeScale = true, Vector3 worldPosition = new Vector3())
         {
             ID = id;
@@ -81,7 +78,7 @@ namespace MoreMountains.Tools
             WorldPosition = worldPosition;
         }
         static MMFadeInEvent e;
-        public static void Trigger(float duration, MMTweenType tween, int id = 0, 
+        public static void Trigger(float duration, MMTweenType tween, int id = 0,
             bool ignoreTimeScale = true, Vector3 worldPosition = new Vector3())
         {
             e.ID = id;
@@ -110,7 +107,7 @@ namespace MoreMountains.Tools
         /// Initializes a new instance of the <see cref="MoreMountains.MMInterface.MMFadeOutEvent"/> struct.
         /// </summary>
         /// <param name="duration">Duration.</param>
-        public MMFadeOutEvent(float duration, MMTweenType tween, int id = 0, 
+        public MMFadeOutEvent(float duration, MMTweenType tween, int id = 0,
             bool ignoreTimeScale = true, Vector3 worldPosition = new Vector3())
         {
             ID = id;
@@ -121,7 +118,7 @@ namespace MoreMountains.Tools
         }
 
         static MMFadeOutEvent e;
-        public static void Trigger(float duration, MMTweenType tween, int id = 0, 
+        public static void Trigger(float duration, MMTweenType tween, int id = 0,
             bool ignoreTimeScale = true, Vector3 worldPosition = new Vector3())
         {
             e.ID = id;

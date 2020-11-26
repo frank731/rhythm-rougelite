@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MoreMountains.Tools
 {
@@ -50,12 +48,12 @@ namespace MoreMountains.Tools
         /// the velocity threshold after which a squash can be triggered if the object stops
         public float SquashVelocityThreshold = 0.1f;
         /// the maximum duration of the squash (will be reduced if velocity is low)
-        [MMVector("Min","Max")]
+        [MMVector("Min", "Max")]
         public Vector2 SquashDuration = new Vector2(0.25f, 0.5f);
         /// the maximum intensity of the squash
         [MMVector("Min", "Max")]
         public Vector2 SquashIntensity = new Vector2(0f, 1f);
-        
+
         [Header("Debug")]
         [MMReadOnly]
         /// the current velocity of the parent object
@@ -112,7 +110,7 @@ namespace MoreMountains.Tools
 
             _previousPosition = _parentTransform.position;
         }
-        
+
         /// <summary>
         /// On late update, we apply our squash and stretch effect
         /// </summary>
@@ -179,7 +177,7 @@ namespace MoreMountains.Tools
                     float intensity = MMMaths.Remap(_lastVelocity, 0f, MaximumVelocity, SquashIntensity.x, SquashIntensity.y);
                     Squash(duration, intensity);
                 }
-            }            
+            }
         }
 
         /// <summary>
@@ -219,7 +217,7 @@ namespace MoreMountains.Tools
                 _newLocalScale.y = RemappedVelocity;
                 _newLocalScale.z = Mathf.Clamp01(1f / (RemappedVelocity + 0.001f));
                 _newLocalScale = Vector3.Lerp(Vector3.one, _newLocalScale, VelocityMagnitude * Intensity);
-            }            
+            }
 
             _newLocalScale.x = Mathf.Clamp(_newLocalScale.x, MinimumScale.x, MaximumScale.x);
             _newLocalScale.y = Mathf.Clamp(_newLocalScale.y, MinimumScale.y, MaximumScale.y);
@@ -234,7 +232,7 @@ namespace MoreMountains.Tools
         {
             _previousPosition = _parentTransform.position;
         }
-        
+
         /// <summary>
         /// Triggered either directly or via the AutoSquash setting, this squashes the object (usually after a contact / stop)
         /// </summary>

@@ -888,7 +888,7 @@ TilemapRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 39d0abba459dc4042b7dcd94b0fade99, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1259,7 +1259,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   openingDirection: 1
   roomController: {fileID: 8859272024883302049}
-  test: 0
 --- !u!1 &3429088558312428621
 GameObject:
   m_ObjectHideFlags: 0
@@ -1482,7 +1481,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   openingDirection: 2
   roomController: {fileID: 8859272024883302049}
-  test: 0
 --- !u!1 &3917793716800332910
 GameObject:
   m_ObjectHideFlags: 0
@@ -1637,7 +1635,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   openingDirection: 4
   roomController: {fileID: 8859272024883302049}
-  test: 0
 --- !u!1 &6189545012906358495
 GameObject:
   m_ObjectHideFlags: 0
@@ -1860,6 +1857,7 @@ MonoBehaviour:
   endRoom: 0
   bossRoom: 0
   itemRoom: 0
+  createdLargeRoom: 0
   distance: 0
   enemyCount: 0
   adjacentRooms: []
@@ -1876,7 +1874,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.023664951}
+  m_Offset: {x: -0.0020141602, y: 0.004480839}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -1887,7 +1885,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 17.757034, y: 9.76928}
+  m_Size: {x: 18.013077, y: 9.98298}
   m_EdgeRadius: 0
 --- !u!1 &8015144793175036413
 GameObject:
@@ -1983,4 +1981,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   openingDirection: 3
   roomController: {fileID: 8859272024883302049}
-  test: 0

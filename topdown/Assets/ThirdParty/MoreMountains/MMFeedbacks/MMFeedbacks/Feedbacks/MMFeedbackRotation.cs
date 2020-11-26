@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -136,7 +135,7 @@ namespace MoreMountains.Feedbacks
             {
                 AnimateRotationTarget.transform.rotation = Quaternion.Euler(DestinationAngles);
             }
-            
+
             _destinationRotation = AnimateRotationTarget.transform.rotation;
             AnimateRotationTarget.transform.rotation = _initialRotation;
 
@@ -204,7 +203,7 @@ namespace MoreMountains.Feedbacks
             {
                 _initialRotation = targetTransform.rotation;
             }
-            
+
             _up = targetTransform.up;
             _right = targetTransform.right;
             _forward = targetTransform.forward;
@@ -212,7 +211,7 @@ namespace MoreMountains.Feedbacks
             while (journey < duration)
             {
                 float percent = Mathf.Clamp01(journey / duration);
-                
+
                 ApplyRotation(targetTransform, remapZero, remapOne, curveX, curveY, curveZ, percent);
 
                 journey += (TimeScale == TimeScales.Scaled) ? Time.deltaTime : Time.unscaledDeltaTime;

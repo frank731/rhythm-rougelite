@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace MoreMountains.Tools
@@ -53,7 +52,7 @@ namespace MoreMountains.Tools
             if (States.Count > 0)
             {
                 CurrentState = States[0];
-            }            
+            }
         }
 
         /// <summary>
@@ -71,13 +70,13 @@ namespace MoreMountains.Tools
                 CurrentState.PerformActions();
                 _lastActionsUpdate = Time.time;
             }
-            
+
             if (Time.time - _lastDecisionsUpdate > DecisionFrequency)
             {
                 CurrentState.EvaluateTransitions();
                 _lastDecisionsUpdate = Time.time;
             }
-            
+
             TimeInThisState += Time.deltaTime;
         }
 
@@ -96,10 +95,10 @@ namespace MoreMountains.Tools
                 if (CurrentState != null)
                 {
                     CurrentState.EnterState();
-                }                
+                }
             }
         }
-        
+
         /// <summary>
         /// When exiting a state we reset our time counter
         /// </summary>
@@ -113,7 +112,7 @@ namespace MoreMountains.Tools
         /// </summary>
         protected virtual void InitializeDecisions()
         {
-            foreach(AIDecision decision in _decisions)
+            foreach (AIDecision decision in _decisions)
             {
                 decision.Initialization();
             }

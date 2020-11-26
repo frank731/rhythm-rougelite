@@ -1,10 +1,7 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
-using System;
-using System.Reflection;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using UnityEngine;
 
 namespace MoreMountains.Tools
 {
@@ -36,7 +33,7 @@ namespace MoreMountains.Tools
         public Font AxisFont;
         public int AxisPixelsPerUnit;
         public Vector2 AxisLabelOffset;*/
-        
+
         protected Transform[] _points;
         protected float _pointScale;
 
@@ -100,7 +97,7 @@ namespace MoreMountains.Tools
 
         protected virtual void Start()
         {
-            FillMethodList();   
+            FillMethodList();
             DrawGraph();
         }
 
@@ -125,7 +122,7 @@ namespace MoreMountains.Tools
         {
             _axis = Instantiate(Axis);
 
-            _axis.SetLabel(TweenName(TweenMethodIndex).Replace("_"," "));
+            _axis.SetLabel(TweenName(TweenMethodIndex).Replace("_", " "));
             _axis.transform.SetParent(this.transform);
             _axis.transform.localPosition = Vector3.zero;
 
@@ -146,9 +143,9 @@ namespace MoreMountains.Tools
 
                 _parameter[0] = _pointValues.x;
                 _pointValues.y = InvokeTween(TweenMethodIndex, _parameter);
-                
+
                 _position.x = i * DistanceBetweenPoints;
-                _position.y =  _pointValues.y * GraphSize;
+                _position.y = _pointValues.y * GraphSize;
 
                 _point.localPosition = _position;
                 _point.localScale = _scale;
@@ -197,20 +194,20 @@ namespace MoreMountains.Tools
         protected float _newValue;
         protected float _newScaleUnit;
         protected Vector3 Vector3Zero = Vector3.zero;
-                
+
         protected virtual void Update()
         {
             _curvePointNewMovement = Vector3Zero;
             _curvePointNewMovement.x = _currentMovement;
             _parameter[0] = _currentMovement;
             _newValue = InvokeTween(TweenMethodIndex, _parameter);
-            
+
             _curvePointNewMovement.y = _newValue;
-            _curvePointNewMovement *= GraphSize;            
+            _curvePointNewMovement *= GraphSize;
             _axis.PlotterCurvePoint.transform.localPosition = _curvePointNewMovement;
 
             _curvePointNewMovement = _positionPointInitialPosition;
-            _curvePointNewMovement.x = _newValue;            
+            _curvePointNewMovement.x = _newValue;
             _axis.PositionPoint.transform.localPosition = _curvePointNewMovement;
 
             _curvePointNewMovement = _positionPointVerticalInitialPosition;
@@ -219,12 +216,12 @@ namespace MoreMountains.Tools
 
             _curvePointNewMovement = _rotationPointInitialRotation;
             _curvePointNewMovement.z = _newValue * 360f;
-            _axis.RotationPoint.transform.localEulerAngles = _curvePointNewMovement;            
+            _axis.RotationPoint.transform.localEulerAngles = _curvePointNewMovement;
 
             _curvePointNewMovement = _scalePointInitialScale;
             _curvePointNewMovement *= _newValue;
             _axis.ScalePoint.transform.localScale = _curvePointNewMovement;
-            
+
             if (Time.unscaledTime - _lastMovementEndedAt < MovementPauseDuration)
             {
                 if (Time.unscaledTime - _lastMovementEndedAt < MovementPauseDuration / 2f)
@@ -244,7 +241,7 @@ namespace MoreMountains.Tools
                     _currentMovement = 0f;
                     _newScaleUnit = MMTween.Tween(Time.unscaledTime - _lastMovementEndedAt, (MovementPauseDuration / 2f), MovementPauseDuration, 0f, 1f, MMTween.MMTweenCurve.EaseOutCubic);
                     _newScale = Vector3.one * _newScaleUnit;
-                    
+
                     _axis.PlotterCurvePoint.localScale = _newScale * _plotterCurvePointScale;
                     _axis.PositionPointVertical.localScale = _newScale;
                     _axis.PositionPoint.localScale = _newScale;

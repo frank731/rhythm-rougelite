@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Audio;
+﻿using UnityEngine;
 
 namespace MoreMountains.Feedbacks
 {
@@ -55,7 +52,7 @@ namespace MoreMountains.Feedbacks
         {
             if (Active)
             {
-                MMCameraClippingPlanesShakeEvent.Trigger(ShakeNear, Duration, RemapNearZero, RemapNearOne, 
+                MMCameraClippingPlanesShakeEvent.Trigger(ShakeNear, Duration, RemapNearZero, RemapNearOne,
                     ShakeFar, RemapFarZero, RemapFarOne,
                     RelativeClippingPlanes,
                     attenuation, Channel, ResetShakerValuesAfterShake, ResetTargetValuesAfterShake);

@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -96,7 +95,7 @@ namespace MoreMountains.Feedbacks
                     if (Mode == Modes.ToDestination)
                     {
                         StartCoroutine(ScaleToDestination());
-                    }                    
+                    }
                 }
             }
         }
@@ -178,7 +177,7 @@ namespace MoreMountains.Feedbacks
             }
 
             float journey = 0f;
-            
+
             while (journey < duration)
             {
                 float percent = Mathf.Clamp01(journey / duration);
@@ -190,7 +189,7 @@ namespace MoreMountains.Feedbacks
                 vector.x = MMFeedbacksHelpers.Remap(vector.x, 0f, 1f, RemapCurveZero, RemapCurveOne);
                 vector.y = MMFeedbacksHelpers.Remap(vector.y, 0f, 1f, RemapCurveZero, RemapCurveOne);
                 vector.z = MMFeedbacksHelpers.Remap(vector.z, 0f, 1f, RemapCurveZero, RemapCurveOne);
-                
+
                 if (Mode == Modes.Additive)
                 {
                     vector += _initialScale;
@@ -205,7 +204,7 @@ namespace MoreMountains.Feedbacks
             vector.x = AnimateX ? curveX.Evaluate(1f) + Offset : targetTransform.localScale.x;
             vector.y = AnimateY ? curveY.Evaluate(1f) + Offset : targetTransform.localScale.y;
             vector.z = AnimateZ ? curveZ.Evaluate(1f) + Offset : targetTransform.localScale.z;
-                       
+
             vector.x = MMFeedbacksHelpers.Remap(vector.x, 0f, 1f, RemapCurveZero, RemapCurveOne);
             vector.y = MMFeedbacksHelpers.Remap(vector.y, 0f, 1f, RemapCurveZero, RemapCurveOne);
             vector.z = MMFeedbacksHelpers.Remap(vector.z, 0f, 1f, RemapCurveZero, RemapCurveOne);

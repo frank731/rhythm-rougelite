@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEditor.Experimental.SceneManagement;
 using UnityEditor.SceneManagement;
-using UnityEngine.AI;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace UnityEditor.AI
 {
@@ -67,7 +67,7 @@ namespace UnityEditor.AI
             if (PrefabUtility.IsPartOfPrefabInstance(navSurface) && !PrefabUtility.IsPartOfModelPrefab(navSurface))
             {
                 // Don't allow deleting the asset belonging to the prefab parent
-                var parentSurface = PrefabUtility.GetCorrespondingObjectFromSource(navSurface) as NavMeshSurface;
+                var parentSurface = PrefabUtility.GetCorrespondingObjectFromSource(navSurface);
                 if (parentSurface && navSurface.navMeshData == parentSurface.navMeshData)
                     return null;
             }
@@ -210,7 +210,7 @@ namespace UnityEditor.AI
             var isDataOwner = true;
             if (PrefabUtility.IsPartOfPrefabInstance(surfaceToStore) && !PrefabUtility.IsPartOfModelPrefab(surfaceToStore))
             {
-                var basePrefabSurface = PrefabUtility.GetCorrespondingObjectFromSource(surfaceToStore) as NavMeshSurface;
+                var basePrefabSurface = PrefabUtility.GetCorrespondingObjectFromSource(surfaceToStore);
                 isDataOwner = basePrefabSurface == null || surfaceToStore.navMeshData != basePrefabSurface.navMeshData;
             }
             m_PrefabNavMeshDataAssets.Add(new SavedPrefabNavMeshData { surface = surfaceToStore, navMeshData = isDataOwner ? surfaceToStore.navMeshData : null });
@@ -300,7 +300,7 @@ namespace UnityEditor.AI
                     {
                         //Debug.LogFormat("The surface {0} from the prefab was storing the original navmesh data and now will be forgotten", surfaceInPrefab);
 
-                        var baseSurface = PrefabUtility.GetCorrespondingObjectFromSource(surfaceInPrefab) as NavMeshSurface;
+                        var baseSurface = PrefabUtility.GetCorrespondingObjectFromSource(surfaceInPrefab);
                         if (baseSurface == null || surfaceInPrefab.navMeshData != baseSurface.navMeshData)
                         {
                             var assetPath = AssetDatabase.GetAssetPath(surfaceInPrefab.navMeshData);

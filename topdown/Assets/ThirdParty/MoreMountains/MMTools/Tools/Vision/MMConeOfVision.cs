@@ -1,8 +1,6 @@
-﻿using UnityEngine;
-using System.Collections;
-using MoreMountains.Tools;
+﻿using System;
 using System.Collections.Generic;
-using System;
+using UnityEngine;
 
 namespace MoreMountains.Tools
 {
@@ -55,14 +53,14 @@ namespace MoreMountains.Tools
         [MMReadOnly]
         public Vector3 EulerAngles;
         public Vector3 Offset;
-        
+
         [Header("Target scanning")]
         public bool ShouldScanForTargets = true;
         public LayerMask TargetMask;
         public float ScanFrequencyInSeconds = 1f;
         [MMReadOnly]
         public List<Transform> VisibleTargets = new List<Transform>();
-        
+
         [Header("Mesh")]
         public float MeshDensity = 0.2f;
         public int EdgePrecision = 3;
@@ -77,7 +75,7 @@ namespace MoreMountains.Tools
         protected float _distanceToTarget;
         protected float _lastScanTimestamp;
 
-        public Vector3 Center { get { return this.transform.position + Offset;  } }
+        public Vector3 Center { get { return this.transform.position + Offset; } }
 
         protected virtual void Awake()
         {
@@ -114,7 +112,7 @@ namespace MoreMountains.Tools
                     _distanceToTarget = Vector3.Distance(Center, _target.position);
 
                     bool duplicate = false;
-                    foreach(Transform visibleTarget in VisibleTargets)
+                    foreach (Transform visibleTarget in VisibleTargets)
                     {
                         if (visibleTarget == _target)
                         {

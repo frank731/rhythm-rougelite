@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Audio;
+﻿using UnityEngine;
 
 namespace MoreMountains.Feedbacks
 {
@@ -50,7 +47,7 @@ namespace MoreMountains.Feedbacks
         {
             if (Active)
             {
-                MMAudioSourceVolumeShakeEvent.Trigger(VolumeTween, Duration, RemapVolumeZero, RemapVolumeOne, RelativeVolume, 
+                MMAudioSourceVolumeShakeEvent.Trigger(VolumeTween, Duration, RemapVolumeZero, RemapVolumeOne, RelativeVolume,
                     attenuation, Channel, ResetShakerValuesAfterShake, ResetTargetValuesAfterShake);
             }
         }

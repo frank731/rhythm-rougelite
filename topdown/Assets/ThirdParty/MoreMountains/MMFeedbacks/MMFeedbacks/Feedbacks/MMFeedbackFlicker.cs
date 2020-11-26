@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace MoreMountains.Feedbacks
@@ -112,7 +111,7 @@ namespace MoreMountains.Feedbacks
             base.CustomReset();
             if (Active && (BoundRenderer != null))
             {
-                SetColor(_initialFlickerColor);                
+                SetColor(_initialFlickerColor);
             }
         }
 
@@ -161,7 +160,7 @@ namespace MoreMountains.Feedbacks
                 {
                     BoundRenderer.material.SetColor(_propertyID, color);
                 }
-            }            
+            }
         }
     }
 }

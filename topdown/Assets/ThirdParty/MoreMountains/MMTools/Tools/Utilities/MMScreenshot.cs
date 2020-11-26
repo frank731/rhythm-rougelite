@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.IO;
 using UnityEngine;
-using System.IO;
 
 namespace MoreMountains.Tools
 {
@@ -24,11 +22,11 @@ namespace MoreMountains.Tools
         public KeyCode ScreenshotShortcut = KeyCode.K;
 
         /// the size by which to multiply the game view when taking the screenshot
-        [MMEnumCondition("Method", (int)Methods.ScreenCapture)]        
+        [MMEnumCondition("Method", (int)Methods.ScreenCapture)]
         public int GameViewSizeMultiplier = 3;
 
         /// the camera to use to take the screenshot with
-        [MMEnumCondition("Method", (int)Methods.RenderTexture)]        
+        [MMEnumCondition("Method", (int)Methods.RenderTexture)]
         public Camera TargetCamera;
         /// the width of the desired screenshot
         [MMEnumCondition("Method", (int)Methods.RenderTexture)]
@@ -41,7 +39,7 @@ namespace MoreMountains.Tools
         /// a test button to take screenshots with
         [MMInspectorButton("TakeScreenshot")]
         public bool TakeScreenshotButton;
-        
+
         /// <summary>
         /// At late update, we look for input
         /// </summary>
@@ -93,7 +91,7 @@ namespace MoreMountains.Tools
         {
             float width = Screen.width * GameViewSizeMultiplier;
             float height = Screen.height * GameViewSizeMultiplier;
-            string savePath = FolderName+"/screenshot_" + width + "x" + height + "_" + System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".png";
+            string savePath = FolderName + "/screenshot_" + width + "x" + height + "_" + System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".png";
 
             ScreenCapture.CaptureScreenshot(savePath, GameViewSizeMultiplier);
             return savePath;
@@ -114,7 +112,7 @@ namespace MoreMountains.Tools
             RenderTexture.active = renderTexture;
             screenShot.ReadPixels(new Rect(0, 0, ResolutionWidth, ResolutionHeight), 0, 0);
             TargetCamera.targetTexture = null;
-            RenderTexture.active = null; 
+            RenderTexture.active = null;
             Destroy(renderTexture);
             byte[] bytes = screenShot.EncodeToPNG();
             System.IO.File.WriteAllBytes(savePath, bytes);
