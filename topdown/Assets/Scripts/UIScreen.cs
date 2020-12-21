@@ -3,11 +3,20 @@ using UnityEngine.SceneManagement;
 
 public class UIScreen : MonoBehaviour
 {
+    public bool startDisabled = false;
     private bool restarted = false;
     private void Awake()
     {
+        if (GameObject.FindGameObjectsWithTag(tag).Length > 1)
+        {
+            Destroy(gameObject); //ensure same screen not duplicated
+        }
         DontDestroyOnLoad(gameObject);
         SceneManager.sceneLoaded += OnSceneLoaded;
+        if (startDisabled)
+        {
+            gameObject.SetActive(false);
+        }
     }
     private void OnDestroy()
     {
@@ -21,10 +30,6 @@ public class UIScreen : MonoBehaviour
             if (restarted)
             {
                 Destroy(gameObject);
-            }
-            else
-            {
-                restarted = true;
             }
         }
     }

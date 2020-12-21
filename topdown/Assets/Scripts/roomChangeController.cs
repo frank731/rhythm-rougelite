@@ -11,6 +11,7 @@ public class RoomChangeController : MonoBehaviour
     private float cameraPanSpeed = 0.15f;
     void MoveRoom(int px, int py)
     {
+        Debug.Log("move");
         //disable camera follow player script just in case
         FloorGlobal.Instance.cameraFollowPlayer.enabled = false;
 

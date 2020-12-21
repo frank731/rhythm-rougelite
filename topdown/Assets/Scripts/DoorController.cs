@@ -4,18 +4,27 @@ public class DoorController : MonoBehaviour
 {
     public GameObject closedDoor;
     public GameObject openDoor;
+    public Animator openDoorAnimator;
+    public Animator closedDoorAnimator;
 
-    public void ChangeDoorStatus(bool open)
+    public void OpenDoor()
     {
-        if (open)
-        {
-            openDoor.SetActive(true);
-            closedDoor.SetActive(false);
-        }
-        else
-        {
-            openDoor.SetActive(false);
-            closedDoor.SetActive(true);
-        }
+        closedDoorAnimator.SetTrigger("Open Door");
+    }
+
+    public void CloseDoor()
+    {
+        openDoorAnimator.SetTrigger("Close Door");
+    }
+
+    public void DoorOpened()
+    {
+        closedDoor.SetActive(false);
+        openDoor.SetActive(true);
+    }
+    public void DoorClosed()
+    {
+        closedDoor.SetActive(true);
+        openDoor.SetActive(false);
     }
 }

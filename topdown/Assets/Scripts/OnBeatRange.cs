@@ -23,7 +23,7 @@ public class OnBeatRange : MonoBehaviour
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        FloorGlobal.Instance.isOnBeat = false;
+        //FloorGlobal.Instance.isOnBeat = false;
         beatMarkers.RemoveAll(item => item == null);
         foreach (GameObject indicator in beatMarkers)
         {

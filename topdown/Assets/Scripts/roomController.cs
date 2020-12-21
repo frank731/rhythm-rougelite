@@ -25,8 +25,8 @@ public class RoomController : MonoBehaviour
     public int enemyCount = 0;
     public List<GameObject> adjacentRooms = new List<GameObject>();
     private List<int> adjacencies = new List<int>();
-    private List<GameObject> enemies = new List<GameObject>();
-    private PlayerController PlayerController = null;
+    public List<GameObject> enemies = new List<GameObject>();
+    private PlayerController playerController = null;
 
     public void RevealMap()
     {
@@ -89,25 +89,41 @@ public class RoomController : MonoBehaviour
             enemies.Add(enemy);
         }
     }
+
+    public void ClearRoom()
+    {
+        StartCoroutine(ChangeDoors(true));
+        roomCleared = true;
+        if (bossRoom)
+        {
+            foreach (Transform child in layout.transform)
+            {
+                if (child.CompareTag("Exit"))
+                {
+                    child.gameObject.SetActive(true);
+                    break;
+                }
+
+            }
+        }
+        else
+        {
+            for(int i = 0; i < playerController.luck + 1; i++)
+            {
+                if (Random.Range(0, 10) == 0)
+                {
+                    Instantiate(FloorGlobal.Instance.pickups[Random.Range(0, FloorGlobal.Instance.pickups.Length)], transform.position, transform.rotation);
+                    break;
+                }
+            }
+        }
+    }
     public void EnemyDestroyed()
     {
         enemyCount -= 1;
         if (enemyCount <= 0)
         {
-            StartCoroutine(ChangeDoors(true));
-            roomCleared = true;
-            if (bossRoom)
-            {
-                foreach (Transform child in layout.transform)
-                {
-                    if (child.CompareTag("Exit"))
-                    {
-                        child.gameObject.SetActive(true);
-                        break;
-                    }
-
-                }
-            }
+            ClearRoom();
         }
     }
     public void SpawnPointDestroyed()
@@ -155,6 +171,19 @@ public class RoomController : MonoBehaviour
         {
             distance = FloorGlobal.Instance.maxRoomCount + 1;
         }
+    }
+    void Start()
+    {
+        
+        //sets room layout
+        if (!startingRoom)
+        {
+            int layoutType = Random.Range(0, FloorGlobal.Instance.layouts[roomShape].Length);
+            ChangeLayout(FloorGlobal.Instance.layouts[roomShape][layoutType]);
+            //disable room as optimization
+            //Invoke("DisableRoom", 0.2f);
+            StartCoroutine(ChangeDoors(false));
+        }
         else
         {
             //create first map icon
@@ -162,22 +191,7 @@ public class RoomController : MonoBehaviour
             minimapRoom.transform.SetParent(FloorGlobal.Instance.minimapCanvas.transform);
             mapIcon = minimapRoom.transform.GetChild(0).gameObject;
             mapIcon.SetActive(true);
-        }
-    }
 
-    void Start()
-    {
-        //sets room layout
-        if (!startingRoom)
-        {
-            int layoutType = Random.Range(0, FloorGlobal.Instance.layouts[roomShape].Length);
-            ChangeLayout(FloorGlobal.Instance.layouts[roomShape][layoutType]);
-            //disable room as optimization
-            Invoke("DisableRoom", 0.2f);
-            StartCoroutine(ChangeDoors(false));
-        }
-        else
-        {
             ChangeLayout(FloorGlobal.Instance.emptyLayout);
             layout.SetActive(true);
             inPlayerRange = true;
@@ -189,9 +203,12 @@ public class RoomController : MonoBehaviour
     public void OnDestroy()
     {
         //destroy its corresponding map icon on destroy
-        if (mapIcon.transform.parent.gameObject != null)
-        {
+        try {
             Destroy(mapIcon.transform.parent.gameObject);
+        }
+        catch
+        {
+            
         }
     }
 
@@ -200,11 +217,11 @@ public class RoomController : MonoBehaviour
         //turns on gate and enemes when player enters room and room hasn't been cleared already
         if (collision.CompareTag("Player"))
         {
-            if (!PlayerController)
+            if (!playerController)
             {
-                PlayerController = collision.gameObject.GetComponent<PlayerController>();
+                playerController = collision.gameObject.GetComponent<PlayerController>();
             }
-            PlayerController.currentRoom = this;
+            playerController.currentRoom = this;
             //re enable room on enter
             isPlayerIn = true;
             inPlayerRange = true;
@@ -237,9 +254,20 @@ public class RoomController : MonoBehaviour
     public IEnumerator ChangeDoors(bool open)
     {
         yield return new WaitForSeconds(0.1f); //waits until all the doors have been created
-        foreach (GameObject door in doors)
+        if (open)
         {
-            door.GetComponent<DoorController>().ChangeDoorStatus(open);
+            
+            foreach (GameObject door in doors)
+            {
+                door.GetComponent<DoorController>().OpenDoor();
+            }
+        }
+        else
+        {
+            foreach (GameObject door in doors)
+            {
+                door.GetComponent<DoorController>().CloseDoor();
+            }
         }
     }
 }

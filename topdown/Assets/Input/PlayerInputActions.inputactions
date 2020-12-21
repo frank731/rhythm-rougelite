@@ -84,6 +84,38 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "DebugClear",
+                    "type": "Button",
+                    "id": "730d19f0-6ece-434f-8797-e1309947b7f2",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Ability One",
+                    "type": "Button",
+                    "id": "806a2136-4237-4cbd-b502-4a751e13cf66",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Ability Two",
+                    "type": "Button",
+                    "id": "e3ba3808-9830-42d7-9751-eea32dbe954e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Ability Three",
+                    "type": "Button",
+                    "id": "da21146a-718a-4825-88cc-2181fddad684",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -381,6 +413,50 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "ViewInventory",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "70fc95c9-d04c-46a7-9715-278de4c959f8",
+                    "path": "<Keyboard>/rightBracket",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "DebugClear",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fc0899c3-1f61-40ea-a35a-af1a9a9195ae",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Ability One",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e0bd5839-6de9-4fd8-ae45-0c3c2b3101e8",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Ability Two",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "764bb14a-7564-4c04-8825-6272f0eaeb3d",
+                    "path": "<Keyboard>/3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Ability Three",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

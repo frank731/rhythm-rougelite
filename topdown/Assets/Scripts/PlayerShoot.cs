@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerShoot : MonoBehaviour
 {
@@ -24,13 +25,14 @@ public class PlayerShoot : MonoBehaviour
     public void Start()
     {
         FloorGlobal.Instance.pausableScripts.Add(this);
-        FloorGlobal.Instance.onBeat.AddListener(OnBeat);
+        FloorGlobal.Instance.startBeat.AddListener(StartBeat);
         audioSource = GetComponent<AudioSource>();
         playerController = transform.parent.parent.GetComponent<PlayerController>();
     }
 
-    public void OnBeat()
+    public void StartBeat()
     {
+        //Debug.Log("beat");
         playerController.canShoot = true;
         //Shoot();
     }
@@ -40,7 +42,7 @@ public class PlayerShoot : MonoBehaviour
         Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
         playerController.canShoot = false;
         currentAmmo--;
-        audioSource.PlayOneShot(shootSFX, 0.4f);
+        audioSource.PlayOneShot(shootSFX, 0.6f);
         if (currentAmmo <= 0)
         {
             outOfAmmo = true;
@@ -54,6 +56,7 @@ public class PlayerShoot : MonoBehaviour
 
     public void OnFire()
     {
+        Debug.Log(FloorGlobal.Instance.isOnBeat);
         //create bullet if mouse clicked and on beat 
         if (playerController.canShoot && FloorGlobal.Instance.isOnBeat && !outOfAmmo && !reloading)
         {

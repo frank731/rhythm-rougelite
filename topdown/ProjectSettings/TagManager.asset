@@ -22,6 +22,11 @@ TagManager:
   - BPMIndicator
   - RoomSpawner
   - ItemDatabase
+  - PlayerUI
+  - DeathScreen
+  - SettingsScreen
+  - PauseScreen
+  - Minimap
   layers:
   - Default
   - TransparentFX

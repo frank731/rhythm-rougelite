@@ -135,5 +135,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 8667592225171454765}
+  bulletDestroyedEffect: {fileID: 3189087880387492486, guid: 9253b1e285561ab449b4f4279ad149eb,
+    type: 3}
   bulletSpeed: 30
   bulletDamage: 0.5

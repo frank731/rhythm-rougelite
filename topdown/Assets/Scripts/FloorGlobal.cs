@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 
 public class FloorGlobal : Singleton<FloorGlobal>
 {
+    private IDictionary<int, GameObject[]> floorRooms = new Dictionary<int, GameObject[]>() { };
+    private Layouts floorLayouts;
     public GameObject[] roomShapes;
     public GameObject[] normalLayouts;
     public GameObject[] largeLayouts;
@@ -14,9 +16,11 @@ public class FloorGlobal : Singleton<FloorGlobal>
     public GameObject[] itemLayouts;
     public GameObject[] doors;
     public GameObject[][] layouts;
+    public GameObject[] pickups;
     public int maxRoomCount = 10;
     public int roomCount = 0;
     public int roomArrSize;
+    public int floorID;
     public List<GameObject> rooms = new List<GameObject>();
     public IDictionary<int, List<GameObject>> roomDistances = new Dictionary<int, List<GameObject>>() { };
     public GameObject emptyLayout;
@@ -29,50 +33,45 @@ public class FloorGlobal : Singleton<FloorGlobal>
     public Sprite[] heartSprites;
     public bool isPaused = false;
     public bool isOnBeat = false;
-    public bool restarted = false;
     public UnityEvent onBeat = new UnityEvent();
+    public UnityEvent startBeat = new UnityEvent();
     public UnityEvent levelChanged = new UnityEvent();
     public List<MonoBehaviour> pausableScripts;
     public RectMask2D minimapMask;
     public CameraFollowPlayer cameraFollowPlayer;
     public PlayerController playerController;
+    public List<GameObject> openUIScreens = new List<GameObject>();
 
     protected override void Awake()
     {
         base.Awake();
         DontDestroyOnLoad(gameObject);
 
-        //Debug.Log(Instance.transform.position);
-
-        roomArrSize = roomShapes.Length;
-        normalLayouts = Resources.LoadAll<GameObject>("Prefabs/Layouts/Room Layouts");
-        largeLayouts = Resources.LoadAll<GameObject>("Prefabs/Layouts/Large Room Layouts");
-        bossLayouts = Resources.LoadAll<GameObject>("Prefabs/Layouts/Boss Layouts");
-        itemLayouts = Resources.LoadAll<GameObject>("Prefabs/Layouts/Item Layouts");
+        Layouts[] loadLayouts = Resources.LoadAll<Layouts>("Prefabs/Layouts");
+       
         heartSprites = Resources.LoadAll<Sprite>("Sprites/HeartsUI");
-
-        layouts = new GameObject[][] { normalLayouts, largeLayouts };
+        pickups = Resources.LoadAll<GameObject>("Prefabs/Pickups");
 
         levelChanged.AddListener(OnLevelChanged);
         SceneManager.sceneLoaded += OnSceneLoaded;
-        
     }
 
     private void Start()
     {
-        Invoke("GetMaxDistance", 0.5f);
         playerController.playerKilled.AddListener(OnKilled);
     }
 
-    void CreateSpecialRoom(GameObject room, GameObject[] layouts, ref bool roomType, GameObject icon)
+    void CreateSpecialRoom(RoomController specialRoomController, GameObject[] layouts, ref bool roomType, GameObject icon, bool isOpen)
     {
-        RoomController farthestRoomController = room.GetComponent<RoomController>();
         int roomLayout = Random.Range(0, layouts.Length);
-        farthestRoomController.ChangeLayout(layouts[roomLayout]);
+        specialRoomController.ChangeLayout(layouts[roomLayout]);
         roomType = true;
-        farthestRoomController.AddMapDetail(icon);
-        farthestRoomController.roomCleared = true;
-        StartCoroutine(farthestRoomController.ChangeDoors(true));
+        specialRoomController.AddMapDetail(icon);
+        if (isOpen)
+        {
+            specialRoomController.roomCleared = true;
+            StartCoroutine(specialRoomController.ChangeDoors(true));
+        }
     }
     private void CreateSpecialRooms(int maxDist)
     {
@@ -95,7 +94,7 @@ public class FloorGlobal : Singleton<FloorGlobal>
             bossRoomController = bossRoom.GetComponent<RoomController>();
         }
         //set boss room
-        CreateSpecialRoom(bossRoom, bossLayouts, ref bossRoom.GetComponent<RoomController>().bossRoom, bossIcon);
+        CreateSpecialRoom(bossRoomController, bossLayouts, ref bossRoomController.bossRoom, bossIcon, false);
 
         index++;
         while (index >= roomDistances[maxDist].Count)
@@ -105,7 +104,7 @@ public class FloorGlobal : Singleton<FloorGlobal>
         }
 
         GameObject itemRoom = roomDistances[maxDist][index];
-        RoomController itemRoomController = bossRoom.GetComponent<RoomController>();
+        RoomController itemRoomController = itemRoom.GetComponent<RoomController>();
         //ensures room is an ending room
         while (!itemRoomController.endRoom)
         {
@@ -118,11 +117,10 @@ public class FloorGlobal : Singleton<FloorGlobal>
                 maxDist -= 1;
             }
             itemRoom = roomDistances[maxDist][index];
-            itemRoomController = bossRoom.GetComponent<RoomController>();
+            itemRoomController = itemRoom.GetComponent<RoomController>();
         }
         //set item room
-        CreateSpecialRoom(itemRoom, itemLayouts, ref itemRoom.GetComponent<RoomController>().itemRoom, itemIcon);
-
+        CreateSpecialRoom(itemRoomController, itemLayouts, ref itemRoomController.itemRoom, itemIcon, true);
     }
     private void GetMaxDistance()
     {
@@ -142,10 +140,8 @@ public class FloorGlobal : Singleton<FloorGlobal>
         }
         int farthestDistance = roomDistances.Keys.Max();
         CreateSpecialRooms(farthestDistance);
-
-
     }
-    public void OnPause(GameObject pauseCanvas)
+    public void Pause(GameObject newPauseCanvas)
     {
         //removes any scripts that have been deleted
         pausableScripts.RemoveAll(script => script == null);
@@ -157,17 +153,37 @@ public class FloorGlobal : Singleton<FloorGlobal>
             {
                 script.enabled = false;
             }
-            pauseCanvas.SetActive(true);
+            newPauseCanvas.SetActive(true);
+            openUIScreens.Add(newPauseCanvas);
         }
         else
         {
-            isPaused = false;
-            Time.timeScale = 1;
-            foreach (MonoBehaviour script in pausableScripts)
+            
+            if (newPauseCanvas == pauseCanvas)
             {
-                script.enabled = true;
+                openUIScreens.ElementAt(openUIScreens.Count - 1).SetActive(false);
+                openUIScreens.RemoveAt(openUIScreens.Count - 1);
             }
-            pauseCanvas.SetActive(false);
+            else if (openUIScreens.Contains(newPauseCanvas))
+            {
+                openUIScreens.Remove(newPauseCanvas);
+                newPauseCanvas.SetActive(false);
+            }
+            else
+            {
+                newPauseCanvas.SetActive(true);
+                openUIScreens.Add(newPauseCanvas);
+            }
+
+            if (openUIScreens.Count == 0)
+            {
+                isPaused = false;
+                Time.timeScale = 1;
+                foreach (MonoBehaviour script in pausableScripts)
+                {
+                    script.enabled = true;
+                }
+            }
         }
     }
 
@@ -176,7 +192,7 @@ public class FloorGlobal : Singleton<FloorGlobal>
         deathCanvas.SetActive(true);
     }
 
-    private void OnLevelChanged()
+    private void OnLevelChanged() //before scene change
     {
         roomDistances.Clear();
         rooms.Clear();
@@ -197,9 +213,29 @@ public class FloorGlobal : Singleton<FloorGlobal>
         }
 
     }
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+
+    private void NewScene() //callable without needed to use scene parameter
     {
+        floorID = FloorInfo.Instance.GetFloorID();
+        roomShapes = FloorInfo.Instance.GetRooms();
+        floorLayouts = FloorInfo.Instance.GetLayouts();
+        doors = FloorInfo.Instance.GetDoors();
+        floorLayouts.LoadLayouts();
         cameraFollowPlayer = Camera.main.GetComponent<CameraFollowPlayer>();
+        normalLayouts = floorLayouts.normalLayouts;
+        largeLayouts = floorLayouts.largeLayouts;
+        itemLayouts = floorLayouts.itemLayouts;
+        bossLayouts = floorLayouts.bossLayouts;
+        roomArrSize = roomShapes.Length;
+        rooms.Clear();
+        roomCount = 0;
+        layouts = new GameObject[][] {normalLayouts, largeLayouts};
+        Invoke("GetMaxDistance", 0.5f);
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode) //turns out this gets called in awake
+    {
+        NewScene();
     }
 
     protected override void OnDestroy()

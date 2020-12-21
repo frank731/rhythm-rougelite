@@ -15,5 +15,6 @@ MonoBehaviour:
   itemId: 1
   displayName: SPEED
   description: You are speed
-  itemSprite: {fileID: 21300000, guid: cc845c667a5a7104f8f0f9c48c7234be, type: 3}
+  itemSprite: {fileID: 1438219111659547533, guid: 0568276cc69af4541894f348930e2610,
+    type: 3}
   inventoryIcon: {fileID: 0}

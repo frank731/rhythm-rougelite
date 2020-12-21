@@ -15,8 +15,7 @@ public class BeatIndicatorMovement : MonoBehaviour {
 
         if (collision.CompareTag("BPMIndicator"))
         {
-            Destroy(image);
-            Destroy(gameObject, beatCreateTime / 10);
+            Destroy(gameObject);
         }
     }
 }

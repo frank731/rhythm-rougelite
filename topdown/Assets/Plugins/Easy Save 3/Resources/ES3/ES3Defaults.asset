@@ -29,28 +29,28 @@ MonoBehaviour:
     referenceMode: 2
     serializationDepthLimit: 64
     assemblyNames:
-    - Assembly-CSharp-firstpass
     - Assembly-CSharp
+    - MoreMountains.Feedbacks
+    - Assembly-CSharp-firstpass
+    - MoreMountains.InventoryEngine
     - MoreMountains.Tools
     - Cinemachine
-    - MoreMountains.Feedbacks.URP
-    - MoreMountains.Feedbacks
-    - MoreMountains.InventoryEngine
-    - NavMeshComponents
     - MoreMountains.Feedbacks.PostProcessing
-    - MoreMountains.InventoryEngine.Demos
-    - MoreMountains.Interface
     - MoreMountains.Feedbacks.MMTools
-    - MoreMountains.Feedbacks.Cinemachine
+    - MoreMountains.Feedbacks.URP
+    - MoreMountains.Interface
     - MoreMountains.Tools.Feedbacks
+    - MoreMountains.InventoryEngine.Demos
     - MoreMountains.Tools.Cinemachine
+    - MoreMountains.Feedbacks.Cinemachine
+    - NavMeshComponents
     - MoreMountains.Tools.Editor
-    - NavMeshComponentsEditor
+    - MoreMountains.InventoryEngine.Editor
     - PsdPlugin
     - MoreMountains.Feedbacks.Editor
-    - MoreMountains.InventoryEngine.Editor
-    - MoreMountains.Interface.Editor
     - MoreMountains.Tools.Feedbacks.Editor
+    - NavMeshComponentsEditor
+    - MoreMountains.Interface.Editor
     showAdvancedSettings: 1
   addMgrToSceneAutomatically: 0
   autoUpdateReferences: 1

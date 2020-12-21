@@ -44,7 +44,10 @@ public class EnemyController : MonoBehaviour
     {
         health -= damage;
         enemyAnimator.SetTrigger("Enemy Damaged");
-        enemyAudioSource.PlayOneShot(enemyHurtSFX, 0.3f);
+        if (!enemyAudioSource.isPlaying) //stops stacking of sfx
+        {
+            enemyAudioSource.PlayOneShot(enemyHurtSFX, 0.3f);
+        }
         if (health <= 0 && !isDead)
         {
             EnemyKilled();

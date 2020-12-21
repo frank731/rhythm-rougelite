@@ -119,6 +119,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 1648780721506973828}
+  bulletDestroyedEffect: {fileID: 8418206535150618518, guid: 799e48f6ef961994ca804ddb86258e10,
+    type: 3}
   bulletSpeed: 10
   bulletDamage: 1
 --- !u!70 &8086016505566932216
