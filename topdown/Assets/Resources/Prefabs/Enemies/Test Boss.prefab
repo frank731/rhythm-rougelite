@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1995415790028000710}
   m_Layer: 0
-  m_Name: firepoint
+  m_Name: Fire Point
   m_TagString: Untagged
   m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 1490787730393243031}
   - component: {fileID: 9032910021373708084}
   m_Layer: 0
-  m_Name: pistol
+  m_Name: Pistol
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -136,6 +136,7 @@ MonoBehaviour:
   weapons: []
   player: {fileID: 0}
   enemyHurtSFX: {fileID: 0}
+  enemyShoot: {fileID: 0}
   leftHand: {fileID: 1490787731048525476}
   rightHand: {fileID: 1490787730441245892}
   enemySprite: {fileID: 1490787730791937057}
@@ -155,6 +156,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 8827757211778301572, guid: 5689bd7bfa611874fb4961900049bd9c,
     type: 3}
+  beatActionDelay: 1
   firePoint: {fileID: 1995415790028000710}
 --- !u!1 &1490787730441245893
 GameObject:
@@ -166,7 +168,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1490787730441245892}
   m_Layer: 13
-  m_Name: righthandenemy
+  m_Name: Right Hand
   m_TagString: Untagged
   m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -201,7 +203,7 @@ GameObject:
   - component: {fileID: 1490787730791937058}
   - component: {fileID: 1490787730791937061}
   - component: {fileID: 1490787730791937060}
-  - component: {fileID: -8602152955578329741}
+  - component: {fileID: 8142078504036119946}
   m_Layer: 13
   m_Name: Test Boss
   m_TagString: Enemy
@@ -218,7 +220,7 @@ Transform:
   m_GameObject: {fileID: 1490787730791937071}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 13.97, y: 3.06, z: -3.1252804}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 0.75}
   m_Children:
   - {fileID: 1490787730393243028}
   - {fileID: 1490787730441245892}
@@ -374,7 +376,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 153a3596451b08840bb3ac1dbad73f6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 30
+  health: 10
   iFrames: 0.1
   isActive: 0
   isDead: 0
@@ -382,8 +384,9 @@ MonoBehaviour:
   enemyScripts: []
   weapons: []
   player: {fileID: 0}
-  enemyHurtSFX: {fileID: 8300000, guid: 6f10d771e7aa4234c90db4da16c32b0d, type: 3}
---- !u!82 &-8602152955578329741
+  enemyHurtSFX: {fileID: 8300000, guid: a4ce1e0e50d887641b42f7507d3951bb, type: 3}
+  enemyShoot: {fileID: 9032910021373708084}
+--- !u!82 &8142078504036119946
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -490,7 +493,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1490787731048525476}
   m_Layer: 13
-  m_Name: lefthandenemy
+  m_Name: Left Hand
   m_TagString: Untagged
   m_Icon: {fileID: -5487077368411116049, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0

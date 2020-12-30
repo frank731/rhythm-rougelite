@@ -136,6 +136,7 @@ MonoBehaviour:
   weapons: []
   player: {fileID: 0}
   enemyHurtSFX: {fileID: 0}
+  enemyShoot: {fileID: 0}
   leftHand: {fileID: 1490787731048525476}
   rightHand: {fileID: 1490787730441245892}
   enemySprite: {fileID: 1490787730791937057}
@@ -155,6 +156,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 8827757211778301572, guid: 5689bd7bfa611874fb4961900049bd9c,
     type: 3}
+  beatActionDelay: 3
   firePoint: {fileID: 1995415790028000710}
 --- !u!1 &1490787730441245893
 GameObject:
@@ -383,6 +385,7 @@ MonoBehaviour:
   weapons: []
   player: {fileID: 0}
   enemyHurtSFX: {fileID: 8300000, guid: a4ce1e0e50d887641b42f7507d3951bb, type: 3}
+  enemyShoot: {fileID: 9032910021373708084}
 --- !u!82 &8142078504036119946
 AudioSource:
   m_ObjectHideFlags: 0

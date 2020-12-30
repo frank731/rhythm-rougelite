@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-
+//TODO implement use beat system so player has to choose what to do on a specific beat
 public class PlayerController : PlayerData
 {
     public bool isInvincible = false;
@@ -28,6 +28,8 @@ public class PlayerController : PlayerData
     public UnityEvent playerKilled = new UnityEvent();
     public AudioClip playerHurtSFX;
     public Texture2D cursorCrosshair;
+    [SerializeField]
+    private GameObject[] abilitiesUI;
     private Animator playerAnimator;
     private AudioSource playerAudioSource;
     private PlayerMovement playerMovement;
@@ -89,8 +91,8 @@ public class PlayerController : PlayerData
                 {
                     itemIndexes.Add(itemId);
                 }
-                Item databaseItem = ItemDatabase.Instance.items[itemId];
-                Item newItem = databaseItem;
+                Item newItem = Instantiate(ItemDatabase.Instance.items[itemId]);
+                newItem.action = ItemDatabase.Instance.items[itemId].action;
                 //Item newItem = new Item(databaseItem.itemId, databaseItem.displayName, databaseItem.description, databaseItem.itemSprite, databaseItem.function); //create copy of item instead of pointer to databases item
                 //create icon for inventory
                 GameObject itemSprite = Instantiate(itemInventoryImageTemplate, itemInventoryImageTemplate.transform.position, itemInventoryImageTemplate.transform.rotation);
@@ -105,9 +107,11 @@ public class PlayerController : PlayerData
                 }
                 break;
             case "ability":
-                Ability databaseAbility = ItemDatabase.Instance.abilities[itemId];
-                Ability newAbility = databaseAbility;
+                Ability newAbility = Instantiate(ItemDatabase.Instance.abilities[itemId]);
+                newAbility.action = ItemDatabase.Instance.abilities[itemId].action;
                 abilities[1] = newAbility;
+                //abilitiesUI[1].GetComponent<Image>().sprite = newAbility.abilitySprite;
+                abilities[1].SetUI(abilitiesUI[1]);
                 break;
         }
 

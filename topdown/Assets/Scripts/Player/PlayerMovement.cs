@@ -54,7 +54,15 @@ public class PlayerMovement : MonoBehaviour
             if(dashTimeLeft > 0)
             {
                 canMove = false;
-                rb.velocity = dashSpeed * direction;
+                direction = new Vector2(Mathf.Ceil(direction.x), Mathf.Ceil(direction.y));
+                if(direction.x != 0 && direction.y != 0) //check if diagonal
+                {
+                    rb.velocity = dashSpeed * direction / 2;
+                }
+                else
+                {
+                    rb.velocity = dashSpeed * direction;
+                }
                 dashTimeLeft -= Time.deltaTime;
             }
             if(dashTimeLeft <= 0)

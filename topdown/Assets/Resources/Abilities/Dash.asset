@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: Dash
   m_EditorClassIdentifier: 
   abilityID: 1
+  cooldown: 3
   displayName: Dash
   description: Dash a short distance, invincible while dashing
   abilitySprite: {fileID: -5955915777618140665, guid: 0568276cc69af4541894f348930e2610,
     type: 3}
+  onCooldown: 0

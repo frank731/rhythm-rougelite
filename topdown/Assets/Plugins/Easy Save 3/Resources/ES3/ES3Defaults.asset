@@ -53,8 +53,8 @@ MonoBehaviour:
     - MoreMountains.Interface.Editor
     showAdvancedSettings: 1
   addMgrToSceneAutomatically: 0
-  autoUpdateReferences: 1
-  addAllPrefabsToManager: 1
+  autoUpdateReferences: 0
+  addAllPrefabsToManager: 0
   logDebugInfo: 0
   logWarnings: 1
   logErrors: 1
