@@ -235,7 +235,6 @@ public class PlayerController : PlayerData
 
     public void OnDebugClear()
     {
-        Debug.Log("d");
         currentRoom.ClearRoom();
         foreach(GameObject enemy in currentRoom.enemies)
         {

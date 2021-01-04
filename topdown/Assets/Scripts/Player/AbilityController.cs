@@ -15,9 +15,10 @@ public class AbilityController : MonoBehaviour
 
     private void UpdateCooldowns()
     {
-        for(int i = usedAbilities.Count - 1; i >= 0; i--)
+        
+        for (int i = usedAbilities.Count - 1; i >= 0; i--)
         {
-            Debug.Log("pog");
+            
             if (usedAbilities[i].UpdateCooldown())
             {
                 usedAbilities.RemoveAt(i);
@@ -41,6 +42,7 @@ public class AbilityController : MonoBehaviour
         {
             playerData.abilities[1].action();
             playerData.abilities[1].StartCooldown();
+            usedAbilities.Add(playerData.abilities[1]);
         }
     }
     public void OnAbilityThree()
@@ -49,6 +51,7 @@ public class AbilityController : MonoBehaviour
         {
             playerData.abilities[2].action();
             playerData.abilities[2].StartCooldown();
+            usedAbilities.Add(playerData.abilities[2]);
         }
     }
 }

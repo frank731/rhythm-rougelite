@@ -19,6 +19,7 @@ public class Ability : ScriptableObject
     private GameObject cooldownUI;
     private TMPro.TextMeshProUGUI cooldownText;
     private int currentCooldown;
+    private long startBeat;
 
     public void SetUI(GameObject newUI)
     {
@@ -34,13 +35,12 @@ public class Ability : ScriptableObject
         onCooldown = true;
         cooldownUI.SetActive(true);
         cooldownText.text = currentCooldown.ToString();
+        startBeat = FloorGlobal.Instance.beatNumber;
     }
 
     public bool UpdateCooldown()
     {
-        Debug.Log(currentCooldown);
-        cooldownText.text = currentCooldown.ToString();
-        if (onCooldown)
+        if (onCooldown && FloorGlobal.Instance.beatNumber != startBeat)
         {
             currentCooldown -= 1;
             if (currentCooldown == 0)
@@ -50,6 +50,7 @@ public class Ability : ScriptableObject
                 return true;
             }
         }
+        cooldownText.text = currentCooldown.ToString();
         return false;
     }
     

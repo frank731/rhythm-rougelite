@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class AnimationAutoDestroy : MonoBehaviour
 {
+    public void DisableSelf()
+    {
+        gameObject.SetActive(false);
+    }
     public void DestroySelf()
     {
         Destroy(gameObject);

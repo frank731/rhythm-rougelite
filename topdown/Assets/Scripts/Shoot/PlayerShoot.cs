@@ -16,6 +16,9 @@ public class PlayerShoot : MonoBehaviour
     public AudioClip reloadSFX;
     protected PlayerController playerController;
     protected AudioSource audioSource;
+    protected ObjectPooler objectPooler;
+    protected FloorGlobal floorGlobal;
+    protected int bulletIndex;
 
     public void Awake()
     {
@@ -24,10 +27,17 @@ public class PlayerShoot : MonoBehaviour
 
     public void Start()
     {
-        FloorGlobal.Instance.pausableScripts.Add(this);
-        FloorGlobal.Instance.startBeat.AddListener(StartBeat);
+        objectPooler = ObjectPooler.SharedInstance;
+        floorGlobal = FloorGlobal.Instance;
+        floorGlobal.pausableScripts.Add(this);
+        floorGlobal.startBeat.AddListener(StartBeat);
         audioSource = GetComponent<AudioSource>();
         playerController = transform.parent.parent.GetComponent<PlayerController>();
+
+        Bullet bullet = bulletPrefab.GetComponent<Bullet>();
+        bullet.bulletDestroyedEffectIndex = objectPooler.AddObject(bullet.bulletDestroyedEffect, 20, true);
+        bulletIndex = objectPooler.AddObject(bulletPrefab, 20, true);
+        
     }
 
     public void StartBeat()
@@ -39,7 +49,8 @@ public class PlayerShoot : MonoBehaviour
 
     protected virtual void Shoot()
     {
-        Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
+        objectPooler.GetPooledObject(bulletIndex, bulletSpawn);
+        //Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
         playerController.canShoot = false;
         currentAmmo--;
         audioSource.PlayOneShot(shootSFX, 0.6f);
@@ -56,9 +67,9 @@ public class PlayerShoot : MonoBehaviour
 
     public void OnFire()
     {
-        //Debug.Log(FloorGlobal.Instance.isOnBeat);
+        //Debug.Log(floorGlobal.isOnBeat);
         //create bullet if mouse clicked and on beat 
-        if (playerController.canShoot && FloorGlobal.Instance.isOnBeat && !outOfAmmo && !reloading)
+        if (playerController.canShoot && floorGlobal.isOnBeat && !outOfAmmo && !reloading)
         {
             Shoot();
         }
@@ -66,7 +77,7 @@ public class PlayerShoot : MonoBehaviour
 
     public void OnReload()
     {
-        if (currentAmmo < maxAmmo && !reloading && FloorGlobal.Instance.isOnBeat)
+        if (currentAmmo < maxAmmo && !reloading && floorGlobal.isOnBeat)
         {
             StartCoroutine(ReloadDelay());
             audioSource.PlayOneShot(reloadSFX, 0.3f);

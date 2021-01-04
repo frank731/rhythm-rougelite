@@ -9,19 +9,23 @@ public class BPMVisualiser : MonoBehaviour
     private float minBPM;
     private float maxBPM;
     public float beatHangDivisor;
-    private float beatHangTime;
+    public float beatHangTime;
+    public float nextBeatTime;
     private float timeUntilNextBeat;
-    private float startHangTime;
+    //private float startHangTime;
     private bool isPlaying = false;
-    private bool startedHang = false;
+    //private bool startedHang = false;
     public AudioSource audioSource;
     public GameObject beatIndicator;
     private BeatIndicatorMovement beatIndicatorMovement;
     public Transform beatIndicatorHolder;
     public Transform beatSpawnPointLeft;
     public Transform beatSpawnPointRight;
-    private float lastTime = 0f, deltaTime = 0f, timer = 0f, hangTimer = 0f;
+    private float lastTime = 0f, deltaTime = 0f, timer = 0f;
     public PlayerController playerController;
+
+    private FloorGlobal floorGlobal;
+
     void OnTempoChange(bool isUp)
     {
         beatCreateTime = 1 / (currBPM / 60);
@@ -37,11 +41,12 @@ public class BPMVisualiser : MonoBehaviour
         beatIndicatorMovement.beatCreateTime = beatCreateTime;
         beatHangTime = beatCreateTime / beatHangDivisor;
         timeUntilNextBeat = 60f / currBPM;
-        startHangTime = timeUntilNextBeat - beatHangTime;
+        //startHangTime = timeUntilNextBeat - beatHangTime;
     }
 
     void Awake()
     {
+        floorGlobal = FloorGlobal.Instance;
         audioSource = Camera.main.GetComponent<AudioSource>();
         baseBPM = BPMDetector.AnalyzeBpm(audioSource.clip);
 
@@ -63,10 +68,11 @@ public class BPMVisualiser : MonoBehaviour
 
         beatHangTime = beatCreateTime / beatHangDivisor;
         timeUntilNextBeat = 60f / currBPM;
-        startHangTime = timeUntilNextBeat - beatHangTime;
+        nextBeatTime = timeUntilNextBeat;
+        //startHangTime = timeUntilNextBeat - beatHangTime;
 
         //StartCoroutine(BeatHangDelay());
-        FloorGlobal.Instance.pausableScripts.Add(this);
+        floorGlobal.pausableScripts.Add(this);
     }
 
 
@@ -92,34 +98,35 @@ public class BPMVisualiser : MonoBehaviour
 
         deltaTime = audioSource.time - lastTime;
         timer += deltaTime;
-        hangTimer += deltaTime;
-        
+        /*
         if (timer >= startHangTime && !startedHang)
         {
-            FloorGlobal.Instance.isOnBeat = true;
-            FloorGlobal.Instance.startBeat.Invoke();
+            floorGlobal.isOnBeat = true;
+            floorGlobal.startBeat.Invoke();
             startedHang = true;
             //Invoke("test", beatHangTime * 3);
         }
-        
+        */
         if (timer >= timeUntilNextBeat)
         {
             //Create the note
-            FloorGlobal.Instance.onBeat.Invoke();
+            floorGlobal.onBeat.Invoke();
+            floorGlobal.beatNumber++;
             GameObject indicatorLeft = Instantiate(beatIndicator, beatSpawnPointLeft.position, beatSpawnPointLeft.rotation);
             indicatorLeft.transform.SetParent(beatIndicatorHolder);
             GameObject indicatorRight = Instantiate(beatIndicator, beatSpawnPointRight.position, beatSpawnPointRight.rotation);
             indicatorRight.transform.SetParent(beatIndicatorHolder);
+            nextBeatTime += timeUntilNextBeat - (timer - timeUntilNextBeat);
             timer -= timeUntilNextBeat;
         }
-        
+        /*
         if (startedHang && hangTimer >= timeUntilNextBeat + beatHangTime * 3)
         {
-            FloorGlobal.Instance.isOnBeat = false;
+            floorGlobal.isOnBeat = false;
             hangTimer -= timeUntilNextBeat;
             startedHang = false;
         }
-        
+        */
         lastTime = audioSource.time;
     }
 

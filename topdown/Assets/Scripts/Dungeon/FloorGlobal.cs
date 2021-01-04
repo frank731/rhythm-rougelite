@@ -7,7 +7,6 @@ using UnityEngine.SceneManagement;
 
 public class FloorGlobal : Singleton<FloorGlobal>
 {
-    private IDictionary<int, GameObject[]> floorRooms = new Dictionary<int, GameObject[]>() { };
     private Layouts floorLayouts;
     public GameObject[] roomShapes;
     public GameObject[] normalLayouts;
@@ -21,6 +20,7 @@ public class FloorGlobal : Singleton<FloorGlobal>
     public int roomCount = 0;
     public int roomArrSize;
     public int floorID;
+    public long beatNumber = 0;
     public List<GameObject> rooms = new List<GameObject>();
     public IDictionary<int, List<GameObject>> roomDistances = new Dictionary<int, List<GameObject>>() { };
     public GameObject emptyLayout;
@@ -41,6 +41,7 @@ public class FloorGlobal : Singleton<FloorGlobal>
     public CameraFollowPlayer cameraFollowPlayer;
     public PlayerController playerController;
     public List<GameObject> openUIScreens = new List<GameObject>();
+    public BPMVisualiser bpmVisualiser;
 
     protected override void Awake()
     {
@@ -214,6 +215,15 @@ public class FloorGlobal : Singleton<FloorGlobal>
 
     }
 
+    public bool IsOnBeat()
+    {
+        if(Mathf.Abs(bpmVisualiser.nextBeatTime - bpmVisualiser.audioSource.time) < bpmVisualiser.beatHangTime)
+        {
+            return true;
+        }
+        return false;
+    }
+
     private void NewScene() //callable without needed to use scene parameter
     {
         floorID = FloorInfo.Instance.GetFloorID();
@@ -226,9 +236,11 @@ public class FloorGlobal : Singleton<FloorGlobal>
         largeLayouts = floorLayouts.largeLayouts;
         itemLayouts = floorLayouts.itemLayouts;
         bossLayouts = floorLayouts.bossLayouts;
+        emptyLayout = floorLayouts.emptyLayout;
         roomArrSize = roomShapes.Length;
         rooms.Clear();
         roomCount = 0;
+        beatNumber = 0;
         layouts = new GameObject[][] {normalLayouts, largeLayouts};
         Invoke("GetMaxDistance", 0.5f);
     }

@@ -6,6 +6,15 @@ public class Bullet : MonoBehaviour
     public GameObject bulletDestroyedEffect;
     public float bulletSpeed = 10;
     public float bulletDamage = 1;
+    public int bulletDestroyedEffectIndex;
+
+    private ObjectPooler objectPooler;
+
+    private void Start()
+    {
+        objectPooler = ObjectPooler.SharedInstance;    
+    }
+
     void FixedUpdate()
     {
         //moves the bullet
@@ -15,7 +24,8 @@ public class Bullet : MonoBehaviour
     {
         //destroys bullet if it hits something, lowers health 
 
-        Instantiate(bulletDestroyedEffect, transform.position, transform.rotation);
+        objectPooler.GetPooledObject(bulletDestroyedEffectIndex, transform);
+        //Instantiate(bulletDestroyedEffect, transform.position, transform.rotation);
         if (collision.collider.CompareTag("Enemy"))
         {
             collision.collider.gameObject.GetComponent<EnemyController>().RemoveHealth(bulletDamage);
@@ -25,10 +35,12 @@ public class Bullet : MonoBehaviour
             collision.collider.gameObject.GetComponent<PlayerController>().RemoveHealth(bulletDamage);
         }
 
-        Destroy(gameObject);
+        //Destroy(gameObject);
+        gameObject.SetActive(false);
     }
     void OnBecameInvisible()
     {
-        Destroy(gameObject);
+        //Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 }
