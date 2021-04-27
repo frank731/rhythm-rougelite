@@ -5,6 +5,8 @@ public class EnemyShoot : MonoBehaviour
     public GameObject bulletPrefab;
     public int beatActionDelay = 1;
     [SerializeField]
+    private Animator animator;
+    [SerializeField]
     private Transform firePoint;
     private int beatCount = 1;
     private EnemyController enemyController;
@@ -13,6 +15,7 @@ public class EnemyShoot : MonoBehaviour
     {
         if (enemyController.isActive && beatCount == beatActionDelay) //shoot every second beat
         {
+            animator.SetTrigger("Shoot");
             Instantiate(bulletPrefab, firePoint.position, transform.rotation);
         }
         beatCount++;

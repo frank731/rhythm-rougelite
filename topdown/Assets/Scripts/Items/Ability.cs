@@ -14,6 +14,7 @@ public class Ability : ScriptableObject
     public Sprite abilitySprite;
     public UnityAction action;
     public bool onCooldown = false;
+    public GameObject pickup;
 
     private GameObject image;
     private GameObject cooldownUI;

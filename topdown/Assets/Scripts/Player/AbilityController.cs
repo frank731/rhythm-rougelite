@@ -7,9 +7,11 @@ public class AbilityController : MonoBehaviour
     public PlayerData playerData;
     public GameObject[] abilityCooldownUI;
     private List<Ability> usedAbilities = new List<Ability>();
+    private FloorGlobal floorGlobal;
 
     private void Start()
     {
+        floorGlobal = FloorGlobal.Instance;
         FloorGlobal.Instance.onBeat.AddListener(UpdateCooldowns);
     }
 
@@ -29,7 +31,7 @@ public class AbilityController : MonoBehaviour
 
     public void OnAbilityOne()
     {
-        if(playerData.abilities[0] != null && !playerData.abilities[0].onCooldown && FloorGlobal.Instance.isOnBeat)
+        if(playerData.abilities[0] != null && !playerData.abilities[0].onCooldown && floorGlobal.IsOnBeat())
         {
             playerData.abilities[0].action();
             playerData.abilities[0].StartCooldown();
@@ -38,7 +40,7 @@ public class AbilityController : MonoBehaviour
     }
     public void OnAbilityTwo()
     {
-        if (playerData.abilities[1] != null && !playerData.abilities[1].onCooldown && FloorGlobal.Instance.isOnBeat)
+        if (playerData.abilities[1] != null && !playerData.abilities[1].onCooldown && floorGlobal.IsOnBeat())
         {
             playerData.abilities[1].action();
             playerData.abilities[1].StartCooldown();
@@ -47,7 +49,7 @@ public class AbilityController : MonoBehaviour
     }
     public void OnAbilityThree()
     {
-        if (playerData.abilities[2] != null && !playerData.abilities[2].onCooldown && FloorGlobal.Instance.isOnBeat)
+        if (playerData.abilities[2] != null && !playerData.abilities[2].onCooldown && floorGlobal.IsOnBeat())
         {
             playerData.abilities[2].action();
             playerData.abilities[2].StartCooldown();

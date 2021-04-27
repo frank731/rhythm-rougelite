@@ -12,6 +12,7 @@ public class UIScreen : MonoBehaviour
             Destroy(gameObject); //ensure same screen not duplicated
         }
         DontDestroyOnLoad(gameObject);
+   
         SceneManager.sceneLoaded += OnSceneLoaded;
         if (startDisabled)
         {
@@ -25,6 +26,10 @@ public class UIScreen : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        if (FloorGlobal.Instance)
+        {
+            FloorGlobal.Instance.dontDestroys.Add(gameObject);
+        }
         if (scene.buildIndex == 1)
         {
             if (restarted)

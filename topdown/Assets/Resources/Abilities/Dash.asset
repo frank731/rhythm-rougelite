@@ -19,3 +19,4 @@ MonoBehaviour:
   abilitySprite: {fileID: -5955915777618140665, guid: 0568276cc69af4541894f348930e2610,
     type: 3}
   onCooldown: 0
+  pickup: {fileID: 6318840654001200769, guid: 799780adf278d9f45bcfee4e35a3bbe2, type: 3}

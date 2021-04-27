@@ -23,7 +23,7 @@ public class ShotgunShoot : PlayerShoot
             bullet.transform.Rotate(0, 0, Random.Range(minSpread, maxSpread));
         }
 
-        animator.SetTrigger("hasShot");
+        animator.SetTrigger("Shoot");
         SendMessageUpwards("OnBeatAction");
         playerController.gunAmmoText.text = currentAmmo.ToString() + "/" + maxAmmo.ToString();
         //akAnimator.SetBool("hasShot", false);

@@ -5,10 +5,16 @@ using UnityEngine.UI;
 public class OnBeatRange : MonoBehaviour
 {
     private List<GameObject> beatMarkers = new List<GameObject>();
+    private FloorGlobal floorGlobal;
+
+    private void Start()
+    {
+        floorGlobal = FloorGlobal.Instance;
+    }
 
     public void BeatAction()
     {
-        if (FloorGlobal.Instance.isOnBeat)
+        if (floorGlobal.IsOnBeat())
         {
             beatMarkers.RemoveAll(item => item == null);
             foreach (GameObject indicator in beatMarkers)

@@ -15,10 +15,10 @@ public class PlayerController : PlayerData
     public RoomController currentRoom;
     public bool canShoot = false;
     public GameObject inventory;
+    public ChooseAbilitySlot chooseAbilitySlot;
     public Transform itemInventoryHolder;
     public Transform gunInventoryHolder;
     public GameObject itemInventoryImageTemplate;
-    public OnBeatRange onBeatRange;
     public Transform heartUIGrid;
     public bool viewingMap = false;
     public GameObject heartTemplate;
@@ -33,11 +33,15 @@ public class PlayerController : PlayerData
     private Animator playerAnimator;
     private AudioSource playerAudioSource;
     private PlayerMovement playerMovement;
+    private FloorGlobal floorGlobal;
+    private ItemDatabase itemDatabase;
 
     private void Awake()
     {
         DontDestroyOnLoad(gameObject);
         Cursor.SetCursor(cursorCrosshair, new Vector2(cursorCrosshair.width / 2, cursorCrosshair.height / 2), CursorMode.ForceSoftware);
+        floorGlobal = FloorGlobal.Instance;
+        itemDatabase = ItemDatabase.Instance;
         //LoadPlayerData();
         GameObject playerUI = GameObject.FindGameObjectWithTag("PlayerUI");
 
@@ -52,17 +56,18 @@ public class PlayerController : PlayerData
         playerAnimator = GetComponent<Animator>();
         playerMovement = GetComponent<PlayerMovement>();
         playerAudioSource = GetComponent<AudioSource>();
-        FloorGlobal.Instance.pausableScripts.Add(this);
-        FloorGlobal.Instance.levelChanged.AddListener(OnLevelChanged);
+        floorGlobal.pausableScripts.Add(this);
+        floorGlobal.levelChanged.AddListener(OnLevelChanged);
         AddHealth(health, heartContainers, true);
         //Debug.Log(heartContainers);
         SwitchToNewWeapon(currentGun);
-        FloorGlobal.Instance.levelChanged.AddListener(LevelChanged);
+        floorGlobal.levelChanged.AddListener(LevelChanged);
+        floorGlobal.dontDestroys.Add(gameObject);
     }
 
     public void OnBeatAction()
     {
-        onBeatRange.BeatAction();
+        floorGlobal.onBeatRange.BeatAction();
     }
 
     public void AddItem(int itemId, string itemType, bool initializing = false)
@@ -74,7 +79,7 @@ public class PlayerController : PlayerData
                 {
                     gunIndexes.Add(itemId);
                 }
-                Gun gun = ItemDatabase.Instance.guns[itemId];
+                Gun gun = itemDatabase.guns[itemId];
                 GameObject newGun = Instantiate(gun.gunObject, rightHand.position, rightHand.rotation);
                 newGun.transform.SetParent(gunsHolder);
                 //create icon for inventory
@@ -91,8 +96,8 @@ public class PlayerController : PlayerData
                 {
                     itemIndexes.Add(itemId);
                 }
-                Item newItem = Instantiate(ItemDatabase.Instance.items[itemId]);
-                newItem.action = ItemDatabase.Instance.items[itemId].action;
+                Item newItem = Instantiate(itemDatabase.items[itemId]);
+                newItem.action = itemDatabase.items[itemId].action;
                 //Item newItem = new Item(databaseItem.itemId, databaseItem.displayName, databaseItem.description, databaseItem.itemSprite, databaseItem.function); //create copy of item instead of pointer to databases item
                 //create icon for inventory
                 GameObject itemSprite = Instantiate(itemInventoryImageTemplate, itemInventoryImageTemplate.transform.position, itemInventoryImageTemplate.transform.rotation);
@@ -107,11 +112,11 @@ public class PlayerController : PlayerData
                 }
                 break;
             case "ability":
-                Ability newAbility = Instantiate(ItemDatabase.Instance.abilities[itemId]);
-                newAbility.action = ItemDatabase.Instance.abilities[itemId].action;
-                abilities[1] = newAbility;
-                //abilitiesUI[1].GetComponent<Image>().sprite = newAbility.abilitySprite;
-                abilities[1].SetUI(abilitiesUI[1]);
+                Ability newAbility = Instantiate(itemDatabase.abilities[itemId]);
+                newAbility.action = itemDatabase.abilities[itemId].action;
+                chooseAbilitySlot.SetNewAbility(newAbility);
+                chooseAbilitySlot.gameObject.SetActive(true);
+                Time.timeScale = 0;
                 break;
         }
 
@@ -134,6 +139,12 @@ public class PlayerController : PlayerData
             item.action();
         }
         //TODO make item effects reversible by keeping list of all current effects and calling when item is added or removed
+    }
+    public void AddAbility(int slot, Ability newAbility)
+    {
+        abilities[slot] = newAbility;
+        //abilitiesUI[1].GetComponent<Image>().sprite = newAbility.abilitySprite;
+        abilities[slot].SetUI(abilitiesUI[slot]);
     }
 
     public void OnSwitchWeapon()
@@ -165,19 +176,19 @@ public class PlayerController : PlayerData
 
     public void OnPause()
     {
-        FloorGlobal.Instance.Pause(FloorGlobal.Instance.pauseCanvas);
+        floorGlobal.Pause(floorGlobal.pauseCanvas);
     }
 
     public void OnViewInventory()
     {
-        FloorGlobal.Instance.Pause(inventory);
+        floorGlobal.Pause(inventory);
     }
 
     public void OnViewMap()
     {
         //calls when tab is pressed and when tab is released
         viewingMap = !viewingMap;
-        FloorGlobal.Instance.OnViewMap(viewingMap);
+        floorGlobal.OnViewMap(viewingMap);
     }
 
     public void AddHealth(float healthAdded, float containerCount = 0, bool initializing = false)
@@ -206,7 +217,7 @@ public class PlayerController : PlayerData
         for (int i = 0; i < (healthAdded / 2) - (healthAdded % 2); i++) //fill full hearts
         {
             //changes last empty heart to full
-            hearts[heartEmptyIndex].GetComponent<Image>().sprite = FloorGlobal.Instance.heartSprites[1];
+            hearts[heartEmptyIndex].GetComponent<Image>().sprite = floorGlobal.heartSprites[1];
             if (!initializing)
             {
                 health += 2;
@@ -223,7 +234,7 @@ public class PlayerController : PlayerData
             //changes empty hearts to half hearts
             if (heartEmptyIndex != hearts.Count && hearts[heartEmptyIndex].GetComponent<Image>().sprite.name == "hearts_empty")
             {
-                hearts[heartEmptyIndex].GetComponent<Image>().sprite = FloorGlobal.Instance.heartSprites[2];
+                hearts[heartEmptyIndex].GetComponent<Image>().sprite = floorGlobal.heartSprites[2];
                 if (!initializing)
                 {
                     health++;
@@ -273,7 +284,7 @@ public class PlayerController : PlayerData
             for (int i = 0; i < (damage / 2) - (damage % 2); i++) //destroy full hearts
             {
                 //changes last full heart to empty
-                hearts[heartEmptyIndex].GetComponent<Image>().sprite = FloorGlobal.Instance.heartSprites[0];
+                hearts[heartEmptyIndex].GetComponent<Image>().sprite = floorGlobal.heartSprites[0];
                 heartEmptyIndex--;
                 if (heartEmptyIndex == -1)
                 {
@@ -286,7 +297,7 @@ public class PlayerController : PlayerData
                 //changes full hearts to half hearts
                 if (heartEmptyIndex > -1 && hearts[heartEmptyIndex].GetComponent<Image>().sprite.name == "hearts_full")
                 {
-                    hearts[heartEmptyIndex].GetComponent<Image>().sprite = FloorGlobal.Instance.heartSprites[2];
+                    hearts[heartEmptyIndex].GetComponent<Image>().sprite = floorGlobal.heartSprites[2];
                 }
             }
 

@@ -27,6 +27,8 @@ TagManager:
   - SettingsScreen
   - PauseScreen
   - Minimap
+  - Inventory
+  - ChooseAbility
   layers:
   - Default
   - TransparentFX

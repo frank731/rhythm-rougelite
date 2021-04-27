@@ -13,6 +13,9 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 direction;
     private PlayerController playerController;
     private float dashTimeLeft;
+    [SerializeField]
+    private ParticleSystem walkParticles;
+    private Vector2 ZEROVECTOR = new Vector2(0, 0);
     private void Awake()
     {
         speed = baseSpeed;
@@ -79,6 +82,17 @@ public class PlayerMovement : MonoBehaviour
         if (canMove)
         {
             direction.Set(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+            if(direction == ZEROVECTOR)
+            {
+                if (walkParticles.isPlaying)
+                {
+                    walkParticles.Stop();
+                }
+            }
+            else if (!walkParticles.isPlaying)
+            {
+                walkParticles.Play();
+            }
             //move the character
             rb.velocity = (direction * speed * Time.deltaTime * 50);
             // change idle to run anim

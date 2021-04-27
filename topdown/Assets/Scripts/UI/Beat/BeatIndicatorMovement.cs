@@ -6,6 +6,8 @@ public class BeatIndicatorMovement : MonoBehaviour {
     public Image image;
     public float beatCreateTime;
     public Transform beatMarker;
+    public AudioSource audioSource;
+    public AudioClip test;
     private void Start()
     {
         StartCoroutine(KinematicFunctions.MoveObject(transform, transform.localPosition, beatMarker.localPosition, beatCreateTime));
@@ -15,6 +17,7 @@ public class BeatIndicatorMovement : MonoBehaviour {
 
         if (collision.CompareTag("BPMIndicator"))
         {
+            //Debug.Log(audioSource.time);
             Destroy(gameObject);
         }
     }

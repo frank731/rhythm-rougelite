@@ -26,7 +26,9 @@ public class RoomController : MonoBehaviour
     public List<GameObject> adjacentRooms = new List<GameObject>();
     private List<int> adjacencies = new List<int>();
     public List<GameObject> enemies = new List<GameObject>();
+
     private PlayerController playerController = null;
+    private FloorGlobal floorGlobal;
 
     public void RevealMap()
     {
@@ -85,7 +87,7 @@ public class RoomController : MonoBehaviour
     {
         if (!enemies.Contains(enemy))
         {
-            enemyCount += 1;
+            enemyCount++;
             enemies.Add(enemy);
         }
     }
@@ -112,7 +114,7 @@ public class RoomController : MonoBehaviour
             {
                 if (Random.Range(0, 10) == 0)
                 {
-                    Instantiate(FloorGlobal.Instance.pickups[Random.Range(0, FloorGlobal.Instance.pickups.Length)], transform.position, transform.rotation);
+                    Instantiate(floorGlobal.pickups[Random.Range(0, floorGlobal.pickups.Length)], transform.position, transform.rotation);
                     break;
                 }
             }
@@ -120,7 +122,8 @@ public class RoomController : MonoBehaviour
     }
     public void EnemyDestroyed()
     {
-        enemyCount -= 1;
+        enemyCount--;
+        floorGlobal.kills++;
         if (enemyCount <= 0)
         {
             ClearRoom();
@@ -156,7 +159,7 @@ public class RoomController : MonoBehaviour
     }
     public void AddDoor(int roomType, Transform doorPos)
     {
-        GameObject door = Instantiate(FloorGlobal.Instance.doors[roomType - 1], doorPos.position, FloorGlobal.Instance.doors[roomType - 1].transform.rotation);
+        GameObject door = Instantiate(floorGlobal.doors[roomType - 1], doorPos.position, floorGlobal.doors[roomType - 1].transform.rotation);
         Destroy(doorPos.gameObject);
         door.transform.SetParent(transform);
         door.transform.position = doorPos.position;
@@ -166,20 +169,20 @@ public class RoomController : MonoBehaviour
 
     private void Awake()
     {
-        FloorGlobal.Instance.rooms.Add(gameObject);
+        floorGlobal = FloorGlobal.Instance;
+        floorGlobal.rooms.Add(gameObject);
         if (!startingRoom)
         {
-            distance = FloorGlobal.Instance.maxRoomCount + 1;
+            distance = floorGlobal.maxRoomCount + 1;
         }
     }
     void Start()
     {
-        
         //sets room layout
         if (!startingRoom)
         {
-            int layoutType = Random.Range(0, FloorGlobal.Instance.layouts[roomShape].Length);
-            ChangeLayout(FloorGlobal.Instance.layouts[roomShape][layoutType]);
+            int layoutType = Random.Range(0, floorGlobal.layouts[roomShape].Length);
+            ChangeLayout(floorGlobal.layouts[roomShape][layoutType]);
             //disable room as optimization
             Invoke("DisableRoom", 0.2f);
             StartCoroutine(ChangeDoors(false));
@@ -187,12 +190,12 @@ public class RoomController : MonoBehaviour
         else
         {
             //create first map icon
-            GameObject minimapRoom = Instantiate(FloorGlobal.Instance.minimapRoomPrefabs[roomShape], FloorGlobal.Instance.minimapCanvas.transform.position, transform.rotation);
-            minimapRoom.transform.SetParent(FloorGlobal.Instance.minimapCanvas.transform);
+            GameObject minimapRoom = Instantiate(floorGlobal.minimapRoomPrefabs[roomShape], floorGlobal.minimapCanvas.transform.position, transform.rotation);
+            minimapRoom.transform.SetParent(floorGlobal.minimapCanvas.transform);
             mapIcon = minimapRoom.transform.GetChild(0).gameObject;
             mapIcon.SetActive(true);
 
-            ChangeLayout(FloorGlobal.Instance.emptyLayout);
+            ChangeLayout(floorGlobal.emptyLayout);
             layout.SetActive(true);
             inPlayerRange = true;
             Invoke("RevealMap", 0.2f);

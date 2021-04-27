@@ -3,16 +3,31 @@ using UnityEngine.SceneManagement;
 
 public class LevelChange : MonoBehaviour
 {
+    private FloorGlobal floorGlobal;
+
+    private void Start()
+    {
+        floorGlobal = FloorGlobal.Instance;    
+    }
+
     public void GoToLevel(AnimationEvent TypeAndIndex)
     {
+        try
+        {
+            FloorGlobal.Instance.levelChanged.Invoke();
+        }
+        catch
+        {
+            
+        }
         switch (TypeAndIndex.stringParameter)
         {
             case "nextLevel":
-                FloorGlobal.Instance.levelChanged.Invoke();
+                
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
                 break;
             case "selectLevel":
-                FloorGlobal.Instance.levelChanged.Invoke();
+                
                 SceneManager.LoadScene(TypeAndIndex.intParameter);
                 break;
         }

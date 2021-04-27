@@ -25,4 +25,10 @@ public class VolumeControl : MonoBehaviour
         mixer.SetFloat("SFX Volume", Mathf.Log10(sliderValue) * 20);
         PlayerPrefs.SetFloat("SFX Volume", sliderValue);
     }
+    public void SetVolume(float value)
+    {
+        mixer.SetFloat("exposedParamName", Mathf.Log10(value) * 20);
+        PlayerPrefs.SetFloat("exposedParamName", value);
+    }
+
 }

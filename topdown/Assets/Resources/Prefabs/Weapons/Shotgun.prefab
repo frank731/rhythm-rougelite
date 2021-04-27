@@ -29,7 +29,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6559611390352724442}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.49, y: -0.22, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6559611391608231720}
@@ -119,6 +119,7 @@ MonoBehaviour:
   reloadDelay: 1
   maxAmmo: 10
   currentAmmo: 0
+  reloadTime: 2
   outOfAmmo: 0
   reloading: 0
   bulletPrefab: {fileID: 3453616470630526375, guid: 25b361e129462134292b73381977cda8,
@@ -140,7 +141,7 @@ Animator:
   m_GameObject: {fileID: 6559611390352724442}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: f8c820ed6ecbde64e9326f77ee990c2b, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

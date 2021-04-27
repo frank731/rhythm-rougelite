@@ -54,5 +54,6 @@ public class ItemDatabase : Singleton<ItemDatabase>
         base.Awake();
         BuildDatabase();
         DontDestroyOnLoad(gameObject);
+        FloorGlobal.Instance.dontDestroys.Add(gameObject);
     }
 }

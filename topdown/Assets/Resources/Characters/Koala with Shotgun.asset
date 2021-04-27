@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcc13506296636449b9ac0ec5ca04d6a, type: 3}
+  m_Name: Koala with Shotgun
+  m_EditorClassIdentifier: 
+  displaySprite: {fileID: 21300000, guid: b528708a5a8f28343aefa9e1d46670a7, type: 3}
+  profileSprite: {fileID: 21300000, guid: 75df1bb8b302ceb4a9230d70d1b2e97e, type: 3}
+  charName: koala but with shotgun
+  description: hes dangerous
+  charID: 1

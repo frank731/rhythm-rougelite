@@ -16,6 +16,7 @@ public class FloorGlobal : Singleton<FloorGlobal>
     public GameObject[] doors;
     public GameObject[][] layouts;
     public GameObject[] pickups;
+    public GameObject[] characters;
     public int maxRoomCount = 10;
     public int roomCount = 0;
     public int roomArrSize;
@@ -30,35 +31,44 @@ public class FloorGlobal : Singleton<FloorGlobal>
     public GameObject itemIcon;
     public GameObject pauseCanvas;
     public GameObject deathCanvas;
+    public GameObject winScreen;
+    public List<GameObject> dontDestroys = new List<GameObject>();
     public Sprite[] heartSprites;
     public bool isPaused = false;
-    public bool isOnBeat = false;
+    //public bool isOnBeat = false;
     public UnityEvent onBeat = new UnityEvent();
-    public UnityEvent startBeat = new UnityEvent();
+    //public UnityEvent startBeat = new UnityEvent();
     public UnityEvent levelChanged = new UnityEvent();
     public List<MonoBehaviour> pausableScripts;
     public RectMask2D minimapMask;
     public CameraFollowPlayer cameraFollowPlayer;
     public PlayerController playerController;
+    public Transform playerSpawnPoint;
     public List<GameObject> openUIScreens = new List<GameObject>();
     public BPMVisualiser bpmVisualiser;
+    public OnBeatRange onBeatRange;
+    public PlayTimer playTimer;
+    public int kills;
+
+    private FloorInfo floorInfo;
 
     protected override void Awake()
     {
         base.Awake();
         DontDestroyOnLoad(gameObject);
-
         Layouts[] loadLayouts = Resources.LoadAll<Layouts>("Prefabs/Layouts");
-       
+
         heartSprites = Resources.LoadAll<Sprite>("Sprites/HeartsUI");
         pickups = Resources.LoadAll<GameObject>("Prefabs/Pickups");
 
         levelChanged.AddListener(OnLevelChanged);
         SceneManager.sceneLoaded += OnSceneLoaded;
+        playerController = Instantiate(characters[ES3.Load<int>("charChoice", 0)], playerSpawnPoint.position, playerSpawnPoint.rotation).GetComponent<PlayerController>();
     }
 
     private void Start()
     {
+        floorInfo = FloorInfo.Instance;
         playerController.playerKilled.AddListener(OnKilled);
     }
 
@@ -159,7 +169,7 @@ public class FloorGlobal : Singleton<FloorGlobal>
         }
         else
         {
-            
+
             if (newPauseCanvas == pauseCanvas)
             {
                 openUIScreens.ElementAt(openUIScreens.Count - 1).SetActive(false);
@@ -217,19 +227,38 @@ public class FloorGlobal : Singleton<FloorGlobal>
 
     public bool IsOnBeat()
     {
-        if(Mathf.Abs(bpmVisualiser.nextBeatTime - bpmVisualiser.audioSource.time) < bpmVisualiser.beatHangTime)
+        //Debug.Log(bpmVisualiser.pastBeatTime);
+        //Debug.Log(bpmVisualiser.nextBeatTime);
+        //Debug.Log(bpmVisualiser.audioSource.time);
+        //Debug.Log(Mathf.Abs(bpmVisualiser.nextBeatTime - bpmVisualiser.audioSource.time));
+        if (Mathf.Abs(bpmVisualiser.currentBeatTime - (bpmVisualiser.audioSource.time - bpmVisualiser.offset)) < bpmVisualiser.beatHangTime)
         {
             return true;
         }
         return false;
     }
 
+    public void Win()
+    {
+        Instantiate(winScreen, transform.position, transform.rotation);
+    }
+
+    public void DestroyAllDontDestroyOnLoad()
+    {
+        foreach(GameObject g in dontDestroys)
+        {
+            Destroy(g);
+        }
+        Destroy(gameObject);
+    }
+
     private void NewScene() //callable without needed to use scene parameter
     {
-        floorID = FloorInfo.Instance.GetFloorID();
-        roomShapes = FloorInfo.Instance.GetRooms();
-        floorLayouts = FloorInfo.Instance.GetLayouts();
-        doors = FloorInfo.Instance.GetDoors();
+        floorInfo = FloorInfo.Instance;
+        floorID = floorInfo.GetFloorID();
+        roomShapes = floorInfo.GetRooms();
+        floorLayouts = floorInfo.GetLayouts();
+        doors = floorInfo.GetDoors();
         floorLayouts.LoadLayouts();
         cameraFollowPlayer = Camera.main.GetComponent<CameraFollowPlayer>();
         normalLayouts = floorLayouts.normalLayouts;

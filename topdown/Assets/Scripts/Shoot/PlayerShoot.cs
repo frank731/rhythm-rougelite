@@ -7,6 +7,7 @@ public class PlayerShoot : MonoBehaviour
     public float reloadDelay = 1f;
     public int maxAmmo;
     public int currentAmmo;
+    public int reloadTime;
     public bool outOfAmmo = false;
     public bool reloading = false;
     public GameObject bulletPrefab;
@@ -19,6 +20,8 @@ public class PlayerShoot : MonoBehaviour
     protected ObjectPooler objectPooler;
     protected FloorGlobal floorGlobal;
     protected int bulletIndex;
+    protected int currentReloadTime;
+    protected long reloadBeat;
 
     public void Awake()
     {
@@ -30,7 +33,7 @@ public class PlayerShoot : MonoBehaviour
         objectPooler = ObjectPooler.SharedInstance;
         floorGlobal = FloorGlobal.Instance;
         floorGlobal.pausableScripts.Add(this);
-        floorGlobal.startBeat.AddListener(StartBeat);
+        floorGlobal.onBeat.AddListener(OnBeat);
         audioSource = GetComponent<AudioSource>();
         playerController = transform.parent.parent.GetComponent<PlayerController>();
 
@@ -40,10 +43,21 @@ public class PlayerShoot : MonoBehaviour
         
     }
 
-    public void StartBeat()
+    public void OnBeat()
     {
         //Debug.Log("beat");
         playerController.canShoot = true;
+        if (reloading && reloadBeat != floorGlobal.beatNumber)
+        {
+            currentReloadTime--;
+            if(currentReloadTime == 0)
+            {
+                outOfAmmo = false;
+                reloading = false;
+                currentAmmo = maxAmmo;
+                playerController.gunAmmoText.text = currentAmmo.ToString() + "/" + maxAmmo.ToString();
+            }
+        }
         //Shoot();
     }
 
@@ -58,18 +72,17 @@ public class PlayerShoot : MonoBehaviour
         {
             outOfAmmo = true;
         }
-        animator.SetBool("hasShot", true);
+        animator.SetTrigger("Shoot");
         SendMessageUpwards("OnBeatAction");
 
         playerController.gunAmmoText.text = currentAmmo.ToString() + "/" + maxAmmo.ToString();
-        //akAnimator.SetBool("hasShot", false);
     }
 
     public void OnFire()
     {
-        //Debug.Log(floorGlobal.isOnBeat);
+        //Debug.Log(floorGlobal.IsOnBeat());
         //create bullet if mouse clicked and on beat 
-        if (playerController.canShoot && floorGlobal.isOnBeat && !outOfAmmo && !reloading)
+        if (playerController.canShoot  && !outOfAmmo && !reloading && floorGlobal.IsOnBeat())
         {
             Shoot();
         }
@@ -77,11 +90,13 @@ public class PlayerShoot : MonoBehaviour
 
     public void OnReload()
     {
-        if (currentAmmo < maxAmmo && !reloading && floorGlobal.isOnBeat)
+        if (currentAmmo < maxAmmo && !reloading && floorGlobal.IsOnBeat())
         {
-            StartCoroutine(ReloadDelay());
+            //StartCoroutine(ReloadDelay());
+            currentReloadTime = reloadTime;
             audioSource.PlayOneShot(reloadSFX, 0.3f);
             reloading = true;
+            reloadBeat = floorGlobal.beatNumber;
         }
     }
 

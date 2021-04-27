@@ -34,16 +34,21 @@ public class AimAtCursor : MonoBehaviour
                 }
             }
         }
+        transform.localScale = new Vector3(1, 1, 1);
+        transform.SetParent(rightHand);
+        transform.position = rightHand.position;
+        playerSprite.flipX = false;
+        mouseFacingRight = true;
     }
-    void Update()
+    void FixedUpdate()
     {
         mousePos = Mouse.current.position.ReadValue();
         mousePos = Camera.main.ScreenToWorldPoint(mousePos);
-
         //flip gun and player left when mouse moves to the left of player
         if (mousePos.x < player.position.x && mouseFacingRight == true)
         {
             transform.localScale = new Vector3(1, -1, 1); //cant use vector.set for some reason idk
+            transform.SetParent(leftHand);
             transform.position = leftHand.position;
             playerSprite.flipX = true;
             mouseFacingRight = false;
@@ -52,6 +57,7 @@ public class AimAtCursor : MonoBehaviour
         if (mousePos.x > player.position.x && mouseFacingRight == false)
         {
             transform.localScale = new Vector3(1, 1, 1);
+            transform.SetParent(rightHand);
             transform.position = rightHand.position;
             playerSprite.flipX = false;
             mouseFacingRight = true;
