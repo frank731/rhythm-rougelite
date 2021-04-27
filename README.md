@@ -1,3 +1,2 @@
 # topdown
-unity
 My game
