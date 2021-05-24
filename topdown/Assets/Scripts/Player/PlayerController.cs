@@ -1,11 +1,28 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 //TODO implement use beat system so player has to choose what to do on a specific beat
-public class PlayerController : PlayerData
+public class PlayerController : MonoBehaviour
 {
+    public int currentGunIndex = 0;
+    public List<GameObject> guns = new List<GameObject>();
+    public List<Item> items = new List<Item>();
+    public Ability[] abilities = new Ability[3];
+    public List<int> gunIndexes;
+    public List<int> itemIndexes;
+    public float health = 6;
+    public float iFrames = 0.1f;
+    public float heartContainers = 3;
+    public float luck = 0;
+    public List<GameObject> hearts = new List<GameObject>();
+    protected int heartEmptyIndex = 0;
+    public GameObject currentGun;
+    public UnityEvent loadPlayerData = new UnityEvent();
+    //public ES3File playerData = new ES3File("playerData.es3");
+
     public bool isInvincible = false;
     public bool isDead = false;
     public bool isDashing = false;
@@ -28,8 +45,12 @@ public class PlayerController : PlayerData
     public UnityEvent playerKilled = new UnityEvent();
     public AudioClip playerHurtSFX;
     public Texture2D cursorCrosshair;
+    public UnityEvent onUpdate;
+    public UnityEvent onHit;
+
     [SerializeField]
     private GameObject[] abilitiesUI;
+    private IDictionary<int, List<GameObject>> invIcons = new Dictionary<int, List<GameObject>>();
     private Animator playerAnimator;
     private AudioSource playerAudioSource;
     private PlayerMovement playerMovement;
@@ -57,7 +78,6 @@ public class PlayerController : PlayerData
         playerMovement = GetComponent<PlayerMovement>();
         playerAudioSource = GetComponent<AudioSource>();
         floorGlobal.pausableScripts.Add(this);
-        floorGlobal.levelChanged.AddListener(OnLevelChanged);
         AddHealth(health, heartContainers, true);
         //Debug.Log(heartContainers);
         SwitchToNewWeapon(currentGun);
@@ -65,9 +85,34 @@ public class PlayerController : PlayerData
         floorGlobal.dontDestroys.Add(gameObject);
     }
 
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            LevelChanged();
+        }
+        else if (Input.GetKeyDown(KeyCode.L))
+        {
+            LoadPlayerData();
+        }
+        onUpdate.Invoke();
+    }
+
     public void OnBeatAction()
     {
         floorGlobal.onBeatRange.BeatAction();
+    }
+    private void AddEffect(Item item)
+    {
+        if (item.useUpdate) onUpdate.AddListener(item.itemEffect.OnUpdate);
+        if (item.usePickup) item.itemEffect.OnPickup();
+        if (item.useHit) onHit.AddListener(item.itemEffect.OnHit);
+    }
+    private void RemoveEffect(Item item)
+    {
+        if (item.useUpdate) onUpdate.RemoveListener(item.itemEffect.OnUpdate);
+        if (item.usePickup) item.itemEffect.OnRemove();
+        if (item.useHit) onHit.RemoveListener(item.itemEffect.OnHit);
     }
 
     public void AddItem(int itemId, string itemType, bool initializing = false)
@@ -79,12 +124,12 @@ public class PlayerController : PlayerData
                 {
                     gunIndexes.Add(itemId);
                 }
-                Gun gun = itemDatabase.guns[itemId];
+                Gun gun = (Gun)itemDatabase.items[itemId];
                 GameObject newGun = Instantiate(gun.gunObject, rightHand.position, rightHand.rotation);
                 newGun.transform.SetParent(gunsHolder);
                 //create icon for inventory
                 GameObject gunSprite = Instantiate(itemInventoryImageTemplate, itemInventoryImageTemplate.transform.position, itemInventoryImageTemplate.transform.rotation);
-                gunSprite.GetComponent<Image>().sprite = gun.gunSprite;
+                gunSprite.GetComponent<Image>().sprite = gun.itemSprite;
                 gunSprite.GetComponent<ShowDescription>().description = gun.description;
                 gunSprite.transform.SetParent(gunInventoryHolder);
                 guns.Add(newGun);
@@ -96,24 +141,27 @@ public class PlayerController : PlayerData
                 {
                     itemIndexes.Add(itemId);
                 }
-                Item newItem = Instantiate(itemDatabase.items[itemId]);
-                newItem.action = itemDatabase.items[itemId].action;
+                //Item newItem = Instantiate(itemDatabase.items[itemId]);
+                Item newItem = itemDatabase.items[itemId];
+                newItem.playerController = this;
+                newItem.playerMovement = playerMovement;
+                AddEffect(newItem);
                 //Item newItem = new Item(databaseItem.itemId, databaseItem.displayName, databaseItem.description, databaseItem.itemSprite, databaseItem.function); //create copy of item instead of pointer to databases item
                 //create icon for inventory
                 GameObject itemSprite = Instantiate(itemInventoryImageTemplate, itemInventoryImageTemplate.transform.position, itemInventoryImageTemplate.transform.rotation);
                 itemSprite.GetComponent<Image>().sprite = newItem.itemSprite;
                 itemSprite.GetComponent<ShowDescription>().description = newItem.description;
                 itemSprite.transform.SetParent(itemInventoryHolder);
-                newItem.inventoryIcon = itemSprite;
+                if(!invIcons.ContainsKey(newItem.itemId)) invIcons[newItem.itemId] = new List<GameObject>();
+                invIcons[newItem.itemId].Add(itemSprite);
                 items.Add(newItem);
-                foreach (Item item in items)
-                {
-                    item.action();
-                }
                 break;
             case "ability":
-                Ability newAbility = Instantiate(itemDatabase.abilities[itemId]);
-                newAbility.action = itemDatabase.abilities[itemId].action;
+                Ability newAbility = Instantiate((Ability)itemDatabase.items[itemId]);
+                newAbility.floorGlobal = floorGlobal;
+                newAbility.playerController = this;
+                newAbility.playerMovement = playerMovement;
+                AddEffect(newAbility);
                 chooseAbilitySlot.SetNewAbility(newAbility);
                 chooseAbilitySlot.gameObject.SetActive(true);
                 Time.timeScale = 0;
@@ -126,22 +174,31 @@ public class PlayerController : PlayerData
     {
         foreach (Item i in items)
         {
-            Debug.Log(i.inventoryIcon.GetInstanceID());
+            Debug.Log(i.itemSprite.GetInstanceID());
         }
-        Item toDelete = items.Find(i => i.itemId == removeItemId); //finds first item with needed id
-        itemIndexes.Remove(removeItemId);
-        //Debug.Log(toDelete.inventoryIcon.transform.position);
-        Destroy(toDelete.inventoryIcon);
-        items.Remove(toDelete);
-        resetStats.Invoke();
-        foreach (Item item in items)
+        try
         {
-            item.action();
+            Item toDelete = items.Find(i => i.itemId == removeItemId); //finds first item with needed id
+            itemIndexes.Remove(removeItemId);
+            //Debug.Log(toDelete.inventoryIcon.transform.position);
+            Destroy(invIcons[removeItemId][0]);
+            invIcons[removeItemId].RemoveAt(0);
+            items.Remove(toDelete);
+            //resetStats.Invoke();
+            RemoveEffect(toDelete);
+        }
+        catch
+        {
+            Debug.Log("ID not in items");
         }
         //TODO make item effects reversible by keeping list of all current effects and calling when item is added or removed
     }
     public void AddAbility(int slot, Ability newAbility)
     {
+        if(abilities[slot] != null)
+        {
+            RemoveEffect(newAbility);
+        }
         abilities[slot] = newAbility;
         //abilitiesUI[1].GetComponent<Image>().sprite = newAbility.abilitySprite;
         abilities[slot].SetUI(abilitiesUI[slot]);
@@ -300,12 +357,13 @@ public class PlayerController : PlayerData
                     hearts[heartEmptyIndex].GetComponent<Image>().sprite = floorGlobal.heartSprites[2];
                 }
             }
-
+            
             //destroys player once health is lower than or equal to zero
             if (health <= 0)
             {
                 KillPlayer();
             }
+            onHit.Invoke();
         }
 
     }
@@ -316,6 +374,28 @@ public class PlayerController : PlayerData
         {
             Destroy(gameObject);
         }
+        Debug.Log("Saving");
+        ES3.Save("currentHealth", health);
+        ES3.Save("heartContainers", heartContainers);
+        ES3.Save("heartEmptyIndex", heartEmptyIndex);
+        ES3.Save("itemIndexes", itemIndexes);
+        ES3.Save("gunIndexes", gunIndexes);
+        ES3.Save("currentGun", currentGun);
+
+        transform.position = new Vector3(0, 0, 0); //reset the players position to the starting room when the new level is loaded
+    }
+
+    public void LoadPlayerData()
+    {
+        Debug.Log("loading");
+        health = ES3.Load<float>("currentHealth", 6);
+        heartContainers = ES3.Load<float>("heartContainers", 3);
+        heartEmptyIndex = ES3.Load("heartEmptyIndex", 0);
+        gunIndexes = ES3.Load("gunIndexes", new List<int>());
+        itemIndexes = ES3.Load("itemIndexes", new List<int>());
+        gunIndexes = ES3.Load("gunIndexes", new List<int>());
+        currentGun = ES3.Load("currentGun", guns[0]);
+        loadPlayerData.Invoke();
     }
 
     public IEnumerator IFrameDelay()

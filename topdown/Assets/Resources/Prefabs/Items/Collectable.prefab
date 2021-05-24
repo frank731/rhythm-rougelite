@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3262021388769839051}
   - component: {fileID: -7913233830321478560}
   m_Layer: 26
-  m_Name: Dash
+  m_Name: Collectable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -74,7 +74,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: -5955915777618140665, guid: 0568276cc69af4541894f348930e2610,
+  m_Sprite: {fileID: 1438219111659547533, guid: 0568276cc69af4541894f348930e2610,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -141,6 +141,7 @@ MonoBehaviour:
           m_StringArgument: shotgun
           m_BoolArgument: 0
         m_CallState: 2
+  playerController: {fileID: 0}
 --- !u!114 &-7913233830321478560
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -154,5 +155,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemId: 1
-  itemType: ability
+  itemType: item
   playerInteractDetection: {fileID: 3262021388769839051}

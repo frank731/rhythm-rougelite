@@ -32,6 +32,7 @@ public class FloorGlobal : Singleton<FloorGlobal>
     public GameObject pauseCanvas;
     public GameObject deathCanvas;
     public GameObject winScreen;
+    public GameObject baseCollectable;
     public List<GameObject> dontDestroys = new List<GameObject>();
     public Sprite[] heartSprites;
     public bool isPaused = false;
@@ -51,6 +52,7 @@ public class FloorGlobal : Singleton<FloorGlobal>
     public int kills;
 
     private FloorInfo floorInfo;
+    private ItemDatabase itemDatabase;
 
     protected override void Awake()
     {
@@ -69,7 +71,17 @@ public class FloorGlobal : Singleton<FloorGlobal>
     private void Start()
     {
         floorInfo = FloorInfo.Instance;
+        itemDatabase = ItemDatabase.Instance;
         playerController.playerKilled.AddListener(OnKilled);
+    }
+
+    public void CreateItem(int itemID, Vector2 pos, Quaternion rot)
+    {
+        GameObject newCollectable = Instantiate(baseCollectable, pos, rot);
+        Item newItem = itemDatabase.items[itemID];
+        newCollectable.GetComponent<SpriteRenderer>().sprite = newItem.itemSprite;
+        newCollectable.GetComponent<AddItem>().itemId = newItem.itemId;
+        newCollectable.GetComponent<AddItem>().itemType = newItem.type;
     }
 
     void CreateSpecialRoom(RoomController specialRoomController, GameObject[] layouts, ref bool roomType, GameObject icon, bool isOpen)

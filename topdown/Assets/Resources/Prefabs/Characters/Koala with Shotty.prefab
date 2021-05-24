@@ -325,6 +325,7 @@ MonoBehaviour:
   baseSpeed: 5
   dashSpeed: 75
   dashTime: 0.1
+  dashTimeLeft: 0
   speed: 3
   rb: {fileID: 137895248801360871}
   animator: {fileID: 137895248801360870}
@@ -387,6 +388,12 @@ MonoBehaviour:
       m_Calls: []
   playerHurtSFX: {fileID: 8300000, guid: 51f2769dc716d1148844990d0d22ecd9, type: 3}
   cursorCrosshair: {fileID: 2800000, guid: 87823d353c12a1f4ea9aecd4edb2766d, type: 3}
+  onUpdate:
+    m_PersistentCalls:
+      m_Calls: []
+  onHit:
+    m_PersistentCalls:
+      m_Calls: []
   abilitiesUI:
   - {fileID: 137895249389646018}
   - {fileID: 137895248656052751}
@@ -416,7 +423,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99d0df3783eebd944bf0f54d716568a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerData: {fileID: 137895248801360873}
+  playerController: {fileID: 137895248801360873}
   abilityCooldownUI: []
 --- !u!61 &137895248801360869
 BoxCollider2D:
@@ -2384,7 +2391,7 @@ MonoBehaviour:
   - {fileID: 6379229242561291378}
   - {fileID: 6891100185370361751}
   - {fileID: 4607214345136448663}
-  playerController: {fileID: 0}
+  playerController: {fileID: 137895248801360873}
 --- !u!1 &2368151146999480860
 GameObject:
   m_ObjectHideFlags: 0

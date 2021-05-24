@@ -16,7 +16,7 @@ public class ChooseAbilitySlot : MonoBehaviour
             Instantiate(playerController.abilities[slot].pickup, playerController.transform.position, playerController.transform.rotation);
         }
         playerController.AddAbility(slot, newAbility);
-        slots[slot].image.sprite = newAbility.abilitySprite;
+        slots[slot].image.sprite = newAbility.itemSprite;
         gameObject.SetActive(false);
     }
 

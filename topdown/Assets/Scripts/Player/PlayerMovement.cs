@@ -6,13 +6,13 @@ public class PlayerMovement : MonoBehaviour
     public float baseSpeed = 3f;
     public float dashSpeed = 100f;
     public float dashTime = 0.1f;
+    public float dashTimeLeft;
     public float speed;
     public Rigidbody2D rb;
     public Animator animator;
 
     private Vector2 direction;
     private PlayerController playerController;
-    private float dashTimeLeft;
     [SerializeField]
     private ParticleSystem walkParticles;
     private Vector2 ZEROVECTOR = new Vector2(0, 0);
@@ -38,16 +38,6 @@ public class PlayerMovement : MonoBehaviour
     private void LoadSpeed()
     {
         speed = ES3.Load("playerSpeed", baseSpeed);
-    }
-
-    public void Dash()
-    {
-        if (!playerController.isDashing)
-        {
-            playerController.isDashing = true;
-            playerController.isInvincible = true;
-            dashTimeLeft = dashTime;
-        }
     }
 
     private void CheckDash()

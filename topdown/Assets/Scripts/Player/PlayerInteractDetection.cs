@@ -6,6 +6,7 @@ public class PlayerInteractDetection : MonoBehaviour
     public bool inRange = false;
     public bool interacted = false;
     public UnityEvent interact = new UnityEvent();
+    public PlayerController playerController;
     private void Start()
     {
         FloorGlobal.Instance.pausableScripts.Add(this);
@@ -15,6 +16,7 @@ public class PlayerInteractDetection : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             inRange = true;
+            playerController = collision.GetComponent<PlayerController>();
         }
     }
     private void OnTriggerExit2D(Collider2D collision)

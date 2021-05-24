@@ -52,6 +52,7 @@ public class BPMVisualiser : MonoBehaviour
     void Awake()
     {
         floorGlobal = FloorGlobal.Instance;
+        floorGlobal.bpmVisualiser = this;
         audioSource = Camera.main.GetComponent<AudioSource>();
         baseBPM = BPMDetector.AnalyzeBpm(audioSource.clip);
         timer -= offset;
@@ -62,6 +63,7 @@ public class BPMVisualiser : MonoBehaviour
         }
         currBPM = baseBPM;
         timeUntilNextBeat = 60f / currBPM;
+        baseTimeUntilNextBeat = timeUntilNextBeat;
         //calculates time before new beat tick is spawned
         //beatCreateTime = 1 / (baseBPM / 60);
 

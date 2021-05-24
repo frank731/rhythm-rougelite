@@ -4,17 +4,13 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-[CreateAssetMenu(fileName = "New Ability", menuName = "Ability", order = 1)]
-public class Ability : ScriptableObject
+//[CreateAssetMenu(fileName = "New Ability", menuName = "Ability", order = 1)]
+public class Ability : Item
 {
-    public int abilityID;
     public int cooldown;
-    public string displayName;
-    public string description;
-    public Sprite abilitySprite;
-    public UnityAction action;
     public bool onCooldown = false;
     public GameObject pickup;
+    public FloorGlobal floorGlobal;
 
     private GameObject image;
     private GameObject cooldownUI;
@@ -25,23 +21,24 @@ public class Ability : ScriptableObject
     public void SetUI(GameObject newUI)
     {
         image = newUI;
-        image.GetComponent<Image>().sprite = abilitySprite;
+        image.GetComponent<Image>().sprite = itemSprite;
         cooldownUI = image.transform.GetChild(0).gameObject;
         cooldownText = cooldownUI.GetComponentInChildren<TMPro.TextMeshProUGUI>();
     }
 
     public void StartCooldown()
     {
+        Debug.Log("started");
         currentCooldown = cooldown;
         onCooldown = true;
         cooldownUI.SetActive(true);
         cooldownText.text = currentCooldown.ToString();
-        startBeat = FloorGlobal.Instance.beatNumber;
+        startBeat = floorGlobal.beatNumber;
     }
 
     public bool UpdateCooldown()
     {
-        if (onCooldown && FloorGlobal.Instance.beatNumber != startBeat)
+        if (onCooldown && floorGlobal.beatNumber != startBeat)
         {
             currentCooldown -= 1;
             if (currentCooldown == 0)
@@ -54,5 +51,4 @@ public class Ability : ScriptableObject
         cooldownText.text = currentCooldown.ToString();
         return false;
     }
-    
 }

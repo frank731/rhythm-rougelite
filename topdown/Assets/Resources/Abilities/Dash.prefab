@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7642858894783180558
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8126808243568160681}
+  - component: {fileID: -7007374984361207151}
+  - component: {fileID: -730145557236228818}
+  m_Layer: 0
+  m_Name: Dash
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8126808243568160681
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7642858894783180558}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-7007374984361207151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7642858894783180558}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5a9422b6afba9e4daaa2a4d73150209, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 1
+  type: ability
+  displayName: Dash
+  description: Dash with invunerability
+  itemSprite: {fileID: -5955915777618140665, guid: 0568276cc69af4541894f348930e2610,
+    type: 3}
+  useUpdate: 0
+  usePickup: 0
+  useHit: 0
+  playerController: {fileID: 0}
+  playerMovement: {fileID: 0}
+  itemEffect: {fileID: -730145557236228818}
+  cooldown: 3
+  onCooldown: 0
+  pickup: {fileID: 0}
+  floorGlobal: {fileID: 0}
+--- !u!114 &-730145557236228818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7642858894783180558}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 981facc8c1ec3534d98368f396a9fd24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  item: {fileID: -7007374984361207151}

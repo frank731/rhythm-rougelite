@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class AbilityController : MonoBehaviour
 {
-    public PlayerData playerData;
+    public PlayerController playerController;
     public GameObject[] abilityCooldownUI;
     private List<Ability> usedAbilities = new List<Ability>();
     private FloorGlobal floorGlobal;
@@ -12,7 +13,7 @@ public class AbilityController : MonoBehaviour
     private void Start()
     {
         floorGlobal = FloorGlobal.Instance;
-        FloorGlobal.Instance.onBeat.AddListener(UpdateCooldowns);
+        floorGlobal.onBeat.AddListener(UpdateCooldowns);
     }
 
     private void UpdateCooldowns()
@@ -28,32 +29,29 @@ public class AbilityController : MonoBehaviour
             
         }
     }
-
+    public void OnAbility(int index)
+    {
+        if (playerController.abilities[index] != null)
+        {
+            Debug.Log(playerController.abilities[index].onCooldown);
+            if (!playerController.abilities[index].onCooldown && floorGlobal.IsOnBeat()){
+                
+                playerController.abilities[index].itemEffect.OnUse();
+                playerController.abilities[index].StartCooldown();
+                usedAbilities.Add(playerController.abilities[index]);
+            }
+        }
+    }
     public void OnAbilityOne()
     {
-        if(playerData.abilities[0] != null && !playerData.abilities[0].onCooldown && floorGlobal.IsOnBeat())
-        {
-            playerData.abilities[0].action();
-            playerData.abilities[0].StartCooldown();
-            usedAbilities.Add(playerData.abilities[0]);
-        }
+        OnAbility(0);
     }
     public void OnAbilityTwo()
     {
-        if (playerData.abilities[1] != null && !playerData.abilities[1].onCooldown && floorGlobal.IsOnBeat())
-        {
-            playerData.abilities[1].action();
-            playerData.abilities[1].StartCooldown();
-            usedAbilities.Add(playerData.abilities[1]);
-        }
+        OnAbility(1);
     }
     public void OnAbilityThree()
     {
-        if (playerData.abilities[2] != null && !playerData.abilities[2].onCooldown && floorGlobal.IsOnBeat())
-        {
-            playerData.abilities[2].action();
-            playerData.abilities[2].StartCooldown();
-            usedAbilities.Add(playerData.abilities[2]);
-        }
+        OnAbility(2);
     }
 }

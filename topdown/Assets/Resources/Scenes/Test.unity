@@ -1902,6 +1902,8 @@ MonoBehaviour:
   deathCanvas: {fileID: 173547906}
   winScreen: {fileID: 4374952973035899769, guid: c416faf6f502ed74a8a553ae3cd390d3,
     type: 3}
+  baseCollectable: {fileID: 6318840654001200769, guid: 9231af984188b9942bac83168e1fa33c,
+    type: 3}
   dontDestroys: []
   heartSprites: []
   isPaused: 0
@@ -2275,20 +2277,18 @@ PrefabInstance:
     - target: {fileID: 4325371457806631010, guid: 9a39f4097bc49264fa3b1dfdfeb3bc1f,
         type: 3}
       propertyPath: itemPool.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4325371457806631010, guid: 9a39f4097bc49264fa3b1dfdfeb3bc1f,
         type: 3}
       propertyPath: itemPool.Array.data[0]
-      value: 
-      objectReference: {fileID: 6318840654001200769, guid: 799780adf278d9f45bcfee4e35a3bbe2,
-        type: 3}
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4325371457806631010, guid: 9a39f4097bc49264fa3b1dfdfeb3bc1f,
         type: 3}
       propertyPath: itemPool.Array.data[1]
-      value: 
-      objectReference: {fileID: 6318840654001200769, guid: c1977ed705c11fd44a25c8f5ae3ccc50,
-        type: 3}
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4325371457806631011, guid: 9a39f4097bc49264fa3b1dfdfeb3bc1f,
         type: 3}
       propertyPath: m_SortingLayer
@@ -2610,20 +2610,18 @@ PrefabInstance:
     - target: {fileID: 4325371457806631010, guid: 9a39f4097bc49264fa3b1dfdfeb3bc1f,
         type: 3}
       propertyPath: itemPool.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4325371457806631010, guid: 9a39f4097bc49264fa3b1dfdfeb3bc1f,
         type: 3}
       propertyPath: itemPool.Array.data[0]
-      value: 
-      objectReference: {fileID: 6318840654001200769, guid: 799780adf278d9f45bcfee4e35a3bbe2,
-        type: 3}
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4325371457806631010, guid: 9a39f4097bc49264fa3b1dfdfeb3bc1f,
         type: 3}
       propertyPath: itemPool.Array.data[1]
-      value: 
-      objectReference: {fileID: 6318840654001200769, guid: c1977ed705c11fd44a25c8f5ae3ccc50,
-        type: 3}
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4325371457806631011, guid: 9a39f4097bc49264fa3b1dfdfeb3bc1f,
         type: 3}
       propertyPath: m_SortingLayer
@@ -3656,7 +3654,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f67dbd022a786f4c83c12035fb913f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerMovement: {fileID: 0}
 --- !u!1 &944963622 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6340157681387104568, guid: d32f96879ca8e344fa60099162b77f8a,
@@ -3703,20 +3700,18 @@ PrefabInstance:
     - target: {fileID: 4325371457806631010, guid: 9a39f4097bc49264fa3b1dfdfeb3bc1f,
         type: 3}
       propertyPath: itemPool.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4325371457806631010, guid: 9a39f4097bc49264fa3b1dfdfeb3bc1f,
         type: 3}
       propertyPath: itemPool.Array.data[0]
-      value: 
-      objectReference: {fileID: 6318840654001200769, guid: 799780adf278d9f45bcfee4e35a3bbe2,
-        type: 3}
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4325371457806631010, guid: 9a39f4097bc49264fa3b1dfdfeb3bc1f,
         type: 3}
       propertyPath: itemPool.Array.data[1]
-      value: 
-      objectReference: {fileID: 6318840654001200769, guid: c1977ed705c11fd44a25c8f5ae3ccc50,
-        type: 3}
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4325371457806631011, guid: 9a39f4097bc49264fa3b1dfdfeb3bc1f,
         type: 3}
       propertyPath: m_SortingLayer
@@ -4136,20 +4131,28 @@ PrefabInstance:
     - target: {fileID: 4325371457806631010, guid: 9a39f4097bc49264fa3b1dfdfeb3bc1f,
         type: 3}
       propertyPath: itemPool.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4325371457806631010, guid: 9a39f4097bc49264fa3b1dfdfeb3bc1f,
         type: 3}
       propertyPath: itemPool.Array.data[0]
-      value: 
-      objectReference: {fileID: 6318840654001200769, guid: 6758301a7413d7c49ab261eb77c80a79,
-        type: 3}
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4325371457806631010, guid: 9a39f4097bc49264fa3b1dfdfeb3bc1f,
         type: 3}
       propertyPath: itemPool.Array.data[1]
-      value: 
-      objectReference: {fileID: 6318840654001200769, guid: c1977ed705c11fd44a25c8f5ae3ccc50,
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4325371457806631010, guid: 9a39f4097bc49264fa3b1dfdfeb3bc1f,
         type: 3}
+      propertyPath: itemPool.Array.data[2]
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4325371457806631010, guid: 9a39f4097bc49264fa3b1dfdfeb3bc1f,
+        type: 3}
+      propertyPath: itemPool.Array.data[3]
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4325371457806631011, guid: 9a39f4097bc49264fa3b1dfdfeb3bc1f,
         type: 3}
       propertyPath: m_SortingLayer
@@ -4524,20 +4527,18 @@ PrefabInstance:
     - target: {fileID: 4325371457806631010, guid: 9a39f4097bc49264fa3b1dfdfeb3bc1f,
         type: 3}
       propertyPath: itemPool.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4325371457806631010, guid: 9a39f4097bc49264fa3b1dfdfeb3bc1f,
         type: 3}
       propertyPath: itemPool.Array.data[0]
-      value: 
-      objectReference: {fileID: 6318840654001200769, guid: 799780adf278d9f45bcfee4e35a3bbe2,
-        type: 3}
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4325371457806631010, guid: 9a39f4097bc49264fa3b1dfdfeb3bc1f,
         type: 3}
       propertyPath: itemPool.Array.data[1]
-      value: 
-      objectReference: {fileID: 6318840654001200769, guid: c1977ed705c11fd44a25c8f5ae3ccc50,
-        type: 3}
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4325371457806631011, guid: 9a39f4097bc49264fa3b1dfdfeb3bc1f,
         type: 3}
       propertyPath: m_SortingLayer
@@ -6998,7 +6999,7 @@ MonoBehaviour:
   offset: 0.1
   songPosition: 0
   currBPM: 0
-  beatHangTime: 0
+  beatHangTime: 0.33
   adjustmentTime: 0
   pastBeatTime: 0
   nextBeatTime: 0
