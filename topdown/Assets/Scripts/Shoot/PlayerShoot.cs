@@ -61,9 +61,11 @@ public class PlayerShoot : MonoBehaviour
         //Shoot();
     }
 
-    protected virtual void Shoot()
+    protected virtual void Shoot(float multiplier)
     {
-        objectPooler.GetPooledObject(bulletIndex, bulletSpawn);
+        multiplier += 0.5f;
+        GameObject bullet = objectPooler.GetPooledObject(bulletIndex, bulletSpawn);
+        bullet.GetComponent<Bullet>().bulletDamage *= multiplier;
         //Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
         playerController.canShoot = false;
         currentAmmo--;
@@ -82,15 +84,16 @@ public class PlayerShoot : MonoBehaviour
     {
         //Debug.Log(floorGlobal.IsOnBeat());
         //create bullet if mouse clicked and on beat 
-        if (playerController.canShoot  && !outOfAmmo && !reloading && floorGlobal.IsOnBeat())
+        float offbeat = floorGlobal.IsOnBeat();
+        if (playerController.canShoot  && !outOfAmmo && !reloading && offbeat != 0)
         {
-            Shoot();
+            Shoot(offbeat);
         }
     }
 
     public void OnReload()
     {
-        if (currentAmmo < maxAmmo && !reloading && floorGlobal.IsOnBeat())
+        if (currentAmmo < maxAmmo && !reloading && floorGlobal.IsOnBeat() != 0)
         {
             //StartCoroutine(ReloadDelay());
             currentReloadTime = reloadTime;

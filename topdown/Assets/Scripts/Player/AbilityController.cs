@@ -34,7 +34,7 @@ public class AbilityController : MonoBehaviour
         if (playerController.abilities[index] != null)
         {
             Debug.Log(playerController.abilities[index].onCooldown);
-            if (!playerController.abilities[index].onCooldown && floorGlobal.IsOnBeat()){
+            if (!playerController.abilities[index].onCooldown && floorGlobal.IsOnBeat() != 0){
                 
                 playerController.abilities[index].itemEffect.OnUse();
                 playerController.abilities[index].StartCooldown();

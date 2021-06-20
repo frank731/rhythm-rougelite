@@ -6,7 +6,7 @@ public class ShotgunShoot : PlayerShoot
     public float minSpread;
     public float maxSpread;
 
-    protected override void Shoot()
+    protected override void Shoot(float multiplier)
     {
         playerController.canShoot = false;
         currentAmmo--;
@@ -19,7 +19,8 @@ public class ShotgunShoot : PlayerShoot
         }
         for (int i = 0; i <= bulletCount; i++)
         {
-            GameObject bullet = Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
+            GameObject bullet = objectPooler.GetPooledObject(bulletIndex, bulletSpawn);
+            bullet.GetComponent<Bullet>().bulletDamage *= multiplier;
             bullet.transform.Rotate(0, 0, Random.Range(minSpread, maxSpread));
         }
 

@@ -1,11 +1,10 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class BPMVisualiser : MonoBehaviour
+public class BPMVisualiser : Singleton<BPMVisualiser>
 {
     public float offset = 0.02f;
-    public float songPosition;
-    private float baseBPM;
+    public float baseBPM;
     public float currBPM;
     private float minBPM;
     private float maxBPM;
@@ -13,19 +12,22 @@ public class BPMVisualiser : MonoBehaviour
     public float adjustmentTime;
     public float pastBeatTime = 0;
     public float nextBeatTime = 0;
-    public float currentBeatTime = 0;
-    private float timeUntilNextBeat;
-    private float baseTimeUntilNextBeat;
+    public float dspSongTime;
+    public float inputOffset;
+    public float songPos;
+    protected float timeUntilNextBeat;
+    //private float baseTimeUntilNextBeat;
     //private float startHangTime;
     private bool isPlaying = false;
     //private bool startedHang = false;
     public AudioSource audioSource;
     public GameObject beatIndicator;
-    private BeatIndicatorMovement beatIndicatorMovement;
+    protected BeatIndicatorMovement beatIndicatorMovement;
+    protected ObjectPooler objectPooler;
+    protected int beatIndicatorIndex;
     public Transform beatIndicatorHolder;
     public Transform beatSpawnPointLeft;
     public Transform beatSpawnPointRight;
-    private float lastTime = 0f, deltaTime = 0f, timer = 0f;
     public PlayerController playerController;
     public AudioClip metronome;
 
@@ -42,20 +44,26 @@ public class BPMVisualiser : MonoBehaviour
         {
             audioSource.pitch -= 0.05f;
         }
+        currBPM = baseBPM * audioSource.pitch;
         audioSource.outputAudioMixerGroup.audioMixer.SetFloat("PitchShift", 1f / audioSource.pitch);
-        timeUntilNextBeat = baseTimeUntilNextBeat * audioSource.pitch;
-        beatIndicatorMovement.beatCreateTime = timeUntilNextBeat;
+        //timeUntilNextBeat = baseTimeUntilNextBeat * audioSource.pitch;
+        //beatIndicatorMovement.beatTime = timeUntilNextBeat;
         //timeUntilNextBeat = 60f / currBPM;
         //startHangTime = timeUntilNextBeat - beatHangTime;
     }
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         floorGlobal = FloorGlobal.Instance;
         floorGlobal.bpmVisualiser = this;
         audioSource = Camera.main.GetComponent<AudioSource>();
         baseBPM = BPMDetector.AnalyzeBpm(audioSource.clip);
-        timer -= offset;
+        dspSongTime = (float)AudioSettings.dspTime;
+        audioSource.Play();
+
+        objectPooler = ObjectPooler.SharedInstance;
+        Debug.Log(objectPooler.name);
         //prevents superfast creation
         while (baseBPM > 180)
         {
@@ -63,32 +71,35 @@ public class BPMVisualiser : MonoBehaviour
         }
         currBPM = baseBPM;
         timeUntilNextBeat = 60f / currBPM;
-        baseTimeUntilNextBeat = timeUntilNextBeat;
+        //baseTimeUntilNextBeat = timeUntilNextBeat;
         //calculates time before new beat tick is spawned
         //beatCreateTime = 1 / (baseBPM / 60);
 
-        minBPM = Mathf.Max(10, baseBPM - 30);
-        maxBPM = Mathf.Min(240, baseBPM + 30);
+        minBPM = Mathf.Max(10, baseBPM - 60);
+        maxBPM = Mathf.Min(240, baseBPM + 60);
 
+        beatIndicator.transform.localScale = new Vector3(1, 1, 1);
         beatIndicatorMovement = beatIndicator.GetComponent<BeatIndicatorMovement>();
-        beatIndicatorMovement.beatCreateTime = timeUntilNextBeat;
+        beatIndicatorMovement.beatTime = timeUntilNextBeat;
         beatIndicatorMovement.beatMarker = transform;
         beatIndicatorMovement.audioSource = audioSource;
-        //startHangTime = timeUntilNextBeat - beatHangTime;
 
+        beatIndicatorIndex = objectPooler.AddObject(beatIndicator, 4);
+        //startHangTime = timeUntilNextBeat - beatHangTime;
+        inputOffset = ES3.Load("inputOffset", 0f);
         //StartCoroutine(BeatHangDelay());
         floorGlobal.pausableScripts.Add(this);
-        floorGlobal.bpmVisualiser = this;
     }
 
 
-    private void FixedUpdate()
+    protected virtual void Update()
     {
+        songPos = (float)(AudioSettings.dspTime - dspSongTime) * audioSource.pitch - offset;
         //changes tempo of song and shifts pitch using output mixer group
         if (Input.GetKeyDown("q"))
         {
-// currBPM = Mathf.Clamp((currBPM - (audioSource.pitch * 7)), minBPM, maxBPM);
-            if (currBPM > minBPM)
+            // currBPM = Mathf.Clamp((currBPM - (audioSource.pitch * 7)), minBPM, maxBPM);
+            if (currBPM > minBPM) 
             {
                 OnTempoChange(false);
             }
@@ -101,36 +112,23 @@ public class BPMVisualiser : MonoBehaviour
                 OnTempoChange(true);
             }
         }
-        /*
-        if (timer >= startHangTime && !startedHang)
-        {
-            floorGlobal.isOnBeat = true;
-            floorGlobal.startBeat.Invoke();
-            startedHang = true;
-            //Invoke("test", beatHangTime * 3);
-        }
-        */
-        if (audioSource.time >= nextBeatTime)//timer >= timeUntilNextBeat)
+        if (songPos >= nextBeatTime)
         {
             //Create the note
             floorGlobal.onBeat.Invoke();
             floorGlobal.beatNumber++;
-            GameObject indicatorLeft = Instantiate(beatIndicator, beatSpawnPointLeft.position, beatSpawnPointLeft.rotation);
+            GameObject indicatorLeft = objectPooler.GetPooledObject(beatIndicatorIndex, beatSpawnPointLeft);
             indicatorLeft.transform.SetParent(beatIndicatorHolder);
-            GameObject indicatorRight = Instantiate(beatIndicator, beatSpawnPointRight.position, beatSpawnPointRight.rotation);
+            GameObject indicatorRight = objectPooler.GetPooledObject(beatIndicatorIndex, beatSpawnPointRight);
             indicatorRight.transform.SetParent(beatIndicatorHolder);
-            timer -= timeUntilNextBeat;
             //timer = 0;
             pastBeatTime = nextBeatTime;
             nextBeatTime += timeUntilNextBeat;// - timer;
             audioSource.PlayOneShot(metronome, 0.5f);
+            //Debug.Log(songPos);
             //Debug.Log(pastBeatTime);
             //Debug.Log(nextBeatTime);
             //Debug.Log(audioSource.time);
-        }
-        if(audioSource.time >= nextBeatTime - beatHangTime)
-        {
-            currentBeatTime = nextBeatTime;
         }
         /*
         if (startedHang && hangTimer >= timeUntilNextBeat + beatHangTime * 3)
@@ -140,7 +138,6 @@ public class BPMVisualiser : MonoBehaviour
             startedHang = false;
         }
         */
-        lastTime = audioSource.time;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

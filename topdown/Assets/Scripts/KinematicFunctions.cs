@@ -14,4 +14,13 @@ public class KinematicFunctions
             yield return null;
         }
     }
+    public static IEnumerator MoveObjectAudioSynced(Transform obj, Vector3 Origin, Vector3 Destination, float totalMovementTime, BPMVisualiser bpmVisualiser)
+    {
+        float startTime = bpmVisualiser.songPos;
+        while (Vector3.Distance(obj.localPosition, Destination) > 0)
+        {
+            obj.localPosition = Vector3.Lerp(Origin, Destination, (bpmVisualiser.songPos - startTime) / totalMovementTime);
+            yield return null;
+        }
+    }
 }

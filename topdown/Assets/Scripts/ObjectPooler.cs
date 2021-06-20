@@ -30,7 +30,6 @@ public class ObjectPooler : MonoBehaviour
 
 	void Awake()
 	{
-
 		SharedInstance = this;
 
 		pooledObjectsList = new List<List<GameObject>>();
@@ -57,9 +56,9 @@ public class ObjectPooler : MonoBehaviour
 			{
 				positions[index] = i % curSize;
 				GameObject pooledObject = pooledObjectsList[index][i % curSize];
-				pooledObject.SetActive(true);
 				pooledObject.transform.position = newTransform.position;
 				pooledObject.transform.rotation = newTransform.rotation;
+				pooledObject.SetActive(true);
 				return pooledObject;
 			}
 		}
@@ -67,12 +66,11 @@ public class ObjectPooler : MonoBehaviour
 		if (itemsToPool[index].shouldExpand)
 		{
 
-			GameObject obj = (GameObject)Instantiate(itemsToPool[index].objectToPool);
+			GameObject obj = (GameObject)Instantiate(itemsToPool[index].objectToPool, newTransform.position, newTransform.rotation);
 			//obj.SetActive(false);
-			obj.transform.parent = this.transform;
+			obj.transform.parent = transform;
 			pooledObjectsList[index].Add(obj);
-			obj.transform.position = newTransform.position;
-			obj.transform.rotation = newTransform.rotation;
+			
 			return obj;
 
 		}
@@ -104,7 +102,7 @@ public class ObjectPooler : MonoBehaviour
 		{
 			GameObject obj = (GameObject)Instantiate(item.objectToPool);
 			obj.SetActive(false);
-			obj.transform.parent = this.transform;
+			obj.transform.SetParent(transform, false);// = this.transform;
 			pooledObjects.Add(obj);
 		}
 		pooledObjectsList.Add(pooledObjects);

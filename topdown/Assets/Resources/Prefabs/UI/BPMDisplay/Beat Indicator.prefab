@@ -91,10 +91,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   image: {fileID: 3656519254720474396}
-  beatCreateTime: 0
+  beatTime: 0.41379312
   beatMarker: {fileID: 0}
   audioSource: {fileID: 0}
-  test: {fileID: 8300000, guid: 368a0cf81bb1095489a5d08baee8b78d, type: 3}
 --- !u!61 &1237860919106802625
 BoxCollider2D:
   m_ObjectHideFlags: 0

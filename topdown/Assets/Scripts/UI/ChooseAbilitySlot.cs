@@ -13,7 +13,7 @@ public class ChooseAbilitySlot : MonoBehaviour
         Time.timeScale = 1;
         if (playerController.abilities[slot] != null)
         {
-            Instantiate(playerController.abilities[slot].pickup, playerController.transform.position, playerController.transform.rotation);
+            FloorGlobal.Instance.CreateItem(playerController.abilities[slot].itemId, playerController.transform.position, playerController.transform.rotation);
         }
         playerController.AddAbility(slot, newAbility);
         slots[slot].image.sprite = newAbility.itemSprite;

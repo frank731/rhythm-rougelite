@@ -36,6 +36,7 @@ public class FloorGlobal : Singleton<FloorGlobal>
     public List<GameObject> dontDestroys = new List<GameObject>();
     public Sprite[] heartSprites;
     public bool isPaused = false;
+    public float inputOffset; 
     //public bool isOnBeat = false;
     public UnityEvent onBeat = new UnityEvent();
     //public UnityEvent startBeat = new UnityEvent();
@@ -66,6 +67,8 @@ public class FloorGlobal : Singleton<FloorGlobal>
         levelChanged.AddListener(OnLevelChanged);
         SceneManager.sceneLoaded += OnSceneLoaded;
         playerController = Instantiate(characters[ES3.Load<int>("charChoice", 0)], playerSpawnPoint.position, playerSpawnPoint.rotation).GetComponent<PlayerController>();
+
+        inputOffset = ES3.Load<float>("inputOffset", 0);
     }
 
     private void Start()
@@ -237,17 +240,26 @@ public class FloorGlobal : Singleton<FloorGlobal>
 
     }
 
-    public bool IsOnBeat()
+    public float IsOnBeat()
     {
         //Debug.Log(bpmVisualiser.pastBeatTime);
         //Debug.Log(bpmVisualiser.nextBeatTime);
-        //Debug.Log(bpmVisualiser.audioSource.time);
+        //Debug.Log(bpmVisualiser.songPos.ToString() + " " + (Mathf.Abs(bpmVisualiser.nextBeatTime - bpmVisualiser.songPos) < bpmVisualiser.beatHangTime || Mathf.Abs(bpmVisualiser.pastBeatTime - bpmVisualiser.songPos) < bpmVisualiser.beatHangTime) + " " + bpmVisualiser.pastBeatTime.ToString() + " " + bpmVisualiser.nextBeatTime);
         //Debug.Log(Mathf.Abs(bpmVisualiser.nextBeatTime - bpmVisualiser.audioSource.time));
-        if (Mathf.Abs(bpmVisualiser.currentBeatTime - (bpmVisualiser.audioSource.time - bpmVisualiser.offset)) < bpmVisualiser.beatHangTime)
+        float first = Mathf.Abs(bpmVisualiser.nextBeatTime - (bpmVisualiser.songPos - bpmVisualiser.inputOffset)), second = Mathf.Abs(bpmVisualiser.pastBeatTime - (bpmVisualiser.songPos - bpmVisualiser.inputOffset));
+        if (first < bpmVisualiser.beatHangTime)
         {
-            return true;
+            return 1 - (first / bpmVisualiser.beatHangTime);
         }
-        return false;
+        else if(second < bpmVisualiser.beatHangTime)
+        {
+            return 1 - (second / bpmVisualiser.beatHangTime);
+        }
+        else
+        {
+            return 0;
+        }
+
     }
 
     public void Win()

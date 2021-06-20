@@ -4,21 +4,25 @@ using UnityEngine.UI;
 public class BeatIndicatorMovement : MonoBehaviour { 
 
     public Image image;
-    public float beatCreateTime;
+    public float beatTime;
     public Transform beatMarker;
     public AudioSource audioSource;
-    public AudioClip test;
     private void Start()
     {
-        StartCoroutine(KinematicFunctions.MoveObject(transform, transform.localPosition, beatMarker.localPosition, beatCreateTime));
+        StartCoroutine(KinematicFunctions.MoveObjectAudioSynced(transform, transform.localPosition, beatMarker.localPosition, beatTime, BPMVisualiser.Instance));
     }
+    private void OnEnable()
+    {
+        StartCoroutine(KinematicFunctions.MoveObjectAudioSynced(transform, transform.localPosition, beatMarker.localPosition, beatTime, BPMVisualiser.Instance));
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
 
         if (collision.CompareTag("BPMIndicator"))
         {
-            //Debug.Log(audioSource.time);
-            Destroy(gameObject);
+            //transform.SetParent(ObjectPooler.SharedInstance.transform);
+            gameObject.SetActive(false);
         }
     }
 }

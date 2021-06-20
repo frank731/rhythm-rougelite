@@ -12,6 +12,7 @@ public class CharacterDescPanel : MonoBehaviour
     public CharacterChoice characterChoice;
     public float hidePos = -281, visPos = 0;
     private RectTransform rt;
+    public MenuButtonController menuButtonController;
     private bool hidden = true;
     private void Start()
     {
@@ -41,8 +42,14 @@ public class CharacterDescPanel : MonoBehaviour
     }
     public void OnCancel()
     {
-        Debug.Log(transform.name);
-        Hide();
+        if (!hidden)
+        {
+            Hide();
+        }
+        else
+        {
+            menuButtonController.OpenTitle();
+        }
     }
     public void Play()
     {

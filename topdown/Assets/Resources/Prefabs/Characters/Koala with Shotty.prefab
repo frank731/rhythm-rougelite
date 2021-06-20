@@ -357,7 +357,7 @@ MonoBehaviour:
   heartContainers: 2
   luck: 2
   hearts: []
-  currentGun: {fileID: 0}
+  currentGun: {fileID: 7710614418063845961}
   loadPlayerData:
     m_PersistentCalls:
       m_Calls: []

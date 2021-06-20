@@ -115,7 +115,7 @@ public class PlayerController : MonoBehaviour
         if (item.useHit) onHit.RemoveListener(item.itemEffect.OnHit);
     }
 
-    public void AddItem(int itemId, string itemType, bool initializing = false)
+    public void AddItem(int itemId, string itemType, bool initializing = false, GameObject abilityPickup = null)
     {
         switch (itemType)
         {
