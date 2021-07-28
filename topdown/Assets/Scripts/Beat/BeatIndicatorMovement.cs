@@ -7,15 +7,17 @@ public class BeatIndicatorMovement : MonoBehaviour {
     public float beatTime;
     public Transform beatMarker;
     public AudioSource audioSource;
-    private void Start()
+
+    public void StartMove()
     {
-        StartCoroutine(KinematicFunctions.MoveObjectAudioSynced(transform, transform.localPosition, beatMarker.localPosition, beatTime, BPMVisualiser.Instance));
+        StartCoroutine(KinematicFunctions.MoveObjectAudioSynced(transform, transform.localPosition, beatMarker.localPosition, beatTime, BeatVisualiser.Instance));
     }
+    /*
     private void OnEnable()
     {
-        StartCoroutine(KinematicFunctions.MoveObjectAudioSynced(transform, transform.localPosition, beatMarker.localPosition, beatTime, BPMVisualiser.Instance));
+        StartCoroutine(KinematicFunctions.MoveObjectAudioSynced(transform, transform.localPosition, beatMarker.localPosition, beatTime, BeatVisualiser.Instance));
     }
-
+    */
     private void OnTriggerEnter2D(Collider2D collision)
     {
 

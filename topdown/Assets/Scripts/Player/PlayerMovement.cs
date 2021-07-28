@@ -20,7 +20,6 @@ public class PlayerMovement : MonoBehaviour
     {
         speed = baseSpeed;
         playerController = GetComponent<PlayerController>();
-        playerController.resetStats.AddListener(ResetStats);
         FloorGlobal.Instance.levelChanged.AddListener(SaveSpeed);
         playerController.loadPlayerData.AddListener(LoadSpeed);
     }

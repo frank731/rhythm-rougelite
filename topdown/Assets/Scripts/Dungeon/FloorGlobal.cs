@@ -16,39 +16,49 @@ public class FloorGlobal : Singleton<FloorGlobal>
     public GameObject[] doors;
     public GameObject[][] layouts;
     public GameObject[] pickups;
-    public GameObject[] characters;
+
+    public List<GameObject> characters;
+    public CharacterChoicesObject characterChoices;
+
     public int maxRoomCount = 10;
     public int roomCount = 0;
     public int roomArrSize;
     public int floorID;
+
     public long beatNumber = 0;
+    public float inputOffset;
+    public UnityEvent onBeat = new UnityEvent();
+    public BeatVisualiser bpmVisualiser;
+    public OnBeatRange onBeatRange;
+
     public List<GameObject> rooms = new List<GameObject>();
     public IDictionary<int, List<GameObject>> roomDistances = new Dictionary<int, List<GameObject>>() { };
     public GameObject emptyLayout;
     public GameObject minimapCanvas;
     public GameObject[] minimapRoomPrefabs;
+    public RectMask2D minimapMask;
+
     public GameObject bossIcon;
     public GameObject itemIcon;
+
     public GameObject pauseCanvas;
     public GameObject deathCanvas;
     public GameObject winScreen;
+    public List<GameObject> openUIScreens = new List<GameObject>();
+
+
     public GameObject baseCollectable;
     public List<GameObject> dontDestroys = new List<GameObject>();
     public Sprite[] heartSprites;
+
     public bool isPaused = false;
-    public float inputOffset; 
-    //public bool isOnBeat = false;
-    public UnityEvent onBeat = new UnityEvent();
-    //public UnityEvent startBeat = new UnityEvent();
     public UnityEvent levelChanged = new UnityEvent();
     public List<MonoBehaviour> pausableScripts;
-    public RectMask2D minimapMask;
+    
     public CameraFollowPlayer cameraFollowPlayer;
     public PlayerController playerController;
     public Transform playerSpawnPoint;
-    public List<GameObject> openUIScreens = new List<GameObject>();
-    public BPMVisualiser bpmVisualiser;
-    public OnBeatRange onBeatRange;
+    
     public PlayTimer playTimer;
     public int kills;
 
@@ -66,7 +76,9 @@ public class FloorGlobal : Singleton<FloorGlobal>
 
         levelChanged.AddListener(OnLevelChanged);
         SceneManager.sceneLoaded += OnSceneLoaded;
-        playerController = Instantiate(characters[ES3.Load<int>("charChoice", 0)], playerSpawnPoint.position, playerSpawnPoint.rotation).GetComponent<PlayerController>();
+
+        characters = characterChoices.characters;
+        playerController = Instantiate(characters[ES3.Load("charChoice", 0)], playerSpawnPoint.position, playerSpawnPoint.rotation).GetComponent<PlayerController>();
 
         inputOffset = ES3.Load<float>("inputOffset", 0);
     }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class ConducterCalibration : BPMVisualiser
+public class ConducterCalibration : BeatVisualiser
 {
     public float calibrationOffset;
     private float diffSum = 0;

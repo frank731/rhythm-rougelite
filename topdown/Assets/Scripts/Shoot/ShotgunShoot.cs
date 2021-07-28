@@ -8,10 +8,7 @@ public class ShotgunShoot : PlayerShoot
 
     protected override void Shoot(float multiplier)
     {
-        playerController.canShoot = false;
-        currentAmmo--;
-
-        audioSource.PlayOneShot(shootSFX, 0.3f);
+        multiplier += 0.5f;
 
         if (currentAmmo <= 0)
         {
@@ -19,14 +16,10 @@ public class ShotgunShoot : PlayerShoot
         }
         for (int i = 0; i <= bulletCount; i++)
         {
-            GameObject bullet = objectPooler.GetPooledObject(bulletIndex, bulletSpawn);
-            bullet.GetComponent<Bullet>().bulletDamage *= multiplier;
+            GameObject bullet = CreateBullet(multiplier);
             bullet.transform.Rotate(0, 0, Random.Range(minSpread, maxSpread));
         }
 
-        animator.SetTrigger("Shoot");
-        SendMessageUpwards("OnBeatAction");
-        playerController.gunAmmoText.text = currentAmmo.ToString() + "/" + maxAmmo.ToString();
-        //akAnimator.SetBool("hasShot", false);
+        AfterShoot();
     }
 }

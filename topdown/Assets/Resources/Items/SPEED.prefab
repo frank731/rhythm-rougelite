@@ -61,7 +61,7 @@ MonoBehaviour:
   type: item
   displayName: SPEED
   description: fast fast fast
-  itemSprite: {fileID: 1438219111659547533, guid: 0568276cc69af4541894f348930e2610,
+  itemSprite: {fileID: 6482953682450307093, guid: 96daa0f9bd6925e458b1c14ff76f6f78,
     type: 3}
   useUpdate: 0
   usePickup: 1

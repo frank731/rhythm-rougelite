@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-//TODO implement use beat system so player has to choose what to do on a specific beat
+using TMPro;
+
 public class PlayerController : MonoBehaviour
 {
     public int currentGunIndex = 0;
@@ -17,7 +18,7 @@ public class PlayerController : MonoBehaviour
     public float iFrames = 0.1f;
     public float heartContainers = 3;
     public float luck = 0;
-    public List<GameObject> hearts = new List<GameObject>();
+    public List<MutableKeyValuePair<GameObject, int>> hearts = new List<MutableKeyValuePair<GameObject, int>>();
     protected int heartEmptyIndex = 0;
     public GameObject currentGun;
     public UnityEvent loadPlayerData = new UnityEvent();
@@ -32,6 +33,7 @@ public class PlayerController : MonoBehaviour
     public RoomController currentRoom;
     public bool canShoot = false;
     public GameObject inventory;
+    public Animator itemPopupAnimator;
     public ChooseAbilitySlot chooseAbilitySlot;
     public Transform itemInventoryHolder;
     public Transform gunInventoryHolder;
@@ -39,9 +41,14 @@ public class PlayerController : MonoBehaviour
     public Transform heartUIGrid;
     public bool viewingMap = false;
     public GameObject heartTemplate;
-    public TMPro.TextMeshProUGUI gunAmmoText;
+
+    public TextMeshProUGUI gunAmmoText;
     public Image gunUIImage;
-    public UnityEvent resetStats = new UnityEvent();
+
+    public TextMeshProUGUI itemPopupName;
+    public TextMeshProUGUI itemPopupDesc;
+    public Image itemPopupSprite;
+    
     public UnityEvent playerKilled = new UnityEvent();
     public AudioClip playerHurtSFX;
     public Texture2D cursorCrosshair;
@@ -132,6 +139,7 @@ public class PlayerController : MonoBehaviour
                 gunSprite.GetComponent<Image>().sprite = gun.itemSprite;
                 gunSprite.GetComponent<ShowDescription>().description = gun.description;
                 gunSprite.transform.SetParent(gunInventoryHolder);
+                OpenItemPickupPopup(gun);
                 guns.Add(newGun);
                 SwitchToNewWeapon(newGun);
                 break;
@@ -154,6 +162,7 @@ public class PlayerController : MonoBehaviour
                 itemSprite.transform.SetParent(itemInventoryHolder);
                 if(!invIcons.ContainsKey(newItem.itemId)) invIcons[newItem.itemId] = new List<GameObject>();
                 invIcons[newItem.itemId].Add(itemSprite);
+                OpenItemPickupPopup(newItem);
                 items.Add(newItem);
                 break;
             case "ability":
@@ -165,6 +174,7 @@ public class PlayerController : MonoBehaviour
                 chooseAbilitySlot.SetNewAbility(newAbility);
                 chooseAbilitySlot.gameObject.SetActive(true);
                 Time.timeScale = 0;
+                OpenItemPickupPopup(newAbility);
                 break;
         }
 
@@ -204,6 +214,14 @@ public class PlayerController : MonoBehaviour
         abilities[slot].SetUI(abilitiesUI[slot]);
     }
 
+    public void OpenItemPickupPopup(Item item)
+    {
+        itemPopupName.text = item.displayName;
+        itemPopupDesc.text = item.description;
+        itemPopupSprite.sprite = item.itemSprite;
+        itemPopupAnimator.SetTrigger("OpenPopup");
+    }
+
     public void OnSwitchWeapon()
     {
         //switches to next gun in rotation
@@ -235,7 +253,6 @@ public class PlayerController : MonoBehaviour
     {
         floorGlobal.Pause(floorGlobal.pauseCanvas);
     }
-
     public void OnViewInventory()
     {
         floorGlobal.Pause(inventory);
@@ -255,14 +272,15 @@ public class PlayerController : MonoBehaviour
         {
             GameObject newHeartContainer = Instantiate(heartTemplate, heartTemplate.transform.position, heartTemplate.transform.rotation);
             newHeartContainer.transform.SetParent(heartUIGrid);
-            hearts.Add(newHeartContainer);
+            hearts.Add(new MutableKeyValuePair<GameObject, int>(newHeartContainer, 0));
             if (!initializing)
             {
                 heartContainers++;
             }
         }
+
         //fill heart containers
-        if (hearts[heartEmptyIndex].GetComponent<Image>().sprite.name == "hearts_half") //if the current "empty" heart is a half heart add +1 to health so it will call the next two loops properly
+        if (hearts[heartEmptyIndex].Value == 1) //if the current "empty" heart is a half heart add +1 to health so it will call the next two loops properly
         {
             healthAdded++;
             if (!initializing)
@@ -274,7 +292,8 @@ public class PlayerController : MonoBehaviour
         for (int i = 0; i < (healthAdded / 2) - (healthAdded % 2); i++) //fill full hearts
         {
             //changes last empty heart to full
-            hearts[heartEmptyIndex].GetComponent<Image>().sprite = floorGlobal.heartSprites[1];
+            hearts[heartEmptyIndex].Key.GetComponent<Image>().sprite = floorGlobal.heartSprites[0];
+            hearts[heartEmptyIndex].Value = 2;
             if (!initializing)
             {
                 health += 2;
@@ -289,9 +308,10 @@ public class PlayerController : MonoBehaviour
         for (int i = 0; i < (healthAdded % 2); i++)
         {
             //changes empty hearts to half hearts
-            if (heartEmptyIndex != hearts.Count && hearts[heartEmptyIndex].GetComponent<Image>().sprite.name == "hearts_empty")
+            if (heartEmptyIndex != hearts.Count && hearts[heartEmptyIndex].Value == 0)
             {
-                hearts[heartEmptyIndex].GetComponent<Image>().sprite = floorGlobal.heartSprites[2];
+                hearts[heartEmptyIndex].Key.GetComponent<Image>().sprite = floorGlobal.heartSprites[1];
+                hearts[heartEmptyIndex].Value = 1;
                 if (!initializing)
                 {
                     health++;
@@ -334,14 +354,15 @@ public class PlayerController : MonoBehaviour
             playerAudioSource.PlayOneShot(playerHurtSFX, 0.3f);
 
             //remove health from ui
-            if (hearts[heartEmptyIndex].GetComponent<Image>().sprite.name == "hearts_half") //if the current "empty" heart is a half heart add +1 to health so it will call the next two loops properly
+            if (hearts[heartEmptyIndex].Value == 1) //if the current "empty" heart is a half heart add +1 to health so it will call the next two loops properly
             {
                 damage++;
             }
             for (int i = 0; i < (damage / 2) - (damage % 2); i++) //destroy full hearts
             {
                 //changes last full heart to empty
-                hearts[heartEmptyIndex].GetComponent<Image>().sprite = floorGlobal.heartSprites[0];
+                hearts[heartEmptyIndex].Key.GetComponent<Image>().sprite = floorGlobal.heartSprites[2];
+                hearts[heartEmptyIndex].Value = 0;
                 heartEmptyIndex--;
                 if (heartEmptyIndex == -1)
                 {
@@ -352,9 +373,10 @@ public class PlayerController : MonoBehaviour
             for (int i = 0; i < (damage % 2); i++)
             {
                 //changes full hearts to half hearts
-                if (heartEmptyIndex > -1 && hearts[heartEmptyIndex].GetComponent<Image>().sprite.name == "hearts_full")
+                if (heartEmptyIndex > -1 && hearts[heartEmptyIndex].Value == 2)
                 {
-                    hearts[heartEmptyIndex].GetComponent<Image>().sprite = floorGlobal.heartSprites[2];
+                    hearts[heartEmptyIndex].Key.GetComponent<Image>().sprite = floorGlobal.heartSprites[1];
+                    hearts[heartEmptyIndex].Value = 1;
                 }
             }
             
@@ -407,8 +429,8 @@ public class PlayerController : MonoBehaviour
 
     private void OnDestroy()
     {
-        foreach(GameObject heart in hearts){
-            Destroy(heart);
+        foreach(var heart in hearts){
+            Destroy(heart.Key);
         }
         hearts.Clear();
     }

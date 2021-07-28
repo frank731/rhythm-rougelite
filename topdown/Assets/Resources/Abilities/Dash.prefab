@@ -48,7 +48,7 @@ MonoBehaviour:
   type: ability
   displayName: Dash
   description: Dash with invunerability
-  itemSprite: {fileID: -5955915777618140665, guid: 0568276cc69af4541894f348930e2610,
+  itemSprite: {fileID: -5955915777618140665, guid: 96daa0f9bd6925e458b1c14ff76f6f78,
     type: 3}
   useUpdate: 0
   usePickup: 0

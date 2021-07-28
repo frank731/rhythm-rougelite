@@ -14,7 +14,7 @@ public class KinematicFunctions
             yield return null;
         }
     }
-    public static IEnumerator MoveObjectAudioSynced(Transform obj, Vector3 Origin, Vector3 Destination, float totalMovementTime, BPMVisualiser bpmVisualiser)
+    public static IEnumerator MoveObjectAudioSynced(Transform obj, Vector3 Origin, Vector3 Destination, float totalMovementTime, BeatVisualiser bpmVisualiser)
     {
         float startTime = bpmVisualiser.songPos;
         while (Vector3.Distance(obj.localPosition, Destination) > 0)

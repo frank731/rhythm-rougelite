@@ -61,12 +61,14 @@ public class PlayerShoot : MonoBehaviour
         //Shoot();
     }
 
-    protected virtual void Shoot(float multiplier)
+    protected GameObject CreateBullet(float multiplier)
     {
-        multiplier += 0.5f;
         GameObject bullet = objectPooler.GetPooledObject(bulletIndex, bulletSpawn);
-        bullet.GetComponent<Bullet>().bulletDamage *= multiplier;
-        //Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
+        bullet.GetComponent<Bullet>().bulletDamage = bullet.GetComponent<Bullet>().baseDamage * multiplier;
+        return bullet;
+    }
+    protected void AfterShoot()
+    {
         playerController.canShoot = false;
         currentAmmo--;
         audioSource.PlayOneShot(shootSFX, 0.6f);
@@ -75,9 +77,15 @@ public class PlayerShoot : MonoBehaviour
             outOfAmmo = true;
         }
         animator.SetTrigger("Shoot");
-        SendMessageUpwards("OnBeatAction");
-
         playerController.gunAmmoText.text = currentAmmo.ToString() + "/" + maxAmmo.ToString();
+        SendMessageUpwards("OnBeatAction");
+    }
+
+    protected virtual void Shoot(float multiplier)
+    {
+        multiplier += 0.5f;
+        CreateBullet(multiplier);
+        AfterShoot();
     }
 
     public void OnFire()

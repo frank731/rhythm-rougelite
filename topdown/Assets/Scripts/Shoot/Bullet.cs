@@ -6,13 +6,15 @@ public class Bullet : MonoBehaviour
     public GameObject bulletDestroyedEffect;
     public float bulletSpeed = 10;
     public float bulletDamage = 1;
+    public float baseDamage;
     public int bulletDestroyedEffectIndex;
 
     private ObjectPooler objectPooler;
 
     private void Start()
     {
-        objectPooler = ObjectPooler.SharedInstance;    
+        baseDamage = bulletDamage;
+        objectPooler = ObjectPooler.SharedInstance;
     }
 
     void FixedUpdate()

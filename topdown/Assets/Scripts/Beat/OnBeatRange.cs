@@ -15,27 +15,24 @@ public class OnBeatRange : MonoBehaviour
     public void BeatAction()
     {
 
-        beatMarkers.RemoveAll(item => item == null);
-        foreach (GameObject indicator in beatMarkers)
-        {
-            indicator.SetActive(false);
+        //beatMarkers.RemoveAll(item => item == null);
+        //foreach (GameObject indicator in beatMarkers)
+        //{
+            //indicator.SetActive(false);
             //Destroy(indicator.GetComponent<Image>());
-        }
+        //}
         
     }
-    /*
+    
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        beatMarkers.Add(collision.gameObject);
+        //if(collision.CompareTag("BPMIndicator")) beatMarkers.Add(collision.gameObject);
     }
+    
     private void OnTriggerExit2D(Collider2D collision)
     {
         //FloorGlobal.Instance.isOnBeat = false;
-        beatMarkers.RemoveAll(item => item == null);
-        foreach (GameObject indicator in beatMarkers)
-        {
-            //indicator.SetActive(false);
-        }
+        //if (collision.CompareTag("BPMIndicator")) beatMarkers.Remove(collision.gameObject);
     }
-    */
+    
 }

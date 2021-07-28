@@ -3,7 +3,11 @@ guid: 4fb4bc0e1309458428a907849ad780a1
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - playerController: {instanceID: 0}
+  - baseMat: {fileID: 2100000, guid: 39d0abba459dc4042b7dcd94b0fade99, type: 2}
+  - outlineMat: {fileID: 2100000, guid: 76ffbc888164bc24da5939d6880d339d, type: 2}
+  - spriteRenderer: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

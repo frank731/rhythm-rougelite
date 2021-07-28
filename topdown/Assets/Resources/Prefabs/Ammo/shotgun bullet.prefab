@@ -139,3 +139,5 @@ MonoBehaviour:
     type: 3}
   bulletSpeed: 30
   bulletDamage: 0.5
+  baseDamage: 0.5
+  bulletDestroyedEffectIndex: 1

@@ -1,8 +1,14 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class BPMVisualiser : Singleton<BPMVisualiser>
+public class BeatVisualiser : Singleton<BeatVisualiser>
 {
+    public bool useCustomMap = false;
+    public float loopLength;
+    public List<float> beatValues;
+    private int nextInd = 0;
+    private int beatCount;
     public float offset = 0.02f;
     public float baseBPM;
     public float currBPM;
@@ -16,10 +22,7 @@ public class BPMVisualiser : Singleton<BPMVisualiser>
     public float inputOffset;
     public float songPos;
     protected float timeUntilNextBeat;
-    //private float baseTimeUntilNextBeat;
-    //private float startHangTime;
     private bool isPlaying = false;
-    //private bool startedHang = false;
     public AudioSource audioSource;
     public GameObject beatIndicator;
     protected BeatIndicatorMovement beatIndicatorMovement;
@@ -59,9 +62,7 @@ public class BPMVisualiser : Singleton<BPMVisualiser>
         floorGlobal.bpmVisualiser = this;
         audioSource = Camera.main.GetComponent<AudioSource>();
         baseBPM = BPMDetector.AnalyzeBpm(audioSource.clip);
-        dspSongTime = (float)AudioSettings.dspTime;
-        audioSource.Play();
-
+        
         objectPooler = ObjectPooler.SharedInstance;
         Debug.Log(objectPooler.name);
         //prevents superfast creation
@@ -84,51 +85,65 @@ public class BPMVisualiser : Singleton<BPMVisualiser>
         beatIndicatorMovement.beatMarker = transform;
         beatIndicatorMovement.audioSource = audioSource;
 
+        beatCount = beatValues.Count;
+
         beatIndicatorIndex = objectPooler.AddObject(beatIndicator, 4);
         //startHangTime = timeUntilNextBeat - beatHangTime;
         inputOffset = ES3.Load("inputOffset", 0f);
         //StartCoroutine(BeatHangDelay());
         floorGlobal.pausableScripts.Add(this);
+
+        isPlaying = false;
+        StartCoroutine(StartMusic());
     }
 
 
     protected virtual void Update()
     {
-        songPos = (float)(AudioSettings.dspTime - dspSongTime) * audioSource.pitch - offset;
-        //changes tempo of song and shifts pitch using output mixer group
-        if (Input.GetKeyDown("q"))
+        if (isPlaying)
         {
-            // currBPM = Mathf.Clamp((currBPM - (audioSource.pitch * 7)), minBPM, maxBPM);
-            if (currBPM > minBPM) 
+            songPos += ((float)(AudioSettings.dspTime - dspSongTime) - offset) * audioSource.pitch;
+            dspSongTime = (float)AudioSettings.dspTime;
+            //songPos = (float)(AudioSettings.dspTime - dspSongTime) * audioSource.pitch - offset;
+            //changes tempo of song and shifts pitch using output mixer group
+            if (Input.GetKeyDown("q"))
             {
-                OnTempoChange(false);
+                // currBPM = Mathf.Clamp((currBPM - (audioSource.pitch * 7)), minBPM, maxBPM);
+                if (currBPM > minBPM)
+                {
+                    OnTempoChange(false);
+                }
             }
-        }
-        else if (Input.GetKeyDown("e"))
-        {
-            //currBPM = Mathf.Clamp((currBPM + (audioSource.pitch * 7)), minBPM, maxBPM);
-            if (maxBPM > currBPM)
+            else if (Input.GetKeyDown("e"))
             {
-                OnTempoChange(true);
+                //currBPM = Mathf.Clamp((currBPM + (audioSource.pitch * 7)), minBPM, maxBPM);
+                if (maxBPM > currBPM)
+                {
+                    OnTempoChange(true);
+                }
             }
-        }
-        if (songPos >= nextBeatTime)
-        {
-            //Create the note
-            floorGlobal.onBeat.Invoke();
-            floorGlobal.beatNumber++;
-            GameObject indicatorLeft = objectPooler.GetPooledObject(beatIndicatorIndex, beatSpawnPointLeft);
-            indicatorLeft.transform.SetParent(beatIndicatorHolder);
-            GameObject indicatorRight = objectPooler.GetPooledObject(beatIndicatorIndex, beatSpawnPointRight);
-            indicatorRight.transform.SetParent(beatIndicatorHolder);
-            //timer = 0;
-            pastBeatTime = nextBeatTime;
-            nextBeatTime += timeUntilNextBeat;// - timer;
-            audioSource.PlayOneShot(metronome, 0.5f);
-            //Debug.Log(songPos);
-            //Debug.Log(pastBeatTime);
-            //Debug.Log(nextBeatTime);
-            //Debug.Log(audioSource.time);
+            if (!useCustomMap && songPos >= nextBeatTime)
+            {
+                //Create the note
+                CreateNote();
+                //timer = 0;
+                pastBeatTime = nextBeatTime;
+                nextBeatTime += timeUntilNextBeat;// - timer;
+                audioSource.PlayOneShot(metronome, 0.5f);
+                //Debug.Log(songPos);
+                //Debug.Log(pastBeatTime);
+                //Debug.Log(nextBeatTime);
+                //Debug.Log(audioSource.time);
+            }
+            else if (useCustomMap && songPos >= beatValues[nextInd] - timeUntilNextBeat)
+            {
+                pastBeatTime = nextBeatTime;
+                beatValues[nextInd] += loopLength;
+                nextInd++;
+                nextInd %= beatCount;
+                nextBeatTime = beatValues[nextInd];
+                CreateNote();
+            }
         }
         /*
         if (startedHang && hangTimer >= timeUntilNextBeat + beatHangTime * 3)
@@ -140,24 +155,33 @@ public class BPMVisualiser : Singleton<BPMVisualiser>
         */
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void CreateNote()
     {
-        if (!isPlaying)
-        {
-            audioSource.Play();
-            isPlaying = true;
-        }
+        floorGlobal.onBeat.Invoke();
+        floorGlobal.beatNumber++;
+        GameObject indicatorLeft = objectPooler.GetPooledObject(beatIndicatorIndex, beatSpawnPointLeft);
+        //indicatorLeft.transform.position = beatSpawnPointLeft.transform.position;
+        //indicatorLeft.transform.rotation = beatSpawnPointLeft.transform.rotation;
+        indicatorLeft.transform.SetParent(beatIndicatorHolder);
+        indicatorLeft.GetComponent<BeatIndicatorMovement>().StartMove();
+        GameObject indicatorRight = objectPooler.GetPooledObject(beatIndicatorIndex, beatSpawnPointRight);
+        //indicatorRight.transform.position = beatSpawnPointRight.transform.position;
+        //indicatorRight.transform.rotation = beatSpawnPointRight.transform.rotation;
+        indicatorRight.transform.SetParent(beatIndicatorHolder);
+        indicatorRight.GetComponent<BeatIndicatorMovement>().StartMove();
     }
+
+    private IEnumerator StartMusic()
+    {
+        yield return new WaitForSeconds(1f);
+        dspSongTime = (float)AudioSettings.dspTime;
+        audioSource.Play();
+        isPlaying = true;
+    }
+
     private void OnDisable()
     {
         audioSource.Pause();
     }
-    private void OnEnable()
-    {
-        //starts audio clip
-        if (isPlaying)
-        {
-            audioSource.Play();
-        }
-    }
+
 }
